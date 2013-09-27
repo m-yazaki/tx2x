@@ -1,88 +1,88 @@
-�y�́z�������̓e�N�j�J�����C�^�[�ł�
-���܂łɂȂ������@�\���������V���i�����������Ƃ��A�����ɂ́A���܂łɂȂ������@�\���������戵������������܂��B�������́A����Ȏ戵�������̌��e����邱�Ƃ��d���ɂ��Ă���e�N�j�J�����C�^�[�ł��B
+【章】私たちはテクニカルライターです
+今までになかった機能を持った新製品が発売されるとき、そこには、今までになかった機能を説明する取扱説明書があります。私たちは、そんな取扱説明書の原稿を作ることを仕事にしているテクニカルライターです。
 
-�y�߁z��Ƃ̂��˗������҂����Ă��܂�
-���̃T�C�g�ł́A�������̍l��������m�����x����m���Ă��������A��Ƃ̂��˗������󂯂��邱�Ƃ�ړI�Ƃ��ĉ^�c���Ă��܂��B
-�������̒m����Z�p�ɂ��ẮA���J�ł�����̂��u���񋟁v�ň�ʂɌ��J���Ă��܂��B�F���܂̍�Ƃ������ł��y�ɂȂ�Ƃ��ꂵ���ł��B
+【節】作業のご依頼をお待ちしています
+このサイトでは、私たちの考えかたや知識レベルを知っていただき、作業のご依頼をお受けすることを目的として運営しています。
+私たちの知識や技術については、公開できるものを「情報提供」で一般に公開しています。皆さまの作業が少しでも楽になるとうれしいです。
 
-�y�߁z�ŋ߂̎�Ȏ��сi���s���j
-�������́A�ŋ߂̎�Ȏ��т��Љ�܂��B
-���\(3)
+【節】最近の主な実績（順不同）
+私たちの、最近の主な実績を紹介します。
+▼表(3)
 ==========
-�y�w�b�_�[�z���i�T�v�i��ƔN�j
+【ヘッダー】製品概要（作業年）
 -----
-�y�w�b�_�[�z�戵�������E����
+【ヘッダー】取扱説明書・教材
 -----
-�y�w�b�_�[�z��Ȕ[�i�f�[�^����
+【ヘッダー】主な納品データ方式
 ==========
-�g�ѓd�b�i2004�`2009�j
+携帯電話（2004～2009）
 -----
-��ʃ��[�U�[�����戵������
+一般ユーザー向け取扱説明書
 -----
-�E	InDesign�^�O�t���e�L�X�g
-�E	Microsoft Word�i�e�L�X�g�f�[�^�Ƃ��āj
+・	InDesignタグ付きテキスト
+・	Microsoft Word（テキストデータとして）
 ==========
-Java�x�[�X�̃A�v���P�[�V�����t���[�����[�N�i2008�`2009�j
+Javaベースのアプリケーションフレームワーク（2008～2009）
 -----
-�J���Ҍ����K�C�h
+開発者向けガイド
 -----
-Microsoft Word�iWord DTP�j
+Microsoft Word（Word DTP）
 ==========
-�J���m�E�n�E�̐������ށi2009�j
+開発ノウハウの説明教材（2009）
 -----
-�J�����S�Ҍ�������
+開発初心者向け教材
 -----
 Microsoft PowerPoint
 ==========
-Windows�A�v���P�[�V�����̎g�������K�C�h�i2009�j
+Windowsアプリケーションの使いかたガイド（2009）
 -----
-��ʃ��[�U�[�����K�C�h
+一般ユーザー向けガイド
 -----
 Microsoft Word
-��
+▲
 
-�y�́z�^�O�t���e�L�X�g�𗘗p�������[�N�t���[
-����������Ă��Ă��郏�[�N�t���[���������������܂��B
-Step 1	�e�L�X�g�G�f�B�^�Ō��e���쐬����
-Step 2	IDTaggedTextGenerator�𗘗p���ă^�O�t���e�L�X�g�ɕϊ�����
-Step 3	�^�O�t���e�L�X�g��InDesign�ɔz�u����
-Step 4	InDesign��DTP��Ƃ��s��
+【章】タグ付きテキストを利用したワークフロー
+私たちが提案しているワークフローをご説明いたします。
+Step 1	テキストエディタで原稿を作成する
+Step 2	IDTaggedTextGeneratorを利用してタグ付きテキストに変換する
+Step 3	タグ付きテキストをInDesignに配置する
+Step 4	InDesignでDTP作業を行う
 
-�y�߁zStep 1 �e�L�X�g�G�f�B�^�Ō��e���쐬����
-�ȒP�ȃ��[���ɏ]���ăe�L�X�g�f�[�^���쐬���܂��B
-�����ł̓e�L�X�g�f�[�^�̃t�@�C�������uDEMO.txt�v�Ƃ��܂��B
+【節】Step 1 テキストエディタで原稿を作成する
+簡単なルールに従ってテキストデータを作成します。
+ここではテキストデータのファイル名を「DEMO.txt」とします。
 
-�y�߁zStep 2 IDTaggedTextGenerator�𗘗p���ă^�O�t���e�L�X�g�ɕϊ�����
-�P	IDTaggedTextGenerator.jar���_�u���N���b�N����
-	�y��ʁz
-�Q	�u�e�L�X�g�v�ɁuDEMO.txt�v���h���b�O���h���b�v����
-	�y��ʁz
-�R	�uFormat�v���N���b�N����
-	�^�O�t���e�L�X�g�uDEMO.win.indesign.txt�v�iWindows�p�j���쐬����܂��B
-	InDesign�t�@�C���uDEMO.indesign.indd�v���R�s�[����܂��B
-	�y��ʁz
+【節】Step 2 IDTaggedTextGeneratorを利用してタグ付きテキストに変換する
+１	IDTaggedTextGenerator.jarをダブルクリックする
+	【画面】
+２	「テキスト」に「DEMO.txt」をドラッグ＆ドロップする
+	【画面】
+３	「Format」をクリックする
+	タグ付きテキスト「DEMO.win.indesign.txt」（Windows用）が作成されます。
+	InDesignファイル「DEMO.indesign.indd」がコピーされます。
+	【画面】
 
-�y�߁zStep 3 �^�O�t���e�L�X�g��InDesign�ɔz�u����
-�P	�uDEMO.indd�v��InDesign CS5�ŊJ��
-�Q	�u���g�ݕ����c�[���v��I�����A�e�L�X�g��}������e�L�X�g�{�b�N�X���N���b�N����
-�R	�u�ҏW�v���j���[���u���ׂĂ�I���v�̏��ɃN���b�N����
-	���ׂẴe�L�X�g���I������܂��B
-	�E	Ctrl�L�[�������Ȃ���A�L�[�������Ă����ׂẴe�L�X�g��I���ł��܂��B
-�S	�u�t�@�C���v���j���[���u�z�u�v�̏��ɃN���b�N����
-	�z�u��ʂ��\������܂��B
-�T	�uDEMO.win.indesign.txt�v��I�����A�u�O���b�h�t�H�[�}�b�g�̓K�p�v�̃`�F�b�N���O��
-�U	�u�J���v���N���b�N����
-	�^�O�t���e�L�X�g���ǂݍ��܂�A�e�L�X�g�{�b�N�X�ɔz�u����܂��B
-������
-�E	�^�O�t���e�L�X�g��z�u�����ہA�u���̃^�O�v���\�����ꂽ�Ƃ��͎��̓��e���m�F���Ă��������B
-	�P	�V�����X�^�C�����g�p���Ă��܂���
-		IDTaggedTextGenerator��V�����X�^�C���ɑΉ�����悤�ɕύX����K�v������܂��B�X�^�C���ǉ��̂��˗������肢�������܂��B
-	�Q	�e�L�X�g�̏��������͊Ԉ���Ă��܂���
-		�^�u�̐����ԈႦ��ƐV�����X�^�C���ƔF�������ꍇ������܂��B
-�E	�^�O�t���e�L�X�g��z�u�����ہA�Ӑ}�����X�^�C���ɂȂ�Ȃ��Ƃ��͎��̓��e���m�F���Ă��������B
-	�E	�e�L�X�g�̏��������͊Ԉ���Ă��܂���
-		�^�u�̐����ԈႦ����A�����̂��ƂɃ^�u�����Y�ꂽ�肷��ƁA�����̕ʂ̃X�^�C���ƔF�������ꍇ������܂��B
-��
+【節】Step 3 タグ付きテキストをInDesignに配置する
+１	「DEMO.indd」をInDesign CS5で開く
+２	「横組み文字ツール」を選択し、テキストを挿入するテキストボックスをクリックする
+３	「編集」メニュー→「すべてを選択」の順にクリックする
+	すべてのテキストが選択されます。
+	・	Ctrlキーを押しながらAキーを押してもすべてのテキストを選択できます。
+４	「ファイル」メニュー→「配置」の順にクリックする
+	配置画面が表示されます。
+５	「DEMO.win.indesign.txt」を選択し、「グリッドフォーマットの適用」のチェックを外す
+６	「開く」をクリックする
+	タグ付きテキストが読み込まれ、テキストボックスに配置されます。
+▼メモ
+・	タグ付きテキストを配置した際、「問題のタグ」が表示されたときは次の内容を確認してください。
+	１	新しいスタイルを使用していませんか
+		IDTaggedTextGeneratorを新しいスタイルに対応するように変更する必要があります。スタイル追加のご依頼をお願いいたします。
+	２	テキストの書きかたは間違っていませんか
+		タブの数を間違えると新しいスタイルと認識される場合があります。
+・	タグ付きテキストを配置した際、意図したスタイルにならないときは次の内容を確認してください。
+	・	テキストの書きかたは間違っていませんか
+		タブの数を間違えたり、数字のあとにタブを入れ忘れたりすると、既存の別のスタイルと認識される場合があります。
+▲
 
-�y�߁zStep 4 InDesign��DTP��Ƃ��s��
-��ʂ�A�C�R����}��������A���y�[�W�ʒu�𒲐������肵�܂��B
+【節】Step 4 InDesignでDTP作業を行う
+画面やアイコンを挿入したり、改ページ位置を調整したりします。

@@ -21,20 +21,20 @@ public class TocManager {
 		FileReader fr = null;
 		BufferedReader bf = null;
 		try {
-			// “ü—Íƒtƒ@ƒCƒ‹
+			// å…¥åŠ›ãƒ•ã‚¡ã‚¤ãƒ«
 			File inputFile = new File(sTextFilename);
 			fr = new FileReader(inputFile);
 			bf = new BufferedReader(fr);
 			String line;
 			while ((line = bf.readLine()) != null) {
-				if (line.matches("y(ƒCƒ“ƒfƒbƒNƒX|Í|ß|€|€‰º)z.*")) {
+				if (line.matches("ã€(ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹|ç« |ç¯€|é …|é …ä¸‹)ã€‘.*")) {
 					m_sTocList.add(line);
 				}
 			}
 		} catch (FileNotFoundException e1) {
-			Tx2x.appendWarn("ƒtƒ@ƒCƒ‹‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ@TocManagerF" + sTextFilename);
+			Tx2x.appendWarn("ãƒ•ã‚¡ã‚¤ãƒ«ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“@TocManagerï¼š" + sTextFilename);
 		} catch (IOException e) {
-			// TODO ©“®¶¬‚³‚ê‚½ catch ƒuƒƒbƒN
+			// TODO è‡ªå‹•ç”Ÿæˆã•ã‚ŒãŸ catch ãƒ–ãƒ­ãƒƒã‚¯
 			e.printStackTrace();
 		} finally {
 			try {
@@ -43,7 +43,7 @@ public class TocManager {
 				if (fr != null)
 					fr.close();
 			} catch (IOException e) {
-				// TODO ©“®¶¬‚³‚ê‚½ catch ƒuƒƒbƒN
+				// TODO è‡ªå‹•ç”Ÿæˆã•ã‚ŒãŸ catch ãƒ–ãƒ­ãƒƒã‚¯
 				e.printStackTrace();
 			}
 		}
@@ -61,7 +61,7 @@ public class TocManager {
 		ArrayList<String> tocHopefuls = new ArrayList<String>();
 		while (it.hasNext()) {
 			String tocItem = (String) it.next();
-			if (tocItem.matches("y[^z]+z" + line)) {
+			if (tocItem.matches("ã€[^ã€‘]+ã€‘" + line)) {
 				tocHopefuls.add(tocItem);
 				break;
 			}
@@ -71,7 +71,7 @@ public class TocManager {
 		} else if (tocHopefuls.size() == 1) {
 			return tocHopefuls.get(0);
 		} else {
-			System.out.println("Œó•â‚ª2‚Â‚à‚ ‚è‚Ü‚·‚ËIIF" + line);
+			System.out.println("å€™è£œãŒ2ã¤ã‚‚ã‚ã‚Šã¾ã™ã­ï¼ï¼ï¼š" + line);
 			return tocHopefuls.get(0);
 		}
 	}

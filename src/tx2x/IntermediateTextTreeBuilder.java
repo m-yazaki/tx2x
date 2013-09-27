@@ -14,7 +14,7 @@ import tx2x_core.IntermediateText;
 import tx2x_core.Style;
 
 /*
- * ‘æ“ñŸƒtƒH[ƒ}ƒbƒgiTx2xƒeƒLƒXƒg‚ğ®Œ`‚·‚éj
+ * ç¬¬äºŒæ¬¡ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆï¼ˆTx2xãƒ†ã‚­ã‚¹ãƒˆã‚’æ•´å½¢ã™ã‚‹ï¼‰
  */
 public class IntermediateTextTreeBuilder {
 	boolean m_bMac = true;
@@ -28,67 +28,67 @@ public class IntermediateTextTreeBuilder {
 	public void parse_file(String sTextFilename, String sMaker)
 			throws IOException {
 		/*
-		 * ì‹Æ—pArrayList‚ğ€”õ
+		 * ä½œæ¥­ç”¨ArrayListã‚’æº–å‚™
 		 */
 		ArrayList<String> allText = new ArrayList<String>();
 
 		/*
-		 * Tx2xŒ`®‚ÌƒeƒLƒXƒgƒtƒ@ƒCƒ‹‚ğƒoƒbƒtƒ@iArrayList<String> allTextj‚É“Ç‚İ‚Ş
+		 * Tx2xå½¢å¼ã®ãƒ†ã‚­ã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã‚’ãƒãƒƒãƒ•ã‚¡ï¼ˆArrayList<String> allTextï¼‰ã«èª­ã¿è¾¼ã‚€
 		 */
 		try {
-			// “ü—Íƒtƒ@ƒCƒ‹
+			// å…¥åŠ›ãƒ•ã‚¡ã‚¤ãƒ«
 			File inputFile = new File(sTextFilename);
 			BufferedReader bf = new BufferedReader(new FileReader(inputFile));
 
 			String line;
 			while ((line = bf.readLine()) != null) {
-				// ƒ‹[ƒv
+				// ãƒ«ãƒ¼ãƒ—
 				allText.add(line);
 			}
 
 			bf.close();
 		} catch (FileNotFoundException e1) {
-			Tx2x.appendWarn("ƒtƒ@ƒCƒ‹‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ@IntermediateTextTreeBuilderF"
+			Tx2x.appendWarn("ãƒ•ã‚¡ã‚¤ãƒ«ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“@IntermediateTextTreeBuilderï¼š"
 					+ sTextFilename);
 			return;
 		} catch (IOException e) {
-			// TODO ©“®¶¬‚³‚ê‚½ catch ƒuƒƒbƒN
+			// TODO è‡ªå‹•ç”Ÿæˆã•ã‚ŒãŸ catch ãƒ–ãƒ­ãƒƒã‚¯
 			e.printStackTrace();
 		}
 
 		/*
-		 * allText‚ğ‰ğß‚µ‚ÄIntermediateTextƒcƒŠ[‚ğ¶¬
-		 * resultRootText‚ªAƒcƒŠ[‚Ìªiƒ‹[ƒgƒIƒuƒWƒFƒNƒgj‚Å‚·B
+		 * allTextã‚’è§£é‡ˆã—ã¦IntermediateTextãƒ„ãƒªãƒ¼ã‚’ç”Ÿæˆ
+		 * resultRootTextãŒã€ãƒ„ãƒªãƒ¼ã®æ ¹ï¼ˆãƒ«ãƒ¼ãƒˆã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼‰ã§ã™ã€‚
 		 */
 		ControlText resultRootText = new ControlText(null, null);
 
 		/*
-		 * •ÏŠ·ŠJnB
+		 * å¤‰æ›é–‹å§‹ã€‚
 		 *
-		 * allText‚ğ‰ğß‚µ‚ÄAresultRootText‚ÉIntermediateTextƒcƒŠ[‚ğ“o˜^‚µ‚Ü‚·B
+		 * allTextã‚’è§£é‡ˆã—ã¦ã€resultRootTextã«IntermediateTextãƒ„ãƒªãƒ¼ã‚’ç™»éŒ²ã—ã¾ã™ã€‚
 		 */
 		try {
 			compileText(allText, resultRootText);
 		} catch (IOException e1) {
-			// TODO ©“®¶¬‚³‚ê‚½ catch ƒuƒƒbƒN
+			// TODO è‡ªå‹•ç”Ÿæˆã•ã‚ŒãŸ catch ãƒ–ãƒ­ãƒƒã‚¯
 			throw new IOException(e1.getMessage());
 		}
 
 		/*
-		 * Œ‹‰Êo—Íi‚»‚Ì1j
+		 * çµæœå‡ºåŠ›ï¼ˆãã®1ï¼‰
 		 *
-		 * ƒRƒ“ƒ\[ƒ‹‚Öo—Í‚µ‚Ü‚·BŠÈˆÕƒfƒoƒbƒO—pB
+		 * ã‚³ãƒ³ã‚½ãƒ¼ãƒ«ã¸å‡ºåŠ›ã—ã¾ã™ã€‚ç°¡æ˜“ãƒ‡ãƒãƒƒã‚°ç”¨ã€‚
 		 */
 		/*
 		 * LinkedList<Style> ruleLinkedList = new LinkedList<Style>(); try {
 		 * outputResult(resultRootText, ruleLinkedList); //
 		 * outputDump(resultRootText, ruleLinkedList, 0); } catch (IOException
-		 * e) { // TODO ©“®¶¬‚³‚ê‚½ catch ƒuƒƒbƒN e.printStackTrace(); }
+		 * e) { // TODO è‡ªå‹•ç”Ÿæˆã•ã‚ŒãŸ catch ãƒ–ãƒ­ãƒƒã‚¯ e.printStackTrace(); }
 		 */
 		/*
-		 * Œ‹‰Êo—Íi‚»‚Ì2j
+		 * çµæœå‡ºåŠ›ï¼ˆãã®2ï¼‰
 		 *
-		 * InDesign—p‚Ìƒ^ƒO•t‚«ƒf[ƒ^‚ğƒtƒ@ƒCƒ‹‚Éo—Í‚µ‚Ü‚·B
+		 * InDesignç”¨ã®ã‚¿ã‚°ä»˜ããƒ‡ãƒ¼ã‚¿ã‚’ãƒ•ã‚¡ã‚¤ãƒ«ã«å‡ºåŠ›ã—ã¾ã™ã€‚
 		 */
 		String sOutputFilename;
 		if (m_bMac) {
@@ -99,49 +99,49 @@ public class IntermediateTextTreeBuilder {
 					".win.indesign.txt");
 		}
 		if (sTextFilename.equals(sOutputFilename)) {
-			System.out.println("ã‘‚«‚³‚ê‚é‚½‚ß’†~‚µ‚Ü‚µ‚½Bƒtƒ@ƒCƒ‹–¼‚ğŠm”F‚µ‚Ä‚­‚¾‚³‚¢B");
+			System.out.println("ä¸Šæ›¸ãã•ã‚Œã‚‹ãŸã‚ä¸­æ­¢ã—ã¾ã—ãŸã€‚ãƒ•ã‚¡ã‚¤ãƒ«åã‚’ç¢ºèªã—ã¦ãã ã•ã„ã€‚");
 		} else {
 			IntermediateTextTreeToInDesign converter = new IntermediateTextTreeToInDesign(
 					sOutputFilename, sMaker, m_bMac, m_bDebugMode);
 			try {
 				converter.output(resultRootText);
 			} catch (IOException e) {
-				// TODO ©“®¶¬‚³‚ê‚½ catch ƒuƒƒbƒN
+				// TODO è‡ªå‹•ç”Ÿæˆã•ã‚ŒãŸ catch ãƒ–ãƒ­ãƒƒã‚¯
 				e.printStackTrace();
 			}
 		}
 	}
 
 	/*
-	 * allTextiTx2xŒ`®‚ÌƒeƒLƒXƒgƒtƒ@ƒCƒ‹j‚ğ•ÏŠ·‚µ‚ÄArootText‚É‚Ô‚ç‰º‚°‚é
+	 * allTextï¼ˆTx2xå½¢å¼ã®ãƒ†ã‚­ã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ï¼‰ã‚’å¤‰æ›ã—ã¦ã€rootTextã«ã¶ã‚‰ä¸‹ã’ã‚‹
 	 */
 	private void compileText(ArrayList<String> allText, ControlText rootText)
 			throws IOException {
 		StyleManager cStyleManager = StyleManager.getInstance();
 		for (int i = 0; i < allText.size();) {
 			/*
-			 * 1s“Ç‚İæ‚Á‚ÄArbControlText‚ÌŒˆ’è
+			 * 1è¡Œèª­ã¿å–ã£ã¦ã€rbControlTextã®æ±ºå®š
 			 */
 			Style styleControlText = cStyleManager.getMatchStyle_Start(allText
 					.get(i));
 
 			/*
-			 * controlText‚Ì¶¬
+			 * controlTextã®ç”Ÿæˆ
 			 */
 			ControlText controlText;
 			if (styleControlText == null) {
 				controlText = new ControlText(null, null);
-			} else if (styleControlText.getStyleName().equals("ysz")) {
-				throw new IOException("controlText‚ªysz‚É‚È‚è‚Ü‚µ‚½B");
+			} else if (styleControlText.getStyleName().equals("ã€è¡Œã€‘")) {
+				throw new IOException("controlTextãŒã€è¡Œã€‘ã«ãªã‚Šã¾ã—ãŸã€‚");
 			} else {
 				controlText = new ControlText(styleControlText,
 						styleControlText.getStyleName());
 			}
 
-			/* controlText‚ğrootText‚Ìq‹Ÿ‚É“o˜^ */
+			/* controlTextã‚’rootTextã®å­ä¾›ã«ç™»éŒ² */
 			rootText.getChildList().add(controlText);
 
-			/* •ÏŠ·I */
+			/* å¤‰æ›ï¼ */
 			try {
 				int prev_i = i;
 				i = compileBlock(controlText, allText, i);
@@ -149,265 +149,265 @@ public class IntermediateTextTreeBuilder {
 					throw new IOException("i == prev_i");
 				}
 			} catch (IOException e) {
-				// TODO ©“®¶¬‚³‚ê‚½ catch ƒuƒƒbƒN
+				// TODO è‡ªå‹•ç”Ÿæˆã•ã‚ŒãŸ catch ãƒ–ãƒ­ãƒƒã‚¯
 				// e.printStackTrace();
-				String error = "@compileText ===== ˆÈ‰º‚Ì•¶Í‚©‚çn‚Ü‚éƒuƒƒbƒN‚ÅƒGƒ‰[”­¶ =====\n";
+				String error = "@compileText ===== ä»¥ä¸‹ã®æ–‡ç« ã‹ã‚‰å§‹ã¾ã‚‹ãƒ–ãƒ­ãƒƒã‚¯ã§ã‚¨ãƒ©ãƒ¼ç™ºç”Ÿ =====\n";
 				for (int j = 0; j < 3 && j < allText.size(); j++) {
 					error += "|" + allText.get(j) + "\n";
 				}
-				error += "ƒGƒ‰[”­¶s(" + (i + 1) + "s–Ú): " + allText.get(i) + "\n";
-				Tx2x.appendWarn("ƒGƒ‰[”­¶s(" + (i + 1) + "s–Ú)");
+				error += "ã‚¨ãƒ©ãƒ¼ç™ºç”Ÿè¡Œ(" + (i + 1) + "è¡Œç›®): " + allText.get(i) + "\n";
+				Tx2x.appendWarn("ã‚¨ãƒ©ãƒ¼ç™ºç”Ÿè¡Œ(" + (i + 1) + "è¡Œç›®)");
 
-				throw new IOException(error + "@"
-						+ e.getMessage().replaceAll("\n", "\n@"));
+				throw new IOException(error + "ã€€"
+						+ e.getMessage().replaceAll("\n", "\nã€€"));
 			}
 		}
 	}
 
 	/*
-	 * smallPartText‚ÌstartPos‚©‚çn‚Ü‚éƒuƒƒbƒN‚©‚çAcontrolText‚Ìq‹Ÿ‚É‚ ‚½‚é•”•ª‚ğ•ÏŠ·‚·‚é
-	 * q‹Ÿ‚É‚ ‚½‚é•”•ª‚Ì•ÏŠ·‚ªI‚í‚Á‚½‚çAŸ‚Ì“Ç‚İæ‚ès”Ô†‚ğ•Ô‚·B
+	 * smallPartTextã®startPosã‹ã‚‰å§‹ã¾ã‚‹ãƒ–ãƒ­ãƒƒã‚¯ã‹ã‚‰ã€controlTextã®å­ä¾›ã«ã‚ãŸã‚‹éƒ¨åˆ†ã‚’å¤‰æ›ã™ã‚‹
+	 * å­ä¾›ã«ã‚ãŸã‚‹éƒ¨åˆ†ã®å¤‰æ›ãŒçµ‚ã‚ã£ãŸã‚‰ã€æ¬¡ã®èª­ã¿å–ã‚Šè¡Œç•ªå·ã‚’è¿”ã™ã€‚
 	 */
 	private int compileBlock(ControlText controlText,
 			ArrayList<String> smallPartText, int startPos) throws IOException {
 
-		/* controlText‚ÌƒXƒ^ƒCƒ‹‚ğæ‚èo‚µ‚Ä‚¨‚­ */
+		/* controlTextã®ã‚¹ã‚¿ã‚¤ãƒ«ã‚’å–ã‚Šå‡ºã—ã¦ãŠã */
 		Style styleControlText = controlText.getStyle();
 
-		/* ƒuƒƒbƒN‚ğ“Š‡‚·‚éIntermediateText‚ÉAIntermediateText‚ğ“o˜^‚·‚éæ‚ğ€”õ */
+		/* ãƒ–ãƒ­ãƒƒã‚¯ã‚’çµ±æ‹¬ã™ã‚‹IntermediateTextã«ã€IntermediateTextã‚’ç™»éŒ²ã™ã‚‹å…ˆã‚’æº–å‚™ */
 		ArrayList<IntermediateText> childArrayControlText = controlText
 				.getChildList();
 
 		/*
-		 * ‚±‚êˆÈ~A•ÏŠ·Œ‹‰Ê‚ğchildArrayControlText‚É“o˜^‚·‚é
+		 * ã“ã‚Œä»¥é™ã€å¤‰æ›çµæœã‚’childArrayControlTextã«ç™»éŒ²ã™ã‚‹
 		 */
-		/* ‰‚ß‚Ì1s‚ğˆ—‚·‚é */
+		/* åˆã‚ã®1è¡Œã‚’å‡¦ç†ã™ã‚‹ */
 		if (styleControlText != null)
 			startPos = styleControlText.compileLine(controlText, smallPartText,
 					startPos);
 
 		StyleManager cStyleManager = StyleManager.getInstance();
 
-		/* **** ŠJnsˆÈ~‚ğŠm”F **** */
+		/* **** é–‹å§‹è¡Œä»¥é™ã‚’ç¢ºèª **** */
 		for (int currentPos = startPos; currentPos < smallPartText.size();) {
 
 			if (styleControlText != null) {
 				// System.out.println(styleControlText.getStyleName() + ":"
 				// + smallPartText.get(currentPos));
 			} else {
-				// System.out.println("y–{•¶z:" + smallPartText.get(currentPos));
+				// System.out.println("ã€æœ¬æ–‡ã€‘:" + smallPartText.get(currentPos));
 			}
 
 			String currentLine = smallPartText.get(currentPos);
 
-			/* “ü‚êq‚ÌƒuƒƒbƒN‚ª‚È‚¢‚©Šm”F */
+			/* å…¥ã‚Œå­ã®ãƒ–ãƒ­ãƒƒã‚¯ãŒãªã„ã‹ç¢ºèª */
 			Style styleCurrentLine = cStyleManager
 					.getMatchStyle_Start(currentLine);
 			if (styleCurrentLine != null) {
 				if (styleControlText == null) {
 					/*
-					 * Œ»ÛF–{•¶ƒuƒƒbƒN‚ÅAƒXƒ^ƒCƒ‹s‚ª‚«‚½ ‘Î‰F–{•¶ƒuƒƒbƒN‚ÌI—¹
+					 * ç¾è±¡ï¼šæœ¬æ–‡ãƒ–ãƒ­ãƒƒã‚¯ã§ã€ã‚¹ã‚¿ã‚¤ãƒ«è¡ŒãŒããŸ å¯¾å¿œï¼šæœ¬æ–‡ãƒ–ãƒ­ãƒƒã‚¯ã®çµ‚äº†
 					 */
-					return currentPos; // Ÿ‚ÌƒXƒ^ƒCƒ‹iƒuƒƒbƒNj‚ÍAŒ»İˆÊ’u‚©‚ç‚Å‚ ‚é‚±‚Æ‚ğŒÄ‚Ño‚µŒ³‚É“`‚¦‚é
+					return currentPos; // æ¬¡ã®ã‚¹ã‚¿ã‚¤ãƒ«ï¼ˆãƒ–ãƒ­ãƒƒã‚¯ï¼‰ã¯ã€ç¾åœ¨ä½ç½®ã‹ã‚‰ã§ã‚ã‚‹ã“ã¨ã‚’å‘¼ã³å‡ºã—å…ƒã«ä¼ãˆã‚‹
 				} else if (styleControlText.bBulletLikeStyle()) {
 					if (styleCurrentLine == styleControlText) {
-						// Œ»ÛF‰Óğ‘‚«ƒ^ƒCƒv‚ÅA“¯‚¶ƒXƒ^ƒCƒ‹‚ª‘±‚¢‚½
-						// ‘Î‰FcontrolText‚É“o˜^‚·‚×‚«q‹Ÿ‚Å‚ ‚é‚Æ‰ğß‚µ‚ÄAchildArrayControlText‚É’Ç‰ÁB
+						// ç¾è±¡ï¼šç®‡æ¡æ›¸ãã‚¿ã‚¤ãƒ—ã§ã€åŒã˜ã‚¹ã‚¿ã‚¤ãƒ«ãŒç¶šã„ãŸ
+						// å¯¾å¿œï¼šcontrolTextã«ç™»éŒ²ã™ã¹ãå­ä¾›ã§ã‚ã‚‹ã¨è§£é‡ˆã—ã¦ã€childArrayControlTextã«è¿½åŠ ã€‚
 						IntermediateText textCurrentLine = new IntermediateText(
-								styleCurrentLine, currentLine); // 1s•ª
+								styleCurrentLine, currentLine); // 1è¡Œåˆ†
 						childArrayControlText.add(textCurrentLine);
-						currentPos++; // Ÿ‚Ìƒ‹[ƒv‚Å‚ÍAŸs‚ğ“Ç‚Ş
-						continue; // ‘±‚«‚àcontrolText“à‚Ì–{•¶‚Å‚ ‚é‰Â”\«‚ª‚ ‚é‚½‚ßAcontinueB
+						currentPos++; // æ¬¡ã®ãƒ«ãƒ¼ãƒ—ã§ã¯ã€æ¬¡è¡Œã‚’èª­ã‚€
+						continue; // ç¶šãã‚‚controlTextå†…ã®æœ¬æ–‡ã§ã‚ã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ãŸã‚ã€continueã€‚
 					} else {
 						/*
-						 * Œ»ÛF‰Óğ‘‚«ƒ^ƒCƒv‚ÅA•Ê‚ÌƒXƒ^ƒCƒ‹‚ª‘±‚¢‚½
-						 * ‘Î‰FcontrolText‚ªI—¹‚µ‚½‚Æ”»’f‚µA‚±‚Ìƒƒ\ƒbƒh‚Ìd–‚ÍI—¹B
+						 * ç¾è±¡ï¼šç®‡æ¡æ›¸ãã‚¿ã‚¤ãƒ—ã§ã€åˆ¥ã®ã‚¹ã‚¿ã‚¤ãƒ«ãŒç¶šã„ãŸ
+						 * å¯¾å¿œï¼šcontrolTextãŒçµ‚äº†ã—ãŸã¨åˆ¤æ–­ã—ã€ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã®ä»•äº‹ã¯çµ‚äº†ã€‚
 						 */
-						return currentPos; // Ÿ‚ÌƒXƒ^ƒCƒ‹iƒuƒƒbƒNj‚ÍAŒ»İˆÊ’u‚©‚ç‚Å‚ ‚é‚±‚Æ‚ğŒÄ‚Ño‚µŒ³‚É“`‚¦‚é
+						return currentPos; // æ¬¡ã®ã‚¹ã‚¿ã‚¤ãƒ«ï¼ˆãƒ–ãƒ­ãƒƒã‚¯ï¼‰ã¯ã€ç¾åœ¨ä½ç½®ã‹ã‚‰ã§ã‚ã‚‹ã“ã¨ã‚’å‘¼ã³å‡ºã—å…ƒã«ä¼ãˆã‚‹
 					}
 				} else if (styleCurrentLine.bTableLikeStyle()) {
 					if (styleControlText.bTableLikeStyle() == false) {
 						/*
-						 * u‚¨’m‚ç‚¹v’¼‰º‚Ìu•\v‚È‚Ç ‘Î‰F“ü‚êq‚Ì•\‚Æ‰ğß‚µAV‚µ‚¢•\‚ğì‚é
+						 * ã€ŒãŠçŸ¥ã‚‰ã›ã€ç›´ä¸‹ã®ã€Œè¡¨ã€ãªã© å¯¾å¿œï¼šå…¥ã‚Œå­ã®è¡¨ã¨è§£é‡ˆã—ã€æ–°ã—ã„è¡¨ã‚’ä½œã‚‹
 						 */
 						/*
-						 * nextControlText‚Ì¶¬
+						 * nextControlTextã®ç”Ÿæˆ
 						 */
-						if (styleCurrentLine.getStyleName().equals("ysz")
+						if (styleCurrentLine.getStyleName().equals("ã€è¡Œã€‘")
 								|| styleCurrentLine.getStyleName().equals(
-										"yƒZƒ‹z")) {
-							throw new IOException("¥•\(n) ‚ª–³‚¢‚Ì‚ÉA" + currentLine
-									+ "‚ª—ˆ‚Ü‚µ‚½B");
+										"ã€ã‚»ãƒ«ã€‘")) {
+							throw new IOException("â–¼è¡¨(n) ãŒç„¡ã„ã®ã«ã€" + currentLine
+									+ "ãŒæ¥ã¾ã—ãŸã€‚");
 						}
 						ControlText nextControlText = new ControlText(
 								styleCurrentLine,
 								styleCurrentLine.getStyleName());
 
-						/* controlText‚Ìq‹Ÿ‚É“o˜^ */
+						/* controlTextã®å­ä¾›ã«ç™»éŒ² */
 						controlText.getChildList().add(nextControlText);
 
-						// y•\z‚Ì‰ğß‚ğn‚ß‚é
+						// ã€è¡¨ã€‘ã®è§£é‡ˆã‚’å§‹ã‚ã‚‹
 						currentPos = compileBlock(nextControlText,
 								smallPartText, currentPos);
 
-						continue; // currentPos‚Íu£v‚ÌŸ‚Ìs‚ğw‚µ‚Ä‚¢‚é‚Í‚¸
+						continue; // currentPosã¯ã€Œâ–²ã€ã®æ¬¡ã®è¡Œã‚’æŒ‡ã—ã¦ã„ã‚‹ã¯ãš
 					}
 					/*
-					 * Šm”F’†‚Ìs‚ª•\ŠÖ˜A‚ÌƒXƒ^ƒCƒ‹
+					 * ç¢ºèªä¸­ã®è¡ŒãŒè¡¨é–¢é€£ã®ã‚¹ã‚¿ã‚¤ãƒ«
 					 *
-					 * •\ƒXƒ^ƒCƒ‹‚Ì“Á«ãAˆÈ‰º‚Ì6ƒpƒ^[ƒ“‚µ‚©‘¶İ‚µ“¾‚È‚¢
+					 * è¡¨ã‚¹ã‚¿ã‚¤ãƒ«ã®ç‰¹æ€§ä¸Šã€ä»¥ä¸‹ã®6ãƒ‘ã‚¿ãƒ¼ãƒ³ã—ã‹å­˜åœ¨ã—å¾—ãªã„
 					 *
-					 * (1)controlTextF•\ currentLineFs c‰‚ß‚Ä‚Ìsi1s–Új‚Ìn‚Ü‚è
+					 * (1)controlTextï¼šè¡¨ currentLineï¼šè¡Œ â€¦åˆã‚ã¦ã®è¡Œï¼ˆ1è¡Œç›®ï¼‰ã®å§‹ã¾ã‚Š
 					 *
-					 * (2)controlTextFs currentLineFs cV‚µ‚¢si2s–ÚˆÈ~j‚Ìn‚Ü‚è
+					 * (2)controlTextï¼šè¡Œ currentLineï¼šè¡Œ â€¦æ–°ã—ã„è¡Œï¼ˆ2è¡Œç›®ä»¥é™ï¼‰ã®å§‹ã¾ã‚Š
 					 *
-					 * (3)controlTextFs currentLineFƒZƒ‹ c‰‚ß‚Ä‚ÌƒZƒ‹i1—ñ–Új‚Ìn‚Ü‚è
+					 * (3)controlTextï¼šè¡Œ currentLineï¼šã‚»ãƒ« â€¦åˆã‚ã¦ã®ã‚»ãƒ«ï¼ˆ1åˆ—ç›®ï¼‰ã®å§‹ã¾ã‚Š
 					 *
-					 * (4)controlTextFƒZƒ‹ currentLineF•\ c“ü‚êq‚Ì•\‚Ìn‚Ü‚è
+					 * (4)controlTextï¼šã‚»ãƒ« currentLineï¼šè¡¨ â€¦å…¥ã‚Œå­ã®è¡¨ã®å§‹ã¾ã‚Š
 					 *
-					 * (5)controlTextFƒZƒ‹ currentLineFs cÅŒã‚ÌƒZƒ‹‚ªI‚í‚èA2s–ÚˆÈ~‚Ìn‚Ü‚è
+					 * (5)controlTextï¼šã‚»ãƒ« currentLineï¼šè¡Œ â€¦æœ€å¾Œã®ã‚»ãƒ«ãŒçµ‚ã‚ã‚Šã€2è¡Œç›®ä»¥é™ã®å§‹ã¾ã‚Š
 					 *
-					 * (6)controlTextFƒZƒ‹ currentLineFƒZƒ‹ cV‚µ‚¢ƒZƒ‹i1—ñ–Új‚Ìn‚Ü‚è
+					 * (6)controlTextï¼šã‚»ãƒ« currentLineï¼šã‚»ãƒ« â€¦æ–°ã—ã„ã‚»ãƒ«ï¼ˆ1åˆ—ç›®ï¼‰ã®å§‹ã¾ã‚Š
 					 */
 					if (styleCurrentLine == styleControlText) {
 						/*
-						 * Œ»ÛFcontrolText‚Æ“¯‚¶ƒXƒ^ƒCƒ‹‚ª‘±‚¢‚Ä‚¢‚é
+						 * ç¾è±¡ï¼šcontrolTextã¨åŒã˜ã‚¹ã‚¿ã‚¤ãƒ«ãŒç¶šã„ã¦ã„ã‚‹
 						 */
-						if (styleControlText.getStyleName().compareTo("ysz") == 0) {
+						if (styleControlText.getStyleName().compareTo("ã€è¡Œã€‘") == 0) {
 							if (startPos == currentPos) {
 								/*
-								 * (Œ»Û2)controlTextFs currentLineFs i•\‚Ì1s–Új
+								 * (ç¾è±¡2)controlTextï¼šè¡Œ currentLineï¼šè¡Œ ï¼ˆè¡¨ã®1è¡Œç›®ï¼‰
 								 *
-								 * (1)Šm”F’†‚Ìs‚ª•\ŠÖ˜A‚ÌƒXƒ^ƒCƒ‹
-								 * (2)controlText‚Æ“¯‚¶ƒXƒ^ƒCƒ‹iyszj‚Å‚ ‚é
-								 * (3)Œ»İ‚ÌƒuƒƒbƒN‚Ì‰‚ß‚Ìˆês‚Ì‚Æ‚«Å‰‚Ìysz
+								 * (1)ç¢ºèªä¸­ã®è¡ŒãŒè¡¨é–¢é€£ã®ã‚¹ã‚¿ã‚¤ãƒ«
+								 * (2)controlTextã¨åŒã˜ã‚¹ã‚¿ã‚¤ãƒ«ï¼ˆã€è¡Œã€‘ï¼‰ã§ã‚ã‚‹
+								 * (3)ç¾åœ¨ã®ãƒ–ãƒ­ãƒƒã‚¯ã®åˆã‚ã®ä¸€è¡Œã®ã¨ãï¼æœ€åˆã®ã€è¡Œã€‘
 								 *
-								 * ‘Î‰FŸ‚ÌcurrentLine‚ÍƒZƒ‹‚Ì‚Â‚à‚è‚Å“o˜^
+								 * å¯¾å¿œï¼šæ¬¡ã®currentLineã¯ã‚»ãƒ«ã®ã¤ã‚‚ã‚Šã§ç™»éŒ²
 								 */
 
-								/* nextControlTextiƒZƒ‹j‚Ì¶¬ */
+								/* nextControlTextï¼ˆã‚»ãƒ«ï¼‰ã®ç”Ÿæˆ */
 								Style styleNextControlText = cStyleManager
-										.getStyle("yƒZƒ‹z");
+										.getStyle("ã€ã‚»ãƒ«ã€‘");
 
 								ControlText nextControlText = new ControlText(
 										styleNextControlText,
 										styleNextControlText.getStyleName());
 
-								/* controlText‚Ìq‹Ÿ‚É“o˜^ */
+								/* controlTextã®å­ä¾›ã«ç™»éŒ² */
 								controlText.getChildList().add(nextControlText);
 
-								// currentPos‚Í==========‚ğw‚µ‚Ä‚¢‚é‚Ì‚ÅAŸ‚Ìs‚©‚ç•ÏŠ·ŠJn
+								// currentPosã¯==========ã‚’æŒ‡ã—ã¦ã„ã‚‹ã®ã§ã€æ¬¡ã®è¡Œã‹ã‚‰å¤‰æ›é–‹å§‹
 								currentPos = compileBlock(nextControlText,
 										smallPartText, currentPos + 1);
 
-								// ƒZƒ‹‚ªI‚í‚Á‚½‚Æ‚«‚ÍA
-								continue; // currentPos‚Íu-----v‚©u=========v‚©u£v‚ÌŸ‚Ìs‚ğw‚µ‚Ä‚¢‚é
+								// ã‚»ãƒ«ãŒçµ‚ã‚ã£ãŸã¨ãã¯ã€
+								continue; // currentPosã¯ã€Œ-----ã€ã‹ã€Œ=========ã€ã‹ã€Œâ–²ã€ã®æ¬¡ã®è¡Œã‚’æŒ‡ã—ã¦ã„ã‚‹
 							} else {
 								/*
-								 * (Œ»Û2)controlTextFs currentLineFs i•\‚Ì2s–ÚˆÈ~j
+								 * (ç¾è±¡2)controlTextï¼šè¡Œ currentLineï¼šè¡Œ ï¼ˆè¡¨ã®2è¡Œç›®ä»¥é™ï¼‰
 								 *
-								 * ‘Î‰FcontrolText‚ªI—¹‚µ‚½‚Æ”»’f‚µA‚±‚Ìƒƒ\ƒbƒh‚Ìd–‚ÍI—¹B
+								 * å¯¾å¿œï¼šcontrolTextãŒçµ‚äº†ã—ãŸã¨åˆ¤æ–­ã—ã€ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã®ä»•äº‹ã¯çµ‚äº†ã€‚
 								 */
-								return currentPos; // currentPos‚Íu==========v‚ğw‚µ‚Ä‚¢‚é
+								return currentPos; // currentPosã¯ã€Œ==========ã€ã‚’æŒ‡ã—ã¦ã„ã‚‹
 							}
 						} else if (styleControlText.getStyleName().compareTo(
-								"yƒZƒ‹z") == 0) {
+								"ã€ã‚»ãƒ«ã€‘") == 0) {
 							/*
-							 * (Œ»Û6)controlTextFƒZƒ‹ currentLineFƒZƒ‹
+							 * (ç¾è±¡6)controlTextï¼šã‚»ãƒ« currentLineï¼šã‚»ãƒ«
 							 *
-							 * ‘Î‰FcontrolText‚ªI—¹‚µ‚½‚Æ”»’f‚µA‚±‚Ìƒƒ\ƒbƒh‚Ìd–‚ÍI—¹B
+							 * å¯¾å¿œï¼šcontrolTextãŒçµ‚äº†ã—ãŸã¨åˆ¤æ–­ã—ã€ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã®ä»•äº‹ã¯çµ‚äº†ã€‚
 							 */
-							return currentPos; // currentPos‚Íu-----v‚ğw‚µ‚Ä‚¢‚é
+							return currentPos; // currentPosã¯ã€Œ-----ã€ã‚’æŒ‡ã—ã¦ã„ã‚‹
 						}
 					} else {
-						/* Œ»ÛF“¯‚¶ƒXƒ^ƒCƒ‹‚Å‚Í‚È‚¢ */
-						if ((styleControlText.getStyleName().compareTo("y•\z") == 0 && styleCurrentLine
-								.getStyleName().compareTo("ysz") == 0)
+						/* ç¾è±¡ï¼šåŒã˜ã‚¹ã‚¿ã‚¤ãƒ«ã§ã¯ãªã„ */
+						if ((styleControlText.getStyleName().compareTo("ã€è¡¨ã€‘") == 0 && styleCurrentLine
+								.getStyleName().compareTo("ã€è¡Œã€‘") == 0)
 								|| (styleControlText.getStyleName().compareTo(
-										"ysz") == 0 && styleCurrentLine
-										.getStyleName().compareTo("yƒZƒ‹z") == 0)) {
+										"ã€è¡Œã€‘") == 0 && styleCurrentLine
+										.getStyleName().compareTo("ã€ã‚»ãƒ«ã€‘") == 0)) {
 							/*
-							 * (Œ»Û1)controlTextF•\ currentLineFs
+							 * (ç¾è±¡1)controlTextï¼šè¡¨ currentLineï¼šè¡Œ
 							 *
-							 * (Œ»Û3)controlTextFs currentLineFƒZƒ‹
+							 * (ç¾è±¡3)controlTextï¼šè¡Œ currentLineï¼šã‚»ãƒ«
 							 *
-							 * ‘Î‰F•Ê‚ÌƒuƒƒbƒN‚ª“ü‚êq‚Ån‚Ü‚Á‚½‚±‚Æ‚É‚·‚é
+							 * å¯¾å¿œï¼šåˆ¥ã®ãƒ–ãƒ­ãƒƒã‚¯ãŒå…¥ã‚Œå­ã§å§‹ã¾ã£ãŸã“ã¨ã«ã™ã‚‹
 							 */
 							/*
-							 * nextControlText‚Ì¶¬
+							 * nextControlTextã®ç”Ÿæˆ
 							 */
 							ControlText nextControlText = new ControlText(
 									styleCurrentLine,
 									styleCurrentLine.getStyleName());
 
-							/* controlText‚Ìq‹Ÿ‚É“o˜^ */
+							/* controlTextã®å­ä¾›ã«ç™»éŒ² */
 							controlText.getChildList().add(nextControlText);
 
-							// currentPos‚Í==========‚â-----‚ğw‚µ‚Ä‚¢‚é‚Ì‚ÅAŸ‚Ìs‚©‚ç•ÏŠ·ŠJn
+							// currentPosã¯==========ã‚„-----ã‚’æŒ‡ã—ã¦ã„ã‚‹ã®ã§ã€æ¬¡ã®è¡Œã‹ã‚‰å¤‰æ›é–‹å§‹
 							currentPos = compileBlock(nextControlText,
 									smallPartText, currentPos + 1);
 
-							continue; // currentPos‚Íu-----v‚©u=========v‚©u£v‚ÌŸ‚Ìs‚ğw‚µ‚Ä‚¢‚é‚Í‚¸
+							continue; // currentPosã¯ã€Œ-----ã€ã‹ã€Œ=========ã€ã‹ã€Œâ–²ã€ã®æ¬¡ã®è¡Œã‚’æŒ‡ã—ã¦ã„ã‚‹ã¯ãš
 						} else if ((styleControlText.getStyleName().compareTo(
-								"yƒZƒ‹z") == 0 && styleCurrentLine.getStyleName()
-								.compareTo("y•\z") == 0)) {
+								"ã€ã‚»ãƒ«ã€‘") == 0 && styleCurrentLine.getStyleName()
+								.compareTo("ã€è¡¨ã€‘") == 0)) {
 							/*
-							 * (Œ»Û4)controlTextFƒZƒ‹ currentLineF•\
+							 * (ç¾è±¡4)controlTextï¼šã‚»ãƒ« currentLineï¼šè¡¨
 							 *
-							 * ‘Î‰F“ü‚êq‚Ì•\‚Æ‰ğß‚µAV‚µ‚¢•\‚ğì‚é
+							 * å¯¾å¿œï¼šå…¥ã‚Œå­ã®è¡¨ã¨è§£é‡ˆã—ã€æ–°ã—ã„è¡¨ã‚’ä½œã‚‹
 							 */
 							/*
-							 * nextControlText‚Ì¶¬
+							 * nextControlTextã®ç”Ÿæˆ
 							 */
 							ControlText nextControlText = new ControlText(
 									styleCurrentLine,
 									styleCurrentLine.getStyleName());
 
-							/* controlText‚Ìq‹Ÿ‚É“o˜^ */
+							/* controlTextã®å­ä¾›ã«ç™»éŒ² */
 							controlText.getChildList().add(nextControlText);
 
-							// y•\z‚Ì‰ğß‚ğn‚ß‚é
+							// ã€è¡¨ã€‘ã®è§£é‡ˆã‚’å§‹ã‚ã‚‹
 							currentPos = compileBlock(nextControlText,
 									smallPartText, currentPos);
 
-							continue; // currentPos‚Íu£v‚ÌŸ‚Ìs‚ğw‚µ‚Ä‚¢‚é‚Í‚¸
+							continue; // currentPosã¯ã€Œâ–²ã€ã®æ¬¡ã®è¡Œã‚’æŒ‡ã—ã¦ã„ã‚‹ã¯ãš
 						} else {
 							/*
-							 * (Œ»Û5)controlTextFƒZƒ‹ currentLineFs
+							 * (ç¾è±¡5)controlTextï¼šã‚»ãƒ« currentLineï¼šè¡Œ
 							 *
-							 * ‘Î‰FcontrolText‚ªI—¹‚µ‚½‚Æ”»’f‚µA‚±‚Ìƒƒ\ƒbƒh‚Ìd–‚ÍI—¹B
+							 * å¯¾å¿œï¼šcontrolTextãŒçµ‚äº†ã—ãŸã¨åˆ¤æ–­ã—ã€ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã®ä»•äº‹ã¯çµ‚äº†ã€‚
 							 */
-							return currentPos; // currentPos‚Íu==========v‚ğw‚µ‚Ä‚¢‚é
+							return currentPos; // currentPosã¯ã€Œ==========ã€ã‚’æŒ‡ã—ã¦ã„ã‚‹
 						}
 					}
 				} else {
-					// Œ»ÛFã‹LˆÈŠO
-					// ‘Î‰F•Ê‚ÌƒuƒƒbƒN‚ª“ü‚êq‚Ån‚Ü‚Á‚½‚±‚Æ‚É‚·‚é
+					// ç¾è±¡ï¼šä¸Šè¨˜ä»¥å¤–
+					// å¯¾å¿œï¼šåˆ¥ã®ãƒ–ãƒ­ãƒƒã‚¯ãŒå…¥ã‚Œå­ã§å§‹ã¾ã£ãŸã“ã¨ã«ã™ã‚‹
 					/*
-					 * controlText‚Ì¶¬
+					 * controlTextã®ç”Ÿæˆ
 					 */
 					ControlText nextControlText = new ControlText(
 							styleCurrentLine, styleCurrentLine.getStyleName());
 
-					/* controlText‚Ìq‹Ÿ‚É“o˜^ */
+					/* controlTextã®å­ä¾›ã«ç™»éŒ² */
 					controlText.getChildList().add(nextControlText);
 
 					currentPos = compileBlock(nextControlText, smallPartText,
 							currentPos);
 
-					// compileBlock‚ÅAsmallPartText‚ğ‘S•”“Ç‚ñ‚Å‚È‚¢H
+					// compileBlockã§ã€smallPartTextã‚’å…¨éƒ¨èª­ã‚“ã§ãªã„ï¼Ÿ
 					if (currentPos < smallPartText.size()) {
-						continue; // ‘S•”“Ç‚ñ‚Å‚È‚¢‚æI
+						continue; // å…¨éƒ¨èª­ã‚“ã§ãªã„ã‚ˆï¼
 					} else {
-						break; // ÅŒã‚Ü‚Å“Ç‚ñ‚¶‚á‚Á‚½EEEH
+						break; // æœ€å¾Œã¾ã§èª­ã‚“ã˜ã‚ƒã£ãŸãƒ»ãƒ»ãƒ»ï¼Ÿ
 					}
 				}
-				throw new IOException("ƒXƒ^ƒCƒ‹‚ª’è‹`‚³‚ê‚½s‚É‚à‚©‚©‚í‚ç‚¸ˆ—‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ");
+				throw new IOException("ã‚¹ã‚¿ã‚¤ãƒ«ãŒå®šç¾©ã•ã‚ŒãŸè¡Œã«ã‚‚ã‹ã‹ã‚ã‚‰ãšå‡¦ç†ã•ã‚Œã¦ã„ã¾ã›ã‚“");
 			}
 
-			/* ƒ^ƒuƒuƒƒbƒN‚ÌŠm”F */
+			/* ã‚¿ãƒ–ãƒ–ãƒ­ãƒƒã‚¯ã®ç¢ºèª */
 			if (currentLine.length() > 0 && currentLine.charAt(0) == '\t') {
-				// ƒ^ƒu•¶š‚Ån‚Ü‚és‚Í‚·‚×‚ÄtabPartText‚É“ü‚ê‚é
+				// ã‚¿ãƒ–æ–‡å­—ã§å§‹ã¾ã‚‹è¡Œã¯ã™ã¹ã¦tabPartTextã«å…¥ã‚Œã‚‹
 				ArrayList<String> tabPartText = new ArrayList<String>();
 				for (; currentPos < smallPartText.size(); currentPos++) {
 					currentLine = smallPartText.get(currentPos);
@@ -418,7 +418,7 @@ public class IntermediateTextTreeBuilder {
 						break;
 				}
 
-				// ƒ^ƒuƒuƒƒbƒN‚ÌcontrolText
+				// ã‚¿ãƒ–ãƒ–ãƒ­ãƒƒã‚¯ã®controlText
 				ControlText tabBlockControlText = new ControlText(
 						styleControlText, null);
 
@@ -427,92 +427,92 @@ public class IntermediateTextTreeBuilder {
 				continue;
 			}
 
-			/* ƒuƒƒbƒN‚ªI—¹‚µ‚Ä‚¢‚È‚¢‚©Šm”F */
+			/* ãƒ–ãƒ­ãƒƒã‚¯ãŒçµ‚äº†ã—ã¦ã„ãªã„ã‹ç¢ºèª */
 			if (styleControlText != null
 					&& styleControlText.isMatch_Last(currentLine)) {
-				// ‚±‚ÌƒuƒƒbƒN‚ªI—¹‚µ‚½I
+				// ã“ã®ãƒ–ãƒ­ãƒƒã‚¯ãŒçµ‚äº†ã—ãŸï¼
 				if (styleControlText.bNoteLikeStyle()) {
-					// ¥`£ƒ^ƒCƒv
-					// ÅŒã‚Ì1si£‚È‚Çj‚ğ”O‚Ì‚½‚ß“o˜^‚·‚é
+					// â–¼ï½â–²ã‚¿ã‚¤ãƒ—
+					// æœ€å¾Œã®1è¡Œï¼ˆâ–²ãªã©ï¼‰ã‚’å¿µã®ãŸã‚ç™»éŒ²ã™ã‚‹
 					IntermediateText lastLineText = new IntermediateText(
 							styleControlText, currentLine);
 					childArrayControlText.add(lastLineText);
-					return currentPos + 1; // currentPos‚Íu£v‚ğw‚µ‚Ä‚¢‚é
+					return currentPos + 1; // currentPosã¯ã€Œâ–²ã€ã‚’æŒ‡ã—ã¦ã„ã‚‹
 				} else if (styleControlText.bTableLikeStyle()) {
-					// •\‚Ìƒ^ƒCƒv
-					if (styleControlText.getStyleName().compareTo("y•\z") == 0) {
-						// ÅŒã‚Ì1si£‚È‚Çj‚ğ”O‚Ì‚½‚ß“o˜^‚·‚é
+					// è¡¨ã®ã‚¿ã‚¤ãƒ—
+					if (styleControlText.getStyleName().compareTo("ã€è¡¨ã€‘") == 0) {
+						// æœ€å¾Œã®1è¡Œï¼ˆâ–²ãªã©ï¼‰ã‚’å¿µã®ãŸã‚ç™»éŒ²ã™ã‚‹
 						IntermediateText lastLineText = new IntermediateText(
 								styleControlText, currentLine);
 						childArrayControlText.add(lastLineText);
-						return currentPos + 1; // currentPos‚Íu£v‚ğw‚µ‚Ä‚¢‚é
-					} else if (styleControlText.getStyleName().equals("yƒZƒ‹z")) {
+						return currentPos + 1; // currentPosã¯ã€Œâ–²ã€ã‚’æŒ‡ã—ã¦ã„ã‚‹
+					} else if (styleControlText.getStyleName().equals("ã€ã‚»ãƒ«ã€‘")) {
 						return currentPos;
 					} else {
 						return currentPos;
 					}
 				}
-				return currentPos; // currentPos‚ÍAI—¹‚ª–¾‚ç‚©‚É‚È‚Á‚½s‚ğw‚µ‚Ä‚¢‚éB’Êí‚ÍŸ‚ÌƒXƒ^ƒCƒ‹‚ÌŠJns‚Å‚ ‚é
+				return currentPos; // currentPosã¯ã€çµ‚äº†ãŒæ˜ã‚‰ã‹ã«ãªã£ãŸè¡Œã‚’æŒ‡ã—ã¦ã„ã‚‹ã€‚é€šå¸¸ã¯æ¬¡ã®ã‚¹ã‚¿ã‚¤ãƒ«ã®é–‹å§‹è¡Œã§ã‚ã‚‹
 			}
 
-			// n‚Ü‚è‚Å‚àI‚í‚è‚Å‚à‚È‚¢‚Æ‚±‚ëi‚Â‚Ü‚é‚Æ‚±‚ë‚½‚¾‚Ì–{•¶j
+			// å§‹ã¾ã‚Šã§ã‚‚çµ‚ã‚ã‚Šã§ã‚‚ãªã„ã¨ã“ã‚ï¼ˆã¤ã¾ã‚‹ã¨ã“ã‚ãŸã ã®æœ¬æ–‡ï¼‰
 			IntermediateText textBody = new IntermediateText(null, currentLine);
 			childArrayControlText.add(textBody);
-			currentPos++; // Ÿ‚Ìs‚ÖEEE
+			currentPos++; // æ¬¡ã®è¡Œã¸ãƒ»ãƒ»ãƒ»
 		}
-		// •Â‚¶‚é‘O‚Éit‚ª‚È‚­‚È‚Á‚¿‚á‚Á‚½BBB
+		// é–‰ã˜ã‚‹å‰ã«itãŒãªããªã£ã¡ã‚ƒã£ãŸã€‚ã€‚ã€‚
 		if (styleControlText != null) {
 			if (styleControlText.bNoteLikeStyle()
 					|| styleControlText.bTableLikeStyle()) {
-				Tx2x.appendWarn("ƒuƒƒbƒN‚ªI—¹‚·‚é‘O‚ÉƒeƒLƒXƒg‚ª‚È‚­‚È‚è‚Ü‚µ‚½B");
-				throw new IOException("ƒuƒƒbƒN‚ªI—¹‚·‚é‘O‚ÉƒeƒLƒXƒg‚ª‚È‚­‚È‚è‚Ü‚µ‚½B\n"
+				Tx2x.appendWarn("ãƒ–ãƒ­ãƒƒã‚¯ãŒçµ‚äº†ã™ã‚‹å‰ã«ãƒ†ã‚­ã‚¹ãƒˆãŒãªããªã‚Šã¾ã—ãŸã€‚");
+				throw new IOException("ãƒ–ãƒ­ãƒƒã‚¯ãŒçµ‚äº†ã™ã‚‹å‰ã«ãƒ†ã‚­ã‚¹ãƒˆãŒãªããªã‚Šã¾ã—ãŸã€‚\n"
 						+ smallPartText);
 			}
 		}
 		return smallPartText.size();
 	}
 
-	/* o—ÍƒeƒXƒg */
-	// ƒuƒƒbƒN‚ğ“Š‡‚·‚éIntermediateText‚ğ“n‚·‚±‚Æ
+	/* å‡ºåŠ›ãƒ†ã‚¹ãƒˆ */
+	// ãƒ–ãƒ­ãƒƒã‚¯ã‚’çµ±æ‹¬ã™ã‚‹IntermediateTextã‚’æ¸¡ã™ã“ã¨
 	@SuppressWarnings("unused")
 	private void outputResult(ControlText controlText,
 			LinkedList<Style> ruleLinkedList) throws IOException {
 		ArrayList<IntermediateText> childArrayList = controlText.getChildList();
 		if (childArrayList == null) {
 			throw new IOException(
-					"ƒuƒƒbƒN‚ğ“Š‡‚·‚éIntermediateText‚ÉAchildArrayList‚ªİ’è‚³‚ê‚Ä‚¢‚È‚¢");
+					"ãƒ–ãƒ­ãƒƒã‚¯ã‚’çµ±æ‹¬ã™ã‚‹IntermediateTextã«ã€childArrayListãŒè¨­å®šã•ã‚Œã¦ã„ãªã„");
 		}
 		Iterator<IntermediateText> it = childArrayList.iterator();
 		while (it.hasNext()) {
 			IntermediateText iText = it.next();
 			if (iText.hasChild()) {
-				// q‹Ÿ‚ª‚¢‚éControlText‚Å‚ ‚é
+				// å­ä¾›ãŒã„ã‚‹ï¼ControlTextã§ã‚ã‚‹
 				ControlText cText = (ControlText) iText;
 				Style rb = cText.getStyle();
 				ruleLinkedList.addLast(cText.getStyle());
 				if (rb != null
 						&& (rb.bBulletLikeStyle() || rb.bTableLikeStyle())
 						&& cText.getText() != null) {
-					// ‰Óğ‘‚«ƒXƒ^ƒCƒ‹‚Ìê‡‚ÍA1s–Ú‚ğƒuƒƒbƒN‚ğ“Š‡‚·‚éIntermediateText‚ª•Û‚µ‚Ä‚¢‚é
-					// ƒeƒLƒXƒg‚Ìo—Í
+					// ç®‡æ¡æ›¸ãã‚¹ã‚¿ã‚¤ãƒ«ã®å ´åˆã¯ã€1è¡Œç›®ã‚’ãƒ–ãƒ­ãƒƒã‚¯ã‚’çµ±æ‹¬ã™ã‚‹IntermediateTextãŒä¿æŒã—ã¦ã„ã‚‹
+					// ãƒ†ã‚­ã‚¹ãƒˆã®å‡ºåŠ›
 					outputText(ruleLinkedList, cText);
 				}
 				outputResult(cText, ruleLinkedList);
 				ruleLinkedList.removeLast();
 			} else {
-				// q‹Ÿ‚ª‚¢‚È‚¢IntermediateText‚Å‚ ‚é
+				// å­ä¾›ãŒã„ãªã„ï¼IntermediateTextã§ã‚ã‚‹
 				Style rb = (Style) iText.getStyle();
 				if (rb != null) {
-					// ƒXƒ^ƒCƒ‹‚ª‚ ‚é
-					// ƒXƒ^ƒCƒ‹‚ğƒvƒbƒVƒ…‚µ‚ÄƒeƒLƒXƒg‚ğo—Í
+					// ã‚¹ã‚¿ã‚¤ãƒ«ãŒã‚ã‚‹
+					// ã‚¹ã‚¿ã‚¤ãƒ«ã‚’ãƒ—ãƒƒã‚·ãƒ¥ã—ã¦ãƒ†ã‚­ã‚¹ãƒˆã‚’å‡ºåŠ›
 					if (iText.getText() != null) {
 						ruleLinkedList.addLast(rb);
 						outputText(ruleLinkedList, iText);
 						ruleLinkedList.removeLast();
 					}
 				} else {
-					// ƒXƒ^ƒCƒ‹‚ª‚È‚¢
-					// ƒeƒLƒXƒg‚ğo—Í‚·‚é‚Ì‚İ
+					// ã‚¹ã‚¿ã‚¤ãƒ«ãŒãªã„
+					// ãƒ†ã‚­ã‚¹ãƒˆã‚’å‡ºåŠ›ã™ã‚‹ã®ã¿
 					if (iText.getText() != null) {
 						outputText(ruleLinkedList, iText);
 					}
@@ -528,13 +528,13 @@ public class IntermediateTextTreeBuilder {
 		while (it.hasNext()) {
 			Style style = it.next();
 			if (style == null) {
-				// outputText += "y–{•¶z";
+				// outputText += "ã€æœ¬æ–‡ã€‘";
 			} else {
 				// outputText += style.getStyleName();
 			}
 		}
 		if (iText.getStyle() == null) {
-			// System.out.println(outputText + "y–{•¶z:" + iText.getText());
+			// System.out.println(outputText + "ã€æœ¬æ–‡ã€‘:" + iText.getText());
 		} else {
 			// System.out.println(outputText + ":" + iText.getText());
 		}

@@ -1,6 +1,6 @@
 /**
- * LongStyleiy‚¨’m‚ç‚¹zy‰Óğ‘‚«zy‰Óğ‘‚«zy–{•¶zy–{•¶zj‚ğŒ³‚ÉAInDesignƒ^ƒO•t‚«ƒeƒLƒXƒg‚ğ¶¬‚·‚é
- * ‚Â‚¢‚Å‚É“Áê•¶š‚Ì’uŠ·‚às‚Á‚Ä‚¢‚Ü‚·B
+ * LongStyleï¼ˆã€ãŠçŸ¥ã‚‰ã›ã€‘ã€ç®‡æ¡æ›¸ãã€‘ã€ç®‡æ¡æ›¸ãã€‘ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘ï¼‰ã‚’å…ƒã«ã€InDesignã‚¿ã‚°ä»˜ããƒ†ã‚­ã‚¹ãƒˆã‚’ç”Ÿæˆã™ã‚‹
+ * ã¤ã„ã§ã«ç‰¹æ®Šæ–‡å­—ã®ç½®æ›ã‚‚è¡Œã£ã¦ã„ã¾ã™ã€‚
  */
 package tx2x;
 
@@ -17,39 +17,39 @@ import tx2x_core.IntermediateText;
 import tx2x_core.Style;
 
 public class LongStyleManager {
-	private static final String KOKOMADE_INDENT_CHAR = String.valueOf((char) 7); // ‚±‚±‚Ü‚ÅƒCƒ“ƒfƒ“ƒg•¶š
-	LinkedList<Style> m_StyleLinkedList; // ƒXƒ^ƒCƒ‹î•ñ‚ğpush/pop‚·‚é
-	String m_sPrevLongStyle; // ’¼‘O‚Ì’·‚¢ƒXƒ^ƒCƒ‹–¼
+	private static final String KOKOMADE_INDENT_CHAR = String.valueOf((char) 7); // ã“ã“ã¾ã§ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆæ–‡å­—
+	LinkedList<Style> m_StyleLinkedList; // ã‚¹ã‚¿ã‚¤ãƒ«æƒ…å ±ã‚’push/popã™ã‚‹
+	String m_sPrevLongStyle; // ç›´å‰ã®é•·ã„ã‚¹ã‚¿ã‚¤ãƒ«å
 	private boolean m_bMac;
 
-	// •Ê†”Ô†‚ª‚©‚í‚Á‚½‚Æ‚«‚Éƒy[ƒW‚ğØ‚è‘Ö‚¦‚é‚½‚ß‚Ì•Ï”
+	// åˆ¥ç´™ç•ªå·ãŒã‹ã‚ã£ãŸã¨ãã«ãƒšãƒ¼ã‚¸ã‚’åˆ‡ã‚Šæ›¿ãˆã‚‹ãŸã‚ã®å¤‰æ•°
 	private int m_nPrevPageNum;
 	private Hashtable<String, Integer> m_cPrefixTable;
 
-	// –¢’è‹`‚ÌƒXƒ^ƒCƒ‹idummy000j‚ğŠÇ—‚·‚é‚½‚ß‚Ì•Ï”
+	// æœªå®šç¾©ã®ã‚¹ã‚¿ã‚¤ãƒ«ï¼ˆdummy000ï¼‰ã‚’ç®¡ç†ã™ã‚‹ãŸã‚ã®å¤‰æ•°
 	private int m_nDummyCounter;
 	private Hashtable<String, String> m_cDummyStyleHashTable;
 
 	/**
-	 * è‡•\‘g‚İ‚ğ§Œä‚·‚é‚½‚ß‚Ì•Ï”
+	 * æ‰‹é †è¡¨çµ„ã¿ã‚’åˆ¶å¾¡ã™ã‚‹ãŸã‚ã®å¤‰æ•°
 	 */
 	private int m_nStepTableWidth = 0;
 
-	// type = 0x1: ‰æ–Ê‚ ‚è
-	// type = 0x2: è‡”š’¼Œã‚É•\‚ ‚è
+	// type = 0x1: ç”»é¢ã‚ã‚Š
+	// type = 0x2: æ‰‹é †æ•°å­—ç›´å¾Œã«è¡¨ã‚ã‚Š
 	int m_nStepTableType = 0;
 
-	// type = 0x1‚Ì‚Æ‚«‚ÍA‰æ–ÊƒLƒƒƒvƒVƒ‡ƒ“‚ğ•Û
-	// type = 0x2‚Ì‚Æ‚«‚ÍAƒXƒeƒbƒv”Ô†‚ğ•Û
+	// type = 0x1ã®ã¨ãã¯ã€ç”»é¢ã‚­ãƒ£ãƒ—ã‚·ãƒ§ãƒ³ã‚’ä¿æŒ
+	// type = 0x2ã®ã¨ãã¯ã€ã‚¹ãƒ†ãƒƒãƒ—ç•ªå·ã‚’ä¿æŒ
 	String m_sStepCaption = "";
 
-	// ƒXƒeƒbƒv”Ô†‚ğ•Û
+	// ã‚¹ãƒ†ãƒƒãƒ—ç•ªå·ã‚’ä¿æŒ
 	String m_sStepNumber = "";
 
 	int m_nPrevStepTableWidth = 0;
 
-	// type = 0x1: ‰æ–Ê‚ ‚è
-	// type = 0x2: è‡”š’¼Œã‚É•\‚ ‚è
+	// type = 0x1: ç”»é¢ã‚ã‚Š
+	// type = 0x2: æ‰‹é †æ•°å­—ç›´å¾Œã«è¡¨ã‚ã‚Š
 	int m_nPrevStepTableType = 0;
 
 	String m_sPrevStepCaption = "";
@@ -73,10 +73,10 @@ public class LongStyleManager {
 			throws IOException {
 		String longStyle = getLongStyle();
 		if (iText.getStyle() == null) {
-			longStyle += "y–{•¶z";
+			longStyle += "ã€æœ¬æ–‡ã€‘";
 		}
 
-		// iText‚Ì–{•¶‚ğˆ—By‰Šú‘€ìzˆÈŠO‚Ì‘S’i—‹¤’Ê
+		// iTextã®æœ¬æ–‡ã‚’å‡¦ç†ã€‚ã€åˆæœŸæ“ä½œã€‘ä»¥å¤–ã®å…¨æ®µè½å…±é€š
 		{
 			String text = iText.getEscapeText();
 			text = text.replaceAll("\\\\<CharStyle:([^>]*)\\\\>",
@@ -84,268 +84,268 @@ public class LongStyleManager {
 			// text = text.replaceAll("\\\\<CharStyle:\\\\>", "<CharStyle:>");
 			if (m_bMac) {
 				String sKeyFontName = "";
-				if (m_sMaker.equals("“ŒÅ")) {
+				if (m_sMaker.equals("æ±èŠ")) {
 					sKeyFontName = "KeyFont";
 
-					// “ŒÅƒXƒ}[ƒgƒtƒHƒ“
-					text = text.replace("yƒz[ƒ€ƒ^ƒbƒ`ƒL[z", "<CharStyle:"
+					// æ±èŠã‚¹ãƒãƒ¼ãƒˆãƒ•ã‚©ãƒ³
+					text = text.replace("ã€ãƒ›ãƒ¼ãƒ ã‚¿ãƒƒãƒã‚­ãƒ¼ã€‘", "<CharStyle:"
 							+ sKeyFontName + ">A<CharStyle:>");
-					text = text.replace("y“dŒ¹ƒ{ƒ^ƒ“z", "<CharStyle:" + sKeyFontName
+					text = text.replace("ã€é›»æºãƒœã‚¿ãƒ³ã€‘", "<CharStyle:" + sKeyFontName
 							+ ">C<CharStyle:>");
-					text = text.replace("y“dŒ¹ƒL[z", "<CharStyle:" + sKeyFontName
+					text = text.replace("ã€é›»æºã‚­ãƒ¼ã€‘", "<CharStyle:" + sKeyFontName
 							+ ">C<CharStyle:>");
-					text = text.replace("yƒJƒƒ‰ƒ{ƒ^ƒ“z", "<CharStyle:"
+					text = text.replace("ã€ã‚«ãƒ¡ãƒ©ãƒœã‚¿ãƒ³ã€‘", "<CharStyle:"
 							+ sKeyFontName + ">D<CharStyle:>");
-					text = text.replace("yƒJƒƒ‰ƒL[z", "<CharStyle:" + sKeyFontName
+					text = text.replace("ã€ã‚«ãƒ¡ãƒ©ã‚­ãƒ¼ã€‘", "<CharStyle:" + sKeyFontName
 							+ ">D<CharStyle:>");
-					text = text.replace("y‰¹—Êƒ{ƒ^ƒ“ãz", "<CharStyle:"
+					text = text.replace("ã€éŸ³é‡ãƒœã‚¿ãƒ³ä¸Šã€‘", "<CharStyle:"
 							+ sKeyFontName + ">E<CharStyle:>");
-					text = text.replace("y‰¹—Êƒ{ƒ^ƒ“‰ºz", "<CharStyle:"
+					text = text.replace("ã€éŸ³é‡ãƒœã‚¿ãƒ³ä¸‹ã€‘", "<CharStyle:"
 							+ sKeyFontName + ">F<CharStyle:>");
-					text = text.replace("yƒTƒCƒhãƒL[z", "<CharStyle:"
+					text = text.replace("ã€ã‚µã‚¤ãƒ‰ä¸Šã‚­ãƒ¼ã€‘", "<CharStyle:"
 							+ sKeyFontName + ">E<CharStyle:>");
-					text = text.replace("yƒTƒCƒh‰ºƒL[z", "<CharStyle:"
+					text = text.replace("ã€ã‚µã‚¤ãƒ‰ä¸‹ã‚­ãƒ¼ã€‘", "<CharStyle:"
 							+ sKeyFontName + ">F<CharStyle:>");
-					text = text.replace("y”­MƒL[z", "<CharStyle:" + sKeyFontName
+					text = text.replace("ã€ç™ºä¿¡ã‚­ãƒ¼ã€‘", "<CharStyle:" + sKeyFontName
 							+ ">G<CharStyle:>");
-					text = text.replace("y“d˜bƒL[z", "<CharStyle:" + sKeyFontName
+					text = text.replace("ã€é›»è©±ã‚­ãƒ¼ã€‘", "<CharStyle:" + sKeyFontName
 							+ ">G<CharStyle:>");
-					text = text.replace("yƒXƒ^[ƒgƒL[z", "<CharStyle:"
+					text = text.replace("ã€ã‚¹ã‚¿ãƒ¼ãƒˆã‚­ãƒ¼ã€‘", "<CharStyle:"
 							+ sKeyFontName + ">H<CharStyle:>");
-					text = text.replace("yƒz[ƒ€ƒL[z", "<CharStyle:" + sKeyFontName
+					text = text.replace("ã€ãƒ›ãƒ¼ãƒ ã‚­ãƒ¼ã€‘", "<CharStyle:" + sKeyFontName
 							+ ">A<CharStyle:>");
-					text = text.replace("yƒƒjƒ…[ƒL[z", "<CharStyle:"
+					text = text.replace("ã€ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚­ãƒ¼ã€‘", "<CharStyle:"
 							+ sKeyFontName + ">M<CharStyle:>");
-					text = text.replace("yƒoƒbƒNƒL[z", "<CharStyle:" + sKeyFontName
+					text = text.replace("ã€ãƒãƒƒã‚¯ã‚­ãƒ¼ã€‘", "<CharStyle:" + sKeyFontName
 							+ ">R<CharStyle:>");
-					// if (text.matches(".*yƒz[ƒ€ƒL[z.*")) {
+					// if (text.matches(".*ã€ãƒ›ãƒ¼ãƒ ã‚­ãƒ¼ã€‘.*")) {
 					// IDTaggedTextGenerator4KDDI
-					// .appendWarn("yƒz[ƒ€ƒL[z‚ÍB–†‚Å‚·Byƒz[ƒ€ƒ^ƒbƒ`ƒL[z‚Ü‚½‚Íyƒz[ƒ€^ƒ[ƒ‹ƒL[z‚ğg—p‚µ‚Ä‚­‚¾‚³‚¢BF"
+					// .appendWarn("ã€ãƒ›ãƒ¼ãƒ ã‚­ãƒ¼ã€‘ã¯æ›–æ˜§ã§ã™ã€‚ã€ãƒ›ãƒ¼ãƒ ã‚¿ãƒƒãƒã‚­ãƒ¼ã€‘ã¾ãŸã¯ã€ãƒ›ãƒ¼ãƒ ï¼ãƒ¡ãƒ¼ãƒ«ã‚­ãƒ¼ã€‘ã‚’ä½¿ç”¨ã—ã¦ãã ã•ã„ã€‚ï¼š"
 					// + text);
 					// }
 					// E31T
-					text = text.replace("yƒƒbƒNƒL[z", "<CharStyle:" + sKeyFontName
+					text = text.replace("ã€ãƒ­ãƒƒã‚¯ã‚­ãƒ¼ã€‘", "<CharStyle:" + sKeyFontName
 							+ ">I<CharStyle:>");
-					text = text.replace("yƒNƒŠƒA^ƒƒ‚ƒL[z", "<CharStyle:"
+					text = text.replace("ã€ã‚¯ãƒªã‚¢ï¼ãƒ¡ãƒ¢ã‚­ãƒ¼ã€‘", "<CharStyle:"
 							+ sKeyFontName + ">B<CharStyle:>");
-					text = text.replace("yƒ[ƒ‹ƒL[z", "<CharStyle:" + sKeyFontName
+					text = text.replace("ã€ãƒ¡ãƒ¼ãƒ«ã‚­ãƒ¼ã€‘", "<CharStyle:" + sKeyFontName
 							+ ">L<CharStyle:>");
-					text = text.replace("y•¶šƒL[z", "<CharStyle:" + sKeyFontName
+					text = text.replace("ã€æ–‡å­—ã‚­ãƒ¼ã€‘", "<CharStyle:" + sKeyFontName
 							+ ">R<CharStyle:>");
-					text = text.replace("yã‰º¶‰EƒL[z", "<CharStyle:"
+					text = text.replace("ã€ä¸Šä¸‹å·¦å³ã‚­ãƒ¼ã€‘", "<CharStyle:"
 							+ sKeyFontName + ">a<CharStyle:>");
-					text = text.replace("yã‰ºƒL[z", "<CharStyle:" + sKeyFontName
+					text = text.replace("ã€ä¸Šä¸‹ã‚­ãƒ¼ã€‘", "<CharStyle:" + sKeyFontName
 							+ ">j<CharStyle:>");
-					text = text.replace("y¶‰EƒL[z", "<CharStyle:" + sKeyFontName
+					text = text.replace("ã€å·¦å³ã‚­ãƒ¼ã€‘", "<CharStyle:" + sKeyFontName
 							+ ">s<CharStyle:>");
-					text = text.replace("yãƒL[z", "<CharStyle:" + sKeyFontName
+					text = text.replace("ã€ä¸Šã‚­ãƒ¼ã€‘", "<CharStyle:" + sKeyFontName
 							+ ">u<CharStyle:>");
-					text = text.replace("y‰ºƒL[z", "<CharStyle:" + sKeyFontName
+					text = text.replace("ã€ä¸‹ã‚­ãƒ¼ã€‘", "<CharStyle:" + sKeyFontName
 							+ ">d<CharStyle:>");
-					text = text.replace("y¶ƒL[z", "<CharStyle:" + sKeyFontName
+					text = text.replace("ã€å·¦ã‚­ãƒ¼ã€‘", "<CharStyle:" + sKeyFontName
 							+ ">l<CharStyle:>");
-					text = text.replace("y‰EƒL[z", "<CharStyle:" + sKeyFontName
+					text = text.replace("ã€å³ã‚­ãƒ¼ã€‘", "<CharStyle:" + sKeyFontName
 							+ ">r<CharStyle:>");
-					text = text.replace("yƒZƒ“ƒ^[ƒL[z", "<CharStyle:"
+					text = text.replace("ã€ã‚»ãƒ³ã‚¿ãƒ¼ã‚­ãƒ¼ã€‘", "<CharStyle:"
 							+ sKeyFontName + ">c<CharStyle:>");
-					text = text.replace("y˜A—æƒL[z", "<CharStyle:" + sKeyFontName
+					text = text.replace("ã€é€£çµ¡å…ˆã‚­ãƒ¼ã€‘", "<CharStyle:" + sKeyFontName
 							+ ">&<CharStyle:>");
-					text = text.replace("yƒAƒhƒŒƒX’ ƒL[z", "<CharStyle:"
+					text = text.replace("ã€ã‚¢ãƒ‰ãƒ¬ã‚¹å¸³ã‚­ãƒ¼ã€‘", "<CharStyle:"
 							+ sKeyFontName + ">&<CharStyle:>");
-					{ // y0ƒL[z`y9ƒL[z
-						Pattern pattern = Pattern.compile("y([0-9])ƒL[z");
+					{ // ã€0ã‚­ãƒ¼ã€‘ï½ã€9ã‚­ãƒ¼ã€‘
+						Pattern pattern = Pattern.compile("ã€([0-9])ã‚­ãƒ¼ã€‘");
 						Matcher matcher = pattern.matcher(text);
 						while (matcher.find()) {
-							text = text.replaceFirst("y[0-9]ƒL[z", "<CharStyle:"
+							text = text.replaceFirst("ã€[0-9]ã‚­ãƒ¼ã€‘", "<CharStyle:"
 									+ sKeyFontName + ">" + matcher.group(1)
 									+ "<CharStyle:>");
 							matcher = pattern.matcher(text);
 						}
 					}
-					text = text.replace("y”ƒL[z", "<CharStyle:" + sKeyFontName
+					text = text.replace("ã€ï¼ƒã‚­ãƒ¼ã€‘", "<CharStyle:" + sKeyFontName
 							+ ">#<CharStyle:>");
-					text = text.replace("y–ƒL[z", "<CharStyle:" + sKeyFontName
+					text = text.replace("ã€ï¼Šã‚­ãƒ¼ã€‘", "<CharStyle:" + sKeyFontName
 							+ ">*<CharStyle:>");
 
-				} else if (m_sMaker.equals("‹ƒZƒ‰")) {
+				} else if (m_sMaker.equals("äº¬ã‚»ãƒ©")) {
 					sKeyFontName = "KeyFont\\_BaseKey001";
 
-					text = text.replace("y”ƒL[z", "<CharStyle:" + sKeyFontName
+					text = text.replace("ã€ï¼ƒã‚­ãƒ¼ã€‘", "<CharStyle:" + sKeyFontName
 							+ ">#<CharStyle:>");
-					text = text.replace("yƒAƒvƒŠƒL[z", "<CharStyle:" + sKeyFontName
+					text = text.replace("ã€ã‚¢ãƒ—ãƒªã‚­ãƒ¼ã€‘", "<CharStyle:" + sKeyFontName
 							+ ">%<CharStyle:>");
-					text = text.replace("yƒAƒhƒŒƒX’ ƒL[z", "<CharStyle:"
+					text = text.replace("ã€ã‚¢ãƒ‰ãƒ¬ã‚¹å¸³ã‚­ãƒ¼ã€‘", "<CharStyle:"
 							+ sKeyFontName + ">&<CharStyle:>");
-					text = text.replace("yƒ}ƒi[ƒL[z", "<CharStyle:" + sKeyFontName
+					text = text.replace("ã€ãƒãƒŠãƒ¼ã‚­ãƒ¼ã€‘", "<CharStyle:" + sKeyFontName
 							+ ">(<CharStyle:>");
-					text = text.replace("yƒJƒƒ‰ƒL[z", "<CharStyle:" + sKeyFontName
+					text = text.replace("ã€ã‚«ãƒ¡ãƒ©ã‚­ãƒ¼ã€‘", "<CharStyle:" + sKeyFontName
 							+ ">)<CharStyle:>");
-					text = text.replace("y–ƒL[z", "<CharStyle:" + sKeyFontName
+					text = text.replace("ã€ï¼Šã‚­ãƒ¼ã€‘", "<CharStyle:" + sKeyFontName
 							+ ">*<CharStyle:>");
-					{ // y0ƒL[z`y9ƒL[z
-						Pattern pattern = Pattern.compile("y([0-9])ƒL[z");
+					{ // ã€0ã‚­ãƒ¼ã€‘ï½ã€9ã‚­ãƒ¼ã€‘
+						Pattern pattern = Pattern.compile("ã€([0-9])ã‚­ãƒ¼ã€‘");
 						Matcher matcher = pattern.matcher(text);
 						while (matcher.find()) {
-							text = text.replaceFirst("y[0-9]ƒL[z", "<CharStyle:"
+							text = text.replaceFirst("ã€[0-9]ã‚­ãƒ¼ã€‘", "<CharStyle:"
 									+ sKeyFontName + ">" + matcher.group(1)
 									+ "<CharStyle:>");
 							matcher = pattern.matcher(text);
 						}
 					}
-					text = text.replace("yƒNƒŠƒA^ƒƒ‚ƒL[z", "<CharStyle:"
+					text = text.replace("ã€ã‚¯ãƒªã‚¢ï¼ãƒ¡ãƒ¢ã‚­ãƒ¼ã€‘", "<CharStyle:"
 							+ sKeyFontName + ">C<CharStyle:>");
-					text = text.replace("yI˜bƒL[z", "<CharStyle:" + sKeyFontName
+					text = text.replace("ã€çµ‚è©±ã‚­ãƒ¼ã€‘", "<CharStyle:" + sKeyFontName
 							+ ">F<CharStyle:>");
-					text = text.replace("yƒ[ƒ‹ƒL[z", "<CharStyle:" + sKeyFontName
+					text = text.replace("ã€ãƒ¡ãƒ¼ãƒ«ã‚­ãƒ¼ã€‘", "<CharStyle:" + sKeyFontName
 							+ ">L<CharStyle:>");
-					text = text.replace("y”­MƒL[z", "<CharStyle:" + sKeyFontName
+					text = text.replace("ã€ç™ºä¿¡ã‚­ãƒ¼ã€‘", "<CharStyle:" + sKeyFontName
 							+ ">N<CharStyle:>");
-					text = text.replace("yEZƒL[z", "<CharStyle:" + sKeyFontName
+					text = text.replace("ã€EZã‚­ãƒ¼ã€‘", "<CharStyle:" + sKeyFontName
 							+ ">R<CharStyle:>");
-					text = text.replace("yã‰º¶‰EƒL[z", "<CharStyle:"
+					text = text.replace("ã€ä¸Šä¸‹å·¦å³ã‚­ãƒ¼ã€‘", "<CharStyle:"
 							+ sKeyFontName + ">a<CharStyle:>");
-					text = text.replace("yƒTƒCƒhŒˆ’èƒL[z", "<CharStyle:"
+					text = text.replace("ã€ã‚µã‚¤ãƒ‰æ±ºå®šã‚­ãƒ¼ã€‘", "<CharStyle:"
 							+ sKeyFontName + ">b<CharStyle:>");
-					text = text.replace("yƒZƒ“ƒ^[ƒL[z", "<CharStyle:"
+					text = text.replace("ã€ã‚»ãƒ³ã‚¿ãƒ¼ã‚­ãƒ¼ã€‘", "<CharStyle:"
 							+ sKeyFontName + ">c<CharStyle:>");
-					text = text.replace("y‰ºƒL[z", "<CharStyle:" + sKeyFontName
+					text = text.replace("ã€ä¸‹ã‚­ãƒ¼ã€‘", "<CharStyle:" + sKeyFontName
 							+ ">d<CharStyle:>");
-					text = text.replace("yTVƒL[z", "<CharStyle:" + sKeyFontName
+					text = text.replace("ã€TVã‚­ãƒ¼ã€‘", "<CharStyle:" + sKeyFontName
 							+ ">e<CharStyle:>");
-					text = text.replace("yƒTƒCƒh‰EƒL[z", "<CharStyle:"
+					text = text.replace("ã€ã‚µã‚¤ãƒ‰å³ã‚­ãƒ¼ã€‘", "<CharStyle:"
 							+ sKeyFontName + ">f<CharStyle:>");
-					text = text.replace("yƒTƒCƒh¶ƒL[z", "<CharStyle:"
+					text = text.replace("ã€ã‚µã‚¤ãƒ‰å·¦ã‚­ãƒ¼ã€‘", "<CharStyle:"
 							+ sKeyFontName + ">g<CharStyle:>");
-					text = text.replace("yƒTƒCƒh¶‰EƒL[z", "<CharStyle:"
+					text = text.replace("ã€ã‚µã‚¤ãƒ‰å·¦å³ã‚­ãƒ¼ã€‘", "<CharStyle:"
 							+ sKeyFontName + ">gf<CharStyle:>");
-					text = text.replace("yã‰ºƒL[z", "<CharStyle:" + sKeyFontName
+					text = text.replace("ã€ä¸Šä¸‹ã‚­ãƒ¼ã€‘", "<CharStyle:" + sKeyFontName
 							+ ">j<CharStyle:>");
-					text = text.replace("y¶ƒL[z", "<CharStyle:" + sKeyFontName
+					text = text.replace("ã€å·¦ã‚­ãƒ¼ã€‘", "<CharStyle:" + sKeyFontName
 							+ ">l<CharStyle:>");
-					text = text.replace("y‰EƒL[z", "<CharStyle:" + sKeyFontName
+					text = text.replace("ã€å³ã‚­ãƒ¼ã€‘", "<CharStyle:" + sKeyFontName
 							+ ">r<CharStyle:>");
-					text = text.replace("y¶‰EƒL[z", "<CharStyle:" + sKeyFontName
+					text = text.replace("ã€å·¦å³ã‚­ãƒ¼ã€‘", "<CharStyle:" + sKeyFontName
 							+ ">s<CharStyle:>");
-					text = text.replace("yãƒL[z", "<CharStyle:" + sKeyFontName
+					text = text.replace("ã€ä¸Šã‚­ãƒ¼ã€‘", "<CharStyle:" + sKeyFontName
 							+ ">u<CharStyle:>");
-					// yƒ}ƒ‹ƒ`ƒL[z‚ÆyƒNƒCƒbƒNƒL[z‚Í“¯‚¶ƒL[ƒtƒHƒ“ƒgiwj
-					text = text.replace("yƒ}ƒ‹ƒ`ƒL[z", "<CharStyle:" + sKeyFontName
+					// ã€ãƒãƒ«ãƒã‚­ãƒ¼ã€‘ã¨ã€ã‚¯ã‚¤ãƒƒã‚¯ã‚­ãƒ¼ã€‘ã¯åŒã˜ã‚­ãƒ¼ãƒ•ã‚©ãƒ³ãƒˆï¼ˆwï¼‰
+					text = text.replace("ã€ãƒãƒ«ãƒã‚­ãƒ¼ã€‘", "<CharStyle:" + sKeyFontName
 							+ ">w<CharStyle:>");
-					text = text.replace("yƒNƒCƒbƒNƒL[z", "<CharStyle:"
+					text = text.replace("ã€ã‚¯ã‚¤ãƒƒã‚¯ã‚­ãƒ¼ã€‘", "<CharStyle:"
 							+ sKeyFontName + ">w<CharStyle:>");
-					// KD47ˆÈ~
-					text = text.replace("yBOOKƒL[z", "<CharStyle:"
+					// KD47ä»¥é™
+					text = text.replace("ã€BOOKã‚­ãƒ¼ã€‘", "<CharStyle:"
 							+ sKeyFontName + ">x<CharStyle:>");
-					// KD48ˆÈ~
-					text = text.replace("yc‰¡—DæØ‘ÖƒL[z", "<CharStyle:"
+					// KD48ä»¥é™
+					text = text.replace("ã€ç¸¦æ¨ªå„ªå…ˆåˆ‡æ›¿ã‚­ãƒ¼ã€‘", "<CharStyle:"
 							+ sKeyFontName + ">m<CharStyle:>");
-					text = text.replace("yƒNƒŠƒAƒL[z", "<CharStyle:" + sKeyFontName
+					text = text.replace("ã€ã‚¯ãƒªã‚¢ã‚­ãƒ¼ã€‘", "<CharStyle:" + sKeyFontName
 							+ ">n<CharStyle:>");
-					text = text.replace("yƒTƒCƒh“dŒ¹ƒL[z", "<CharStyle:"
+					text = text.replace("ã€ã‚µã‚¤ãƒ‰é›»æºã‚­ãƒ¼ã€‘", "<CharStyle:"
 							+ sKeyFontName + ">o<CharStyle:>");
-					text = text.replace("yƒƒbƒNƒL[z", "<CharStyle:" + sKeyFontName
+					text = text.replace("ã€ãƒ­ãƒƒã‚¯ã‚­ãƒ¼ã€‘", "<CharStyle:" + sKeyFontName
 							+ ">p<CharStyle:>");
-					if (text.matches(".*y“dŒ¹ƒL[z.*")) {
-						Tx2x.appendWarn("y“dŒ¹ƒL[z‚ÍB–†‚Å‚·ByI˜bƒL[z‚Ü‚½‚ÍyƒTƒCƒh“dŒ¹ƒL[z‚ğg—p‚µ‚Ä‚­‚¾‚³‚¢BF"
+					if (text.matches(".*ã€é›»æºã‚­ãƒ¼ã€‘.*")) {
+						Tx2x.appendWarn("ã€é›»æºã‚­ãƒ¼ã€‘ã¯æ›–æ˜§ã§ã™ã€‚ã€çµ‚è©±ã‚­ãƒ¼ã€‘ã¾ãŸã¯ã€ã‚µã‚¤ãƒ‰é›»æºã‚­ãƒ¼ã€‘ã‚’ä½¿ç”¨ã—ã¦ãã ã•ã„ã€‚ï¼š"
 								+ text);
 					}
 				}
-				// text = text.replaceAll("-", "<2013>"); // ‘åä•v‚¶‚á‚È‚©‚Á‚½
+				// text = text.replaceAll("-", "<2013>"); // å¤§ä¸ˆå¤«ã˜ã‚ƒãªã‹ã£ãŸ
 				// text = text.replaceAll("(<[^>]+)<2013>([^>]+>)", "$1-$2"); //
-				// ƒ^ƒO‚Ì’†‚Ì-‚ÍA<2013>‚Å‚Íƒ_ƒ
+				// ã‚¿ã‚°ã®ä¸­ã®-ã¯ã€<2013>ã§ã¯ãƒ€ãƒ¡
 
-				if (text.matches(".*ƒL[z.*")) {
-					Tx2x.appendWarn("•s–¾‚ÈƒL[‚ªŒ©‚Â‚©‚è‚Ü‚µ‚½BF" + text);
+				if (text.matches(".*ã‚­ãƒ¼ã€‘.*")) {
+					Tx2x.appendWarn("ä¸æ˜ãªã‚­ãƒ¼ãŒè¦‹ã¤ã‹ã‚Šã¾ã—ãŸã€‚ï¼š" + text);
 				}
 
 				if (!Tx2xOptions.getInstance().getBoolean("InDesignCS5")) {
-					// ‡@`‡S
-					text = text.replace("‡@", "š›1š");
-					text = text.replace("‡A", "š›2š");
-					text = text.replace("‡B", "š›3š");
-					text = text.replace("‡C", "š›4š");
-					text = text.replace("‡D", "š›5š");
-					text = text.replace("‡E", "š›6š");
-					text = text.replace("‡F", "š›7š");
-					text = text.replace("‡G", "š›8š");
-					text = text.replace("‡H", "š›9š");
-					text = text.replace("‡I", "š›10š");
-					text = text.replace("‡J", "š›11š");
-					text = text.replace("‡K", "š›12š");
-					text = text.replace("‡L", "š›13š");
-					text = text.replace("‡M", "š›14š");
-					text = text.replace("‡N", "š›15š");
-					text = text.replace("‡O", "š›16š");
-					text = text.replace("‡P", "š›17š");
-					text = text.replace("‡Q", "š›18š");
-					text = text.replace("‡R", "š›19š");
-					text = text.replace("‡S", "š›20š");
+					// â‘ ï½â‘³
+					text = text.replace("â‘ ", "â˜…â—‹1â˜…");
+					text = text.replace("â‘¡", "â˜…â—‹2â˜…");
+					text = text.replace("â‘¢", "â˜…â—‹3â˜…");
+					text = text.replace("â‘£", "â˜…â—‹4â˜…");
+					text = text.replace("â‘¤", "â˜…â—‹5â˜…");
+					text = text.replace("â‘¥", "â˜…â—‹6â˜…");
+					text = text.replace("â‘¦", "â˜…â—‹7â˜…");
+					text = text.replace("â‘§", "â˜…â—‹8â˜…");
+					text = text.replace("â‘¨", "â˜…â—‹9â˜…");
+					text = text.replace("â‘©", "â˜…â—‹10â˜…");
+					text = text.replace("â‘ª", "â˜…â—‹11â˜…");
+					text = text.replace("â‘«", "â˜…â—‹12â˜…");
+					text = text.replace("â‘¬", "â˜…â—‹13â˜…");
+					text = text.replace("â‘­", "â˜…â—‹14â˜…");
+					text = text.replace("â‘®", "â˜…â—‹15â˜…");
+					text = text.replace("â‘¯", "â˜…â—‹16â˜…");
+					text = text.replace("â‘°", "â˜…â—‹17â˜…");
+					text = text.replace("â‘±", "â˜…â—‹18â˜…");
+					text = text.replace("â‘²", "â˜…â—‹19â˜…");
+					text = text.replace("â‘³", "â˜…â—‹20â˜…");
 				}
 			}
 
-			{ // ¦0`¦999iŒ…”§ŒÀ–³‚µj
-				Pattern pattern = Pattern.compile("š(¦[0-9]*)š");
+			{ // â€»0ï½â€»999ï¼ˆæ¡æ•°åˆ¶é™ç„¡ã—ï¼‰
+				Pattern pattern = Pattern.compile("â˜…(â€»[0-9]*)â˜…");
 				Matcher matcher = pattern.matcher(text);
 				while (matcher.find()) {
-					text = text.replaceFirst("š¦[0-9]*š",
+					text = text.replaceFirst("â˜…â€»[0-9]*â˜…",
 							"<CharStyle:small-up>" + matcher.group(1)
 									+ "<CharStyle:>");
 					matcher = pattern.matcher(text);
 				}
 			}
 
-			// šiRjš
-			text = text.replace("šiRjš",
+			// â˜…ï¼ˆRï¼‰â˜…
+			text = text.replace("â˜…ï¼ˆRï¼‰â˜…",
 					"<CharStyle:small-up><00AE><CharStyle:>");
-			// šiCjš
-			text = text.replace("šiCjš", "<cOTFContAlt:0><00A9><cOTFContAlt:>");
-			// šTMš
-			text = text.replace("šTMš", "<cOTFContAlt:0><2122><cOTFContAlt:>");
+			// â˜…ï¼ˆCï¼‰â˜…
+			text = text.replace("â˜…ï¼ˆCï¼‰â˜…", "<cOTFContAlt:0><00A9><cOTFContAlt:>");
+			// â˜…TMâ˜…
+			text = text.replace("â˜…TMâ˜…", "<cOTFContAlt:0><2122><cOTFContAlt:>");
 
-			// `
-			// text = text.replace("`", "<FF5E>");
-			// text = text.replace("|", "<2212>");
+			// ï½
+			// text = text.replace("ï½", "<FF5E>");
+			// text = text.replace("ï¼", "<2212>");
 
-			text = text.replace("¥P.", "<25B6>P.");
-			text = text.replace(" ¥ ", " <25B6> ");
+			text = text.replace("â–¼P.", "<25B6>P.");
+			text = text.replace(" â–¼ ", " <25B6> ");
 
-			{ // ‘€ìn
-				Pattern pattern = Pattern.compile("‘€ì([‚O-‚X]+)");
+			{ // æ“ä½œn
+				Pattern pattern = Pattern.compile("æ“ä½œ([ï¼-ï¼™]+)");
 				Matcher matcher = pattern.matcher(text);
 				if (matcher.find()) {
 					text = matcher
-							.replaceFirst("‘€ì<2009><CharStyle:step\\\\_number02><cOTFContAlt:0><cOTFeatureList:nalt\\\\,7>"
+							.replaceFirst("æ“ä½œ<2009><CharStyle:step\\\\_number02><cOTFContAlt:0><cOTFeatureList:nalt\\\\,7>"
 									+ zenkakuNumberToHankakuNumber(matcher
 											.group(1))
 									+ "<cOTFContAlt:><cOTFeatureList:><cOTFContAlt:0><2009><cOTFContAlt:><CharStyle:>");
 				}
 			}
 
-			text = text.replace("š‚±‚±‚Ü‚ÅƒCƒ“ƒfƒ“ƒgš", KOKOMADE_INDENT_CHAR);
+			text = text.replace("â˜…ã“ã“ã¾ã§ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆâ˜…", KOKOMADE_INDENT_CHAR);
 
 			iText.setText(text);
 		}
 
-		// •W€“I‚Èƒ`ƒFƒbƒNi‚»‚ê‚¼‚ê“Æ—§‚µ‚Ä‚¢‚é‚Ì‚Å‡•s“¯j
+		// æ¨™æº–çš„ãªãƒã‚§ãƒƒã‚¯ï¼ˆãã‚Œãã‚Œç‹¬ç«‹ã—ã¦ã„ã‚‹ã®ã§é †ä¸åŒï¼‰
 
-		if (longStyle.equals("yÍzyÍz") || longStyle.equals("y•t˜^zyÍzyÍz")) {
+		if (longStyle.equals("ã€ç« ã€‘ã€ç« ã€‘") || longStyle.equals("ã€ä»˜éŒ²ã€‘ã€ç« ã€‘ã€ç« ã€‘")) {
 			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:‘åŒ©o‚µ>";
+			return "<ParaStyle:å¤§è¦‹å‡ºã—>";
 		}
 
-		if (longStyle.equals("yßzyßz")) {
-			iText.setText(iText.getText().substring(3)); // yßz‚ğíœ‚·‚é‚Â‚à‚è
+		if (longStyle.equals("ã€ç¯€ã€‘ã€ç¯€ã€‘")) {
+			iText.setText(iText.getText().substring(3)); // ã€ç¯€ã€‘ã‚’å‰Šé™¤ã™ã‚‹ã¤ã‚‚ã‚Š
 			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:¬Œ©o‚µ>";
+			return "<ParaStyle:å°è¦‹å‡ºã—>";
 		}
 
-		if (longStyle.equals("y€zy€z") || longStyle.equals("yˆÀ‘Sã‚Ì‚²’ˆÓzy€zy€z")
-				|| longStyle.equals("y•t˜^zy€zy€z")) {
+		if (longStyle.equals("ã€é …ã€‘ã€é …ã€‘") || longStyle.equals("ã€å®‰å…¨ä¸Šã®ã”æ³¨æ„ã€‘ã€é …ã€‘ã€é …ã€‘")
+				|| longStyle.equals("ã€ä»˜éŒ²ã€‘ã€é …ã€‘ã€é …ã€‘")) {
 			String ret = "";
-			iText.setText(iText.getText().substring(3)); // yßz‚ğíœ‚·‚é‚Â‚à‚è
-			// if (iText.getText().equals("ƒtƒHƒgƒTƒCƒY‚ğİ’è‚·‚é"))
+			iText.setText(iText.getText().substring(3)); // ã€ç¯€ã€‘ã‚’å‰Šé™¤ã™ã‚‹ã¤ã‚‚ã‚Š
+			// if (iText.getText().equals("ãƒ•ã‚©ãƒˆã‚µã‚¤ã‚ºã‚’è¨­å®šã™ã‚‹"))
 			// System.out.println("!");
-			if (m_sPrevLongStyle.equals("ymemozymemoz£")) {
+			if (m_sPrevLongStyle.equals("ã€memoã€‘ã€memoã€‘â–²")) {
 				ret += "<ParaStyle:head04\\_01>";
 			} else {
 				ret += "<ParaStyle:head04>";
@@ -354,163 +354,163 @@ public class LongStyleManager {
 			return ret;
 		}
 
-		if (longStyle.equals("y€2zy€2z")) {
+		if (longStyle.equals("ã€é …2ã€‘ã€é …2ã€‘")) {
 			String ret = "";
-			iText.setText(iText.getText().substring(4)); // yß2z‚ğíœ‚·‚é‚Â‚à‚è
+			iText.setText(iText.getText().substring(4)); // ã€ç¯€2ã€‘ã‚’å‰Šé™¤ã™ã‚‹ã¤ã‚‚ã‚Š
 			ret += "<ParaStyle:head04\\_2line>";
 			m_sPrevLongStyle = longStyle;
 			return ret;
 		}
 
-		if (longStyle.equals("y€‰ºzy€‰ºz")
-				|| longStyle.equals("yˆÀ‘Sã‚Ì‚²’ˆÓzy€‰ºzy€‰ºz")
-				|| longStyle.equals("y•t˜^zy€‰ºzy€‰ºz")
-				|| longStyle.equals("y•t˜^zy—˜—p‹–‘øzy€‰ºzy€‰ºz")) {
+		if (longStyle.equals("ã€é …ä¸‹ã€‘ã€é …ä¸‹ã€‘")
+				|| longStyle.equals("ã€å®‰å…¨ä¸Šã®ã”æ³¨æ„ã€‘ã€é …ä¸‹ã€‘ã€é …ä¸‹ã€‘")
+				|| longStyle.equals("ã€ä»˜éŒ²ã€‘ã€é …ä¸‹ã€‘ã€é …ä¸‹ã€‘")
+				|| longStyle.equals("ã€ä»˜éŒ²ã€‘ã€åˆ©ç”¨è¨±è«¾ã€‘ã€é …ä¸‹ã€‘ã€é …ä¸‹ã€‘")) {
 			String ret = "";
-			iText.setText(iText.getText().substring(4)); // y€‰ºz‚ğíœ‚·‚é‚Â‚à‚è
-			if (m_sPrevLongStyle.equals("yè‡zyè‡zy–{•¶zy–{•¶z"))
-				ret = "<ParaStyle:head05\\_01>¡	";
+			iText.setText(iText.getText().substring(4)); // ã€é …ä¸‹ã€‘ã‚’å‰Šé™¤ã™ã‚‹ã¤ã‚‚ã‚Š
+			if (m_sPrevLongStyle.equals("ã€æ‰‹é †ã€‘ã€æ‰‹é †ã€‘ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘"))
+				ret = "<ParaStyle:head05\\_01>â– 	";
 			else
-				ret = "<ParaStyle:head05>¡	";
+				ret = "<ParaStyle:head05>â– 	";
 			m_sPrevLongStyle = longStyle;
 			return ret;
 		}
 
-		if (longStyle.equals("y–{•¶zy–{•¶z")) {
+		if (longStyle.equals("ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘")) {
 			String text = iText.getText();
 			// <b></b>
 			text = text.replace("\\<b\\>", "<CharStyle:body-M>");
 			text = text.replace("\\</b\\>", "<CharStyle:>");
 			iText.setText(text);
 			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:–{•¶>";
+			return "<ParaStyle:æœ¬æ–‡>";
 		}
 
-		if (longStyle.equals("y–{•¶zy–{•¶zy–{•¶zy–{•¶z")) {
+		if (longStyle.equals("ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:body01>";
 		}
 
-		if (longStyle.equals("y—˜—p‹–‘øzy–{•¶z")
-				|| longStyle.equals("y•t˜^zy—˜—p‹–‘øzy–{•¶z")) {
+		if (longStyle.equals("ã€åˆ©ç”¨è¨±è«¾ã€‘ã€æœ¬æ–‡ã€‘")
+				|| longStyle.equals("ã€ä»˜éŒ²ã€‘ã€åˆ©ç”¨è¨±è«¾ã€‘ã€æœ¬æ–‡ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:body03>";
 		}
 
-		if (longStyle.equals("y—˜—p‹–‘øzyè‡•ªŠòzyè‡•ªŠòz")) {
+		if (longStyle.equals("ã€åˆ©ç”¨è¨±è«¾ã€‘ã€æ‰‹é †åˆ†å²ã€‘ã€æ‰‹é †åˆ†å²ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:body03-Bold01>";
 		}
 
-		if (longStyle.compareTo("yˆÀ‘Sã‚Ì‚²’ˆÓzyè‡•ªŠòzyè‡•ªŠòz") == 0) {
-			iText.setText("¡\t" + iText.getText().substring(1));
+		if (longStyle.compareTo("ã€å®‰å…¨ä¸Šã®ã”æ³¨æ„ã€‘ã€æ‰‹é †åˆ†å²ã€‘ã€æ‰‹é †åˆ†å²ã€‘") == 0) {
+			iText.setText("â– \t" + iText.getText().substring(1));
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:body02-Bold01>";
 		}
 
-		if (longStyle.equals("y—˜—p‹–‘øzy—˜—p‹–‘øŒ_–ñi1jzy—˜—p‹–‘øŒ_–ñi1jz")) {
+		if (longStyle.equals("ã€åˆ©ç”¨è¨±è«¾ã€‘ã€åˆ©ç”¨è¨±è«¾å¥‘ç´„ï¼ˆ1ï¼‰ã€‘ã€åˆ©ç”¨è¨±è«¾å¥‘ç´„ï¼ˆ1ï¼‰ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:body03\\_b>";
 		}
 
-		if (longStyle.equals("y—˜—p‹–‘øzyˆÈãzyˆÈãz")) {
+		if (longStyle.equals("ã€åˆ©ç”¨è¨±è«¾ã€‘ã€ä»¥ä¸Šã€‘ã€ä»¥ä¸Šã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:body03-center01>";
 		}
 
-		if (longStyle.equals("y•t˜^zy—˜—p‹–‘øzy‰Óğ‘‚«Ezy‰Óğ‘‚«Ez")) {
+		if (longStyle.equals("ã€ä»˜éŒ²ã€‘ã€åˆ©ç”¨è¨±è«¾ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘")) {
 			String text = iText.getText();
-			text = text.replaceFirst("E", "<2022>");
+			text = text.replaceFirst("ãƒ»", "â€¢");
 			iText.setText(text);
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:body03\\_a>";
 		}
 
-		if (longStyle.equals("y•t˜^zy—˜—p‹–‘øzy‰Óğ‘‚«Ezy‰Óğ‘‚«Ezy–{•¶zy–{•¶z")) {
+		if (longStyle.equals("ã€ä»˜éŒ²ã€‘ã€åˆ©ç”¨è¨±è«¾ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:body03\\_a>\t";
 		}
 
-		if (longStyle.equals("y•t˜^zy—˜—p‹–‘øzy‰Óğ‘‚«Ezy‰Óğ‘‚«Ezy¦zy¦z")) {
+		if (longStyle.equals("ã€ä»˜éŒ²ã€‘ã€åˆ©ç”¨è¨±è«¾ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€â€»ã€‘ã€â€»ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:cap04>";
 		}
 
-		if (longStyle.equals("y•t˜^zyEngzy–{•¶z")) {
+		if (longStyle.equals("ã€ä»˜éŒ²ã€‘ã€Engã€‘ã€æœ¬æ–‡ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:body\\_Eng00>";
 		}
 
-		if (longStyle.equals("y•t˜^zyEngzy‰Óğ‘‚«Ezy‰Óğ‘‚«Ez")) {
+		if (longStyle.equals("ã€ä»˜éŒ²ã€‘ã€Engã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘")) {
 			String text = iText.getText();
-			text = text.replaceFirst("E", "<2022>");
+			text = text.replaceFirst("ãƒ»", "â€¢");
 			iText.setText(text);
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:body\\_Eng01\\_01>";
 		}
 
-		if (longStyle.equals("y•t˜^zyEngzy‰Óğ‘‚«Ezy‰Óğ‘‚«Ezy–{•¶zy–{•¶z")) {
+		if (longStyle.equals("ã€ä»˜éŒ²ã€‘ã€Engã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:body\\_Eng01\\_01>\t";
 		}
 
-		if (longStyle.equals("y•t˜^zyEngzy•\zyszyƒZƒ‹zy–{•¶z")) {
+		if (longStyle.equals("ã€ä»˜éŒ²ã€‘ã€Engã€‘ã€è¡¨ã€‘ã€è¡Œã€‘ã€ã‚»ãƒ«ã€‘ã€æœ¬æ–‡ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:body\\_Eng00>";
 		}
 
-		if (longStyle.equals("y–ÚŸzy–{•¶z")) {
+		if (longStyle.equals("ã€ç›®æ¬¡ã€‘ã€æœ¬æ–‡ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:contents-body01>";
 		}
 
-		if (longStyle.equals("y–ÚŸzy–ÚŸzy–{•¶zy–{•¶z")) {
+		if (longStyle.equals("ã€ç›®æ¬¡ã€‘ã€ç›®æ¬¡ã€‘ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:contents-body02>";
 		}
 
-		if (longStyle.equals("y–ÚŸzy–ÚŸzy–{•¶zy–{•¶zy–{•¶zy–{•¶z")) {
+		if (longStyle.equals("ã€ç›®æ¬¡ã€‘ã€ç›®æ¬¡ã€‘ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:contents-body03>";
 		}
 
-		if (longStyle.equals("y–ÚŸzy–ÚŸzy–{•¶zy–{•¶zy–{•¶zy–{•¶zy–{•¶zy–{•¶z")) {
+		if (longStyle.equals("ã€ç›®æ¬¡ã€‘ã€ç›®æ¬¡ã€‘ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:contents-body04>";
 		}
 
-		if (longStyle.equals("y•Ò–ÚŸzy–{•¶z") || longStyle.equals("y•t˜^zy•Ò–ÚŸzy–{•¶z")) {
+		if (longStyle.equals("ã€ç·¨ç›®æ¬¡ã€‘ã€æœ¬æ–‡ã€‘") || longStyle.equals("ã€ä»˜éŒ²ã€‘ã€ç·¨ç›®æ¬¡ã€‘ã€æœ¬æ–‡ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:HeadContents01>";
 		}
 
-		if (longStyle.equals("y•Ò–ÚŸzy•Ò–ÚŸzy–{•¶zy–{•¶z")
-				|| longStyle.equals("yˆÀ‘Sã‚Ì‚²’ˆÓzy•Ò–ÚŸzy•Ò–ÚŸzy–{•¶zy–{•¶z")
-				|| longStyle.equals("y•t˜^zy•Ò–ÚŸzy•Ò–ÚŸzy–{•¶zy–{•¶z")) {
+		if (longStyle.equals("ã€ç·¨ç›®æ¬¡ã€‘ã€ç·¨ç›®æ¬¡ã€‘ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘")
+				|| longStyle.equals("ã€å®‰å…¨ä¸Šã®ã”æ³¨æ„ã€‘ã€ç·¨ç›®æ¬¡ã€‘ã€ç·¨ç›®æ¬¡ã€‘ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘")
+				|| longStyle.equals("ã€ä»˜éŒ²ã€‘ã€ç·¨ç›®æ¬¡ã€‘ã€ç·¨ç›®æ¬¡ã€‘ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:HeadContents02>";
 		}
 
-		if (longStyle.equals("y•t˜^zyõˆøzy–{•¶z")) {
+		if (longStyle.equals("ã€ä»˜éŒ²ã€‘ã€ç´¢å¼•ã€‘ã€æœ¬æ–‡ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:index-body01>";
 		}
 
-		if (longStyle.equals("y•t˜^zyõˆøzyõˆøzy–{•¶zy–{•¶z")) {
+		if (longStyle.equals("ã€ä»˜éŒ²ã€‘ã€ç´¢å¼•ã€‘ã€ç´¢å¼•ã€‘ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:index-body02>";
 		}
 
-		if (longStyle.equals("y‰æ–Êzy‰æ–Êz")) {
+		if (longStyle.equals("ã€ç”»é¢ã€‘ã€ç”»é¢ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:body00>";
 		}
 
-		if (longStyle.equals("y‰Óğ‘‚«Ezy‰Óğ‘‚«Ez")
-				|| longStyle.equals("yˆÀ‘Sã‚Ì‚²’ˆÓzy‰Óğ‘‚«Ezy‰Óğ‘‚«Ez")
-				|| longStyle.equals("y•t˜^zy‰Óğ‘‚«Ezy‰Óğ‘‚«Ez")) {
+		if (longStyle.equals("ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘")
+				|| longStyle.equals("ã€å®‰å…¨ä¸Šã®ã”æ³¨æ„ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘")
+				|| longStyle.equals("ã€ä»˜éŒ²ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘")) {
 			String text = iText.getText();
-			text = text.replaceFirst("E", "<2022>");
+			text = text.replaceFirst("ãƒ»", "â€¢");
 			// <b></b>
 			text = text.replace("\\<b\\>", "<CharStyle:body-M>");
 			text = text.replace("\\</b\\>", "<CharStyle:>");
@@ -519,35 +519,35 @@ public class LongStyleManager {
 			return "<ParaStyle:body01>";
 		}
 
-		if (longStyle.equals("y‰Óğ‘‚«Ezy‰Óğ‘‚«Ezy•\z")) {
+		if (longStyle.equals("ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€è¡¨ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:body01>";
 		}
 
-		if (longStyle.equals("y‰Óğ‘‚«Ezy‰Óğ‘‚«Ezy•\zyszyƒZƒ‹zy–{•¶z")) {
+		if (longStyle.equals("ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€è¡¨ã€‘ã€è¡Œã€‘ã€ã‚»ãƒ«ã€‘ã€æœ¬æ–‡ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			String text = iText.getText();
-			if (text.matches(".*y’†‰›‘µ‚¦z.*")) {
-				iText.setText(text.replaceFirst("y’†‰›‘µ‚¦z", ""));
+			if (text.matches(".*ã€ä¸­å¤®æƒãˆã€‘.*")) {
+				iText.setText(text.replaceFirst("ã€ä¸­å¤®æƒãˆã€‘", ""));
 				return "<ParaStyle:table-body01-center01>";
 			} else {
 				return "<ParaStyle:table-body02>";
 			}
 		}
 
-		if (longStyle.equals("y‰Óğ‘‚«Ezy‰Óğ‘‚«Ezy•\zyszyƒZƒ‹Fƒwƒbƒ_[zy–{•¶z")) {
+		if (longStyle.equals("ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€è¡¨ã€‘ã€è¡Œã€‘ã€ã‚»ãƒ«ï¼šãƒ˜ãƒƒãƒ€ãƒ¼ã€‘ã€æœ¬æ–‡ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			String text = iText.getText();
-			if (text.matches(".*y’†‰›‘µ‚¦z.*")) {
-				iText.setText(text.replaceFirst("y’†‰›‘µ‚¦z", ""));
+			if (text.matches(".*ã€ä¸­å¤®æƒãˆã€‘.*")) {
+				iText.setText(text.replaceFirst("ã€ä¸­å¤®æƒãˆã€‘", ""));
 				return "<ParaStyle:table-body01-center01>";
 			} else {
 				return "<ParaStyle:table-body02>";
 			}
 		}
 
-		if (longStyle.equals("y‰Óğ‘‚«Ezy‰Óğ‘‚«Ezy–{•¶zy–{•¶z")
-				|| longStyle.equals("y•t˜^zy‰Óğ‘‚«Ezy‰Óğ‘‚«Ezy–{•¶zy–{•¶z")) {
+		if (longStyle.equals("ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘")
+				|| longStyle.equals("ã€ä»˜éŒ²ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘")) {
 			String text = iText.getText();
 			// <b></b>
 			text = text.replace("\\<b\\>", "<CharStyle:body-M>");
@@ -557,248 +557,248 @@ public class LongStyleManager {
 			return "<ParaStyle:body01>\t";
 		}
 
-		if (longStyle.equals("y‰Óğ‘‚«Ezy‰Óğ‘‚«Ezy‰Óğ‘‚«Ezy‰Óğ‘‚«Ez")
-				|| longStyle.equals("y‰Óğ‘‚«Ezy‰Óğ‘‚«Ezy‰Óğ‘‚«|zy‰Óğ‘‚«|z")
-				|| longStyle.equals("y•t˜^zy‰Óğ‘‚«Ezy‰Óğ‘‚«Ezy‰Óğ‘‚«|zy‰Óğ‘‚«|z")) {
+		if (longStyle.equals("ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘")
+				|| longStyle.equals("ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ãï¼ã€‘ã€ç®‡æ¡æ›¸ãï¼ã€‘")
+				|| longStyle.equals("ã€ä»˜éŒ²ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ãï¼ã€‘ã€ç®‡æ¡æ›¸ãï¼ã€‘")) {
 			String text = iText.getText();
-			text = text.replaceFirst("|", "-");
+			text = text.replaceFirst("ï¼", "-");
 			iText.setText(text);
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:body01\\_a>";
 		}
 
-		if (longStyle.equals("y‰Óğ‘‚«Ezy‰Óğ‘‚«Ezy¦zy¦z")
-				|| longStyle.equals("y•t˜^zy‰Óğ‘‚«Ezy‰Óğ‘‚«Ezy¦zy¦z")) {
+		if (longStyle.equals("ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€â€»ã€‘ã€â€»ã€‘")
+				|| longStyle.equals("ã€ä»˜éŒ²ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€â€»ã€‘ã€â€»ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:cap03>";
 		}
 
-		if (longStyle.equals("y‰Óğ‘‚«Ezy‰Óğ‘‚«Ezy¦zy¦zy–{•¶zy–{•¶z")
-				|| longStyle.equals("y•t˜^zy‰Óğ‘‚«Ezy‰Óğ‘‚«Ezy¦zy¦zy–{•¶zy–{•¶zy–{•¶zy–{•¶z")) {
+		if (longStyle.equals("ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€â€»ã€‘ã€â€»ã€‘ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘")
+				|| longStyle.equals("ã€ä»˜éŒ²ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€â€»ã€‘ã€â€»ã€‘ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:cap03>\t";
 		}
 
-		if (longStyle.equals("y*zy*z") || longStyle.equals("y•t˜^zy*zy*z")
-				|| longStyle.equals("y•t˜^zyEngzy*zy*z")) {
+		if (longStyle.equals("ã€*ã€‘ã€*ã€‘") || longStyle.equals("ã€ä»˜éŒ²ã€‘ã€*ã€‘ã€*ã€‘")
+				|| longStyle.equals("ã€ä»˜éŒ²ã€‘ã€Engã€‘ã€*ã€‘ã€*ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:cap01\\_a>";
 		}
 
-		if (longStyle.equals("y¦zy¦z") || longStyle.equals("y•t˜^zy¦zy¦z")) {
+		if (longStyle.equals("ã€â€»ã€‘ã€â€»ã€‘") || longStyle.equals("ã€ä»˜éŒ²ã€‘ã€â€»ã€‘ã€â€»ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:cap01>";
 		}
 
-		if (longStyle.equals("y•t˜^zy¦Ezy¦Ez")) {
-			iText.setText(iText.getText().substring(1)); // ¦‚ğíœ‚·‚é‚Â‚à‚è
+		if (longStyle.equals("ã€ä»˜éŒ²ã€‘ã€â€»ãƒ»ã€‘ã€â€»ãƒ»ã€‘")) {
+			iText.setText(iText.getText().substring(1)); // â€»ã‚’å‰Šé™¤ã™ã‚‹ã¤ã‚‚ã‚Š
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:cap01>";
 		}
 
-		if (longStyle.equals("y¦zy¦zy–{•¶zy–{•¶z")
-				|| longStyle.equals("y•t˜^zy¦zy¦zy–{•¶zy–{•¶z")
-				|| longStyle.equals("y•t˜^zy¦Ezy¦Ezy–{•¶zy–{•¶z")) {
+		if (longStyle.equals("ã€â€»ã€‘ã€â€»ã€‘ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘")
+				|| longStyle.equals("ã€ä»˜éŒ²ã€‘ã€â€»ã€‘ã€â€»ã€‘ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘")
+				|| longStyle.equals("ã€ä»˜éŒ²ã€‘ã€â€»ãƒ»ã€‘ã€â€»ãƒ»ã€‘ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:cap01>\t";
 		}
 
-		if (longStyle.equals("y¦zy¦zy‰Óğ‘‚«Ezy‰Óğ‘‚«Ez")
-				|| longStyle.equals("y•t˜^zy¦zy¦zy‰Óğ‘‚«Ezy‰Óğ‘‚«Ez")) {
+		if (longStyle.equals("ã€â€»ã€‘ã€â€»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘")
+				|| longStyle.equals("ã€ä»˜éŒ²ã€‘ã€â€»ã€‘ã€â€»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:cap04>";
 		}
 
-		if (longStyle.equals("y¦0zy¦0z")
-				|| longStyle.equals("yˆÀ‘Sã‚Ì‚²’ˆÓzy¦0zy¦0z")
-				|| longStyle.equals("y•t˜^zy¦0zy¦0z")) {
+		if (longStyle.equals("ã€â€»0ã€‘ã€â€»0ã€‘")
+				|| longStyle.equals("ã€å®‰å…¨ä¸Šã®ã”æ³¨æ„ã€‘ã€â€»0ã€‘ã€â€»0ã€‘")
+				|| longStyle.equals("ã€ä»˜éŒ²ã€‘ã€â€»0ã€‘ã€â€»0ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:cap01\\_a>";
 		}
 
-		if (longStyle.equals("y¦0zy¦0zy–{•¶zy–{•¶z")
-				|| longStyle.equals("y•t˜^zy¦0zy¦0zy–{•¶zy–{•¶z")) {
+		if (longStyle.equals("ã€â€»0ã€‘ã€â€»0ã€‘ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘")
+				|| longStyle.equals("ã€ä»˜éŒ²ã€‘ã€â€»0ã€‘ã€â€»0ã€‘ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:cap01\\_a>\t";
 		}
 
-		if (longStyle.equals("y•\z")) {
+		if (longStyle.equals("ã€è¡¨ã€‘")) {
 			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:•\\\:•\>";
+			return "<ParaStyle:è¡¨\\:è¡¨>";
 		}
 
-		if (longStyle.equals("y•\zyszyƒZƒ‹Fƒwƒbƒ_[zy–{•¶z")) {
+		if (longStyle.equals("ã€è¡¨ã€‘ã€è¡Œã€‘ã€ã‚»ãƒ«ï¼šãƒ˜ãƒƒãƒ€ãƒ¼ã€‘ã€æœ¬æ–‡ã€‘")) {
 			m_sPrevLongStyle = longStyle;
-			iText.setText(iText.getText().replace("yƒwƒbƒ_[z", ""));
-			return "<ParaStyle:•\\\:•\ƒwƒbƒ_[>";
+			iText.setText(iText.getText().replace("ã€ãƒ˜ãƒƒãƒ€ãƒ¼ã€‘", ""));
+			return "<ParaStyle:è¡¨\\:è¡¨ãƒ˜ãƒƒãƒ€ãƒ¼>";
 		}
 
-		if (longStyle.equals("y•t˜^zy•\zyszyƒZƒ‹Fƒwƒbƒ_[zy–{•¶z")) {
+		if (longStyle.equals("ã€ä»˜éŒ²ã€‘ã€è¡¨ã€‘ã€è¡Œã€‘ã€ã‚»ãƒ«ï¼šãƒ˜ãƒƒãƒ€ãƒ¼ã€‘ã€æœ¬æ–‡ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			String text = iText.getText();
-			if (text.matches(".*y’†‰›‘µ‚¦z.*")) {
-				iText.setText(text.replaceFirst("y’†‰›‘µ‚¦z", ""));
+			if (text.matches(".*ã€ä¸­å¤®æƒãˆã€‘.*")) {
+				iText.setText(text.replaceFirst("ã€ä¸­å¤®æƒãˆã€‘", ""));
 				return "<ParaStyle:table-title02>";
 			} else {
 				return "<ParaStyle:table-body03>";
 			}
 		}
 
-		if (longStyle.equals("y•\zyszyƒZƒ‹zy–{•¶z")) {
+		if (longStyle.equals("ã€è¡¨ã€‘ã€è¡Œã€‘ã€ã‚»ãƒ«ã€‘ã€æœ¬æ–‡ã€‘")) {
 			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:•\\\:•\–{•¶>";
+			return "<ParaStyle:è¡¨\\:è¡¨æœ¬æ–‡>";
 		}
 
-		if (longStyle.equals("yˆÀ‘Sã‚Ì‚²’ˆÓzy•\zyszyƒZƒ‹zy–{•¶z")) {
+		if (longStyle.equals("ã€å®‰å…¨ä¸Šã®ã”æ³¨æ„ã€‘ã€è¡¨ã€‘ã€è¡Œã€‘ã€ã‚»ãƒ«ã€‘ã€æœ¬æ–‡ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			String text = iText.getText();
-			if (text.matches(".*y’†‰›‘µ‚¦z.*")) {
-				iText.setText(text.replaceFirst("y’†‰›‘µ‚¦z", ""));
+			if (text.matches(".*ã€ä¸­å¤®æƒãˆã€‘.*")) {
+				iText.setText(text.replaceFirst("ã€ä¸­å¤®æƒãˆã€‘", ""));
 				return "<ParaStyle:table-body03-center01>";
 			} else {
 				return "<ParaStyle:table-body04>";
 			}
 		}
 
-		if (longStyle.equals("yˆÀ‘Sã‚Ì‚²’ˆÓzy•\zyszyƒZƒ‹Fƒwƒbƒ_[zy–{•¶z")) {
+		if (longStyle.equals("ã€å®‰å…¨ä¸Šã®ã”æ³¨æ„ã€‘ã€è¡¨ã€‘ã€è¡Œã€‘ã€ã‚»ãƒ«ï¼šãƒ˜ãƒƒãƒ€ãƒ¼ã€‘ã€æœ¬æ–‡ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			String text = iText.getText();
-			if (text.matches(".*y’†‰›‘µ‚¦z.*")) {
-				iText.setText(text.replaceFirst("y’†‰›‘µ‚¦z", ""));
+			if (text.matches(".*ã€ä¸­å¤®æƒãˆã€‘.*")) {
+				iText.setText(text.replaceFirst("ã€ä¸­å¤®æƒãˆã€‘", ""));
 				return "<ParaStyle:table-title02>";
 			} else {
 				return "<ParaStyle:table-body03>";
 			}
 		}
 
-		if (longStyle.equals("yˆÀ‘Sã‚Ì‚²’ˆÓzy•\zyszyƒZƒ‹zy‰Óğ‘‚«Ezy‰Óğ‘‚«Ez")) {
+		if (longStyle.equals("ã€å®‰å…¨ä¸Šã®ã”æ³¨æ„ã€‘ã€è¡¨ã€‘ã€è¡Œã€‘ã€ã‚»ãƒ«ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:table-body04\\_a>";
 		}
 
-		if (longStyle.equals("yˆÀ‘Sã‚Ì‚²’ˆÓzy•\zyszyƒZƒ‹zy1.zy1.z")) {
+		if (longStyle.equals("ã€å®‰å…¨ä¸Šã®ã”æ³¨æ„ã€‘ã€è¡¨ã€‘ã€è¡Œã€‘ã€ã‚»ãƒ«ã€‘ã€1.ã€‘ã€1.ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:table-body04\\_a>";
 		}
 
-		if (longStyle.equals("yˆÀ‘Sã‚Ì‚²’ˆÓzy•\zyszyƒZƒ‹zy1.zy1.zy‰Óğ‘‚«Ezy‰Óğ‘‚«Ez")) {
+		if (longStyle.equals("ã€å®‰å…¨ä¸Šã®ã”æ³¨æ„ã€‘ã€è¡¨ã€‘ã€è¡Œã€‘ã€ã‚»ãƒ«ã€‘ã€1.ã€‘ã€1.ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:table-body04\\_a-tab01>";
 		}
 
-		if (longStyle.equals("yˆÀ‘Sã‚Ì‚²’ˆÓzy•\zyszyƒZƒ‹zy‰Óğ‘‚«œzy‰Óğ‘‚«œz")) {
-			iText.setText(iText.getText().replaceFirst("œ",
-					"<CharStyle:body_color01>œ<CharStyle:>")
-					+ ""); // œ‚ÉF‚ğ•t‚¯‚é
+		if (longStyle.equals("ã€å®‰å…¨ä¸Šã®ã”æ³¨æ„ã€‘ã€è¡¨ã€‘ã€è¡Œã€‘ã€ã‚»ãƒ«ã€‘ã€ç®‡æ¡æ›¸ãâ—ã€‘ã€ç®‡æ¡æ›¸ãâ—ã€‘")) {
+			iText.setText(iText.getText().replaceFirst("â—",
+					"<CharStyle:body_color01>â—<CharStyle:>")
+					+ ""); // â—ã«è‰²ã‚’ä»˜ã‘ã‚‹
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:table-body04\\_a>";
 		}
 
-		if (longStyle.equals("yˆÀ‘Sã‚Ì‚²’ˆÓzy•\zyszyƒZƒ‹zy‰Óğ‘‚«œzy‰Óğ‘‚«œzy–{•¶zy–{•¶z")) {
+		if (longStyle.equals("ã€å®‰å…¨ä¸Šã®ã”æ³¨æ„ã€‘ã€è¡¨ã€‘ã€è¡Œã€‘ã€ã‚»ãƒ«ã€‘ã€ç®‡æ¡æ›¸ãâ—ã€‘ã€ç®‡æ¡æ›¸ãâ—ã€‘ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:table-body04\\_a>\t";
 		}
 
-		if (longStyle.equals("yˆÀ‘Sã‚Ì‚²’ˆÓzy•\zyszyƒZƒ‹zy‰Óğ‘‚«œzy‰Óğ‘‚«œzy‰Óğ‘‚«Ezy‰Óğ‘‚«Ez")) {
+		if (longStyle.equals("ã€å®‰å…¨ä¸Šã®ã”æ³¨æ„ã€‘ã€è¡¨ã€‘ã€è¡Œã€‘ã€ã‚»ãƒ«ã€‘ã€ç®‡æ¡æ›¸ãâ—ã€‘ã€ç®‡æ¡æ›¸ãâ—ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:table-body04\\_a-tab01>";
 		}
 
-		if (longStyle.equals("yˆÀ‘Sã‚Ì‚²’ˆÓzy•\zyszyƒZƒ‹zy‰Óğ‘‚«œzy‰Óğ‘‚«œzy‰Óğ‘‚«|zy‰Óğ‘‚«|z")) {
+		if (longStyle.equals("ã€å®‰å…¨ä¸Šã®ã”æ³¨æ„ã€‘ã€è¡¨ã€‘ã€è¡Œã€‘ã€ã‚»ãƒ«ã€‘ã€ç®‡æ¡æ›¸ãâ—ã€‘ã€ç®‡æ¡æ›¸ãâ—ã€‘ã€ç®‡æ¡æ›¸ãï¼ã€‘ã€ç®‡æ¡æ›¸ãï¼ã€‘")) {
 			m_sPrevLongStyle = longStyle;
-			iText.setText(iText.getText().replaceFirst("|", "<2212>") + "");
+			iText.setText(iText.getText().replaceFirst("ï¼", "<2212>") + "");
 			return "<ParaStyle:table-body04\\_a-tab01>";
 		}
 
-		if (longStyle.equals("yˆÀ‘Sã‚Ì‚²’ˆÓzy•\zyszyƒZƒ‹zy‰Óğ‘‚«œzy‰Óğ‘‚«œzy¦zy¦z")) {
+		if (longStyle.equals("ã€å®‰å…¨ä¸Šã®ã”æ³¨æ„ã€‘ã€è¡¨ã€‘ã€è¡Œã€‘ã€ã‚»ãƒ«ã€‘ã€ç®‡æ¡æ›¸ãâ—ã€‘ã€ç®‡æ¡æ›¸ãâ—ã€‘ã€â€»ã€‘ã€â€»ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:cap04>";
 		}
 
 		if (longStyle
-				.equals("yˆÀ‘Sã‚Ì‚²’ˆÓzy•\zyszyƒZƒ‹zy‰Óğ‘‚«œzy‰Óğ‘‚«œzy‰Óğ‘‚«Ezy‰Óğ‘‚«Ezy–{•¶zy–{•¶z")) {
+				.equals("ã€å®‰å…¨ä¸Šã®ã”æ³¨æ„ã€‘ã€è¡¨ã€‘ã€è¡Œã€‘ã€ã‚»ãƒ«ã€‘ã€ç®‡æ¡æ›¸ãâ—ã€‘ã€ç®‡æ¡æ›¸ãâ—ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:table-body04\\_a-tab01>\t";
 		}
 
 		if (longStyle
-				.equals("yˆÀ‘Sã‚Ì‚²’ˆÓzy•\zyszyƒZƒ‹zy‰Óğ‘‚«œzy‰Óğ‘‚«œzy‰Óğ‘‚«Ezy‰Óğ‘‚«Ezy‰Óğ‘‚«|zy‰Óğ‘‚«|z")) {
+				.equals("ã€å®‰å…¨ä¸Šã®ã”æ³¨æ„ã€‘ã€è¡¨ã€‘ã€è¡Œã€‘ã€ã‚»ãƒ«ã€‘ã€ç®‡æ¡æ›¸ãâ—ã€‘ã€ç®‡æ¡æ›¸ãâ—ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ãï¼ã€‘ã€ç®‡æ¡æ›¸ãï¼ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			iText.setText(iText.getText().replaceFirst("\t",
 					KOKOMADE_INDENT_CHAR));
 			return "<ParaStyle:table-body04\\_a-tab01>\t";
 		}
 
-		if (longStyle.equals("yˆÀ‘Sã‚Ì‚²’ˆÓzy•\zyszyƒZƒ‹zy‰Óğ‘‚«œzy‰Óğ‘‚«œzy1.zy1.z")) {
+		if (longStyle.equals("ã€å®‰å…¨ä¸Šã®ã”æ³¨æ„ã€‘ã€è¡¨ã€‘ã€è¡Œã€‘ã€ã‚»ãƒ«ã€‘ã€ç®‡æ¡æ›¸ãâ—ã€‘ã€ç®‡æ¡æ›¸ãâ—ã€‘ã€1.ã€‘ã€1.ã€‘")) {
 			iText.setText(iText.getText().replaceFirst("\t", ""));
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:table-body04\\_a-tab01>";
 		}
 
-		if (longStyle.equals("yˆÀ‘Sã‚Ì‚²’ˆÓzy•\zyszyƒZƒ‹zy¦zy¦z")) {
+		if (longStyle.equals("ã€å®‰å…¨ä¸Šã®ã”æ³¨æ„ã€‘ã€è¡¨ã€‘ã€è¡Œã€‘ã€ã‚»ãƒ«ã€‘ã€â€»ã€‘ã€â€»ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:cap01>";
 		}
 
-		if (longStyle.equals("y•t˜^zy•\zyszyƒZƒ‹zy–{•¶z")) {
+		if (longStyle.equals("ã€ä»˜éŒ²ã€‘ã€è¡¨ã€‘ã€è¡Œã€‘ã€ã‚»ãƒ«ã€‘ã€æœ¬æ–‡ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			String text = iText.getText();
-			if (text.matches(".*y’†‰›‘µ‚¦z.*")) {
-				iText.setText(text.replaceFirst("y’†‰›‘µ‚¦z", ""));
+			if (text.matches(".*ã€ä¸­å¤®æƒãˆã€‘.*")) {
+				iText.setText(text.replaceFirst("ã€ä¸­å¤®æƒãˆã€‘", ""));
 				return "<ParaStyle:table-body03-center01>";
 			} else {
 				return "<ParaStyle:table-body03>";
 			}
 		}
 
-		if (longStyle.compareTo("y•t˜^zy•\zyszyƒZƒ‹zy‰Óğ‘‚«Ezy‰Óğ‘‚«Ez") == 0) {
+		if (longStyle.compareTo("ã€ä»˜éŒ²ã€‘ã€è¡¨ã€‘ã€è¡Œã€‘ã€ã‚»ãƒ«ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘") == 0) {
 			String text = iText.getText();
-			text = text.replaceFirst("E", "<2022>");
+			text = text.replaceFirst("ãƒ»", "â€¢");
 			iText.setText(text);
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:table-body03\\_a>";
 		}
 
-		if (longStyle.compareTo("y•t˜^zy•\zyszyƒZƒ‹zy‰Óğ‘‚«Ezy‰Óğ‘‚«Ezy–{•¶zy–{•¶z") == 0) {
+		if (longStyle.compareTo("ã€ä»˜éŒ²ã€‘ã€è¡¨ã€‘ã€è¡Œã€‘ã€ã‚»ãƒ«ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘") == 0) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:table-body03\\_a>\t";
 		}
 
-		if (longStyle.compareTo("y•t˜^zy•\zyszyƒZƒ‹zy¦zy¦z") == 0) {
+		if (longStyle.compareTo("ã€ä»˜éŒ²ã€‘ã€è¡¨ã€‘ã€è¡Œã€‘ã€ã‚»ãƒ«ã€‘ã€â€»ã€‘ã€â€»ã€‘") == 0) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:table-body04\\_a>\t";
 		}
 
-		if (longStyle.compareTo("y•\zyszyƒZƒ‹zyQÆzyQÆz") == 0) {
+		if (longStyle.compareTo("ã€è¡¨ã€‘ã€è¡Œã€‘ã€ã‚»ãƒ«ã€‘ã€å‚ç…§ã€‘ã€å‚ç…§ã€‘") == 0) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:table-body02\\_a>";
 		}
 
-		if (longStyle.equals("y•\zyszyƒZƒ‹zy‰Óğ‘‚«Ezy‰Óğ‘‚«Ez")) {
+		if (longStyle.equals("ã€è¡¨ã€‘ã€è¡Œã€‘ã€ã‚»ãƒ«ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			String text = iText.getText();
-			text = text.replaceFirst("E", "<2022>");
+			text = text.replaceFirst("ãƒ»", "â€¢");
 			iText.setText(text);
-			return "<ParaStyle:•\\\:•\ƒoƒŒƒbƒg>";
+			return "<ParaStyle:è¡¨\\:è¡¨ãƒãƒ¬ãƒƒãƒˆ>";
 		}
 
-		if (longStyle.equals("y•\zyszyƒZƒ‹zy‰Óğ‘‚«Ezy‰Óğ‘‚«Ezy–{•¶zy–{•¶z")) {
+		if (longStyle.equals("ã€è¡¨ã€‘ã€è¡Œã€‘ã€ã‚»ãƒ«ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:table-body02\\_a>\t";
 		}
 
-		if (longStyle.compareTo("y•\zyszyƒZƒ‹zy¦zy¦z") == 0) {
+		if (longStyle.compareTo("ã€è¡¨ã€‘ã€è¡Œã€‘ã€ã‚»ãƒ«ã€‘ã€â€»ã€‘ã€â€»ã€‘") == 0) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:cap01>";
 		}
 
-		if (longStyle.compareTo("y•\zyszyƒZƒ‹zyè‡•ªŠòzyè‡•ªŠòz") == 0) {
-			iText.setText("¡\t" + iText.getText().substring(1));
+		if (longStyle.compareTo("ã€è¡¨ã€‘ã€è¡Œã€‘ã€ã‚»ãƒ«ã€‘ã€æ‰‹é †åˆ†å²ã€‘ã€æ‰‹é †åˆ†å²ã€‘") == 0) {
+			iText.setText("â– \t" + iText.getText().substring(1));
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:table-body01-Bold01>";
 		}
 
-		if (longStyle.compareTo("y‰æ–ÊˆÍ‚İzy‰æ–Êzy‰æ–Êz") == 0) {
+		if (longStyle.compareTo("ã€ç”»é¢å›²ã¿ã€‘ã€ç”»é¢ã€‘ã€ç”»é¢ã€‘") == 0) {
 			m_sPrevLongStyle = longStyle;
 			// iText.setText(iText.getText()
 			// + IDTaggedTextGenerator4KDDI.getCRLF(m_bMac)
@@ -813,38 +813,38 @@ public class LongStyleManager {
 					+ "<ParaStyle:body00>";
 		}
 
-		if (longStyle.compareTo("y‰æ–ÊˆÍ‚İzy–{•¶z") == 0) {
+		if (longStyle.compareTo("ã€ç”»é¢å›²ã¿ã€‘ã€æœ¬æ–‡ã€‘") == 0) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:table-cap01>";
 		}
-		if (longStyle.equals("yƒƒ‚zyƒƒ‚z")) {
-			if (iText.getText().equals("£")) {
+		if (longStyle.equals("ã€ãƒ¡ãƒ¢ã€‘ã€ãƒ¡ãƒ¢ã€‘")) {
+			if (iText.getText().equals("â–²")) {
 				iText.setText("");
-				m_sPrevLongStyle = longStyle + "£";
+				m_sPrevLongStyle = longStyle + "â–²";
 				return "<CellEnd:><RowEnd:><TableEnd:>";
 			} else {
 				iText.setText(null);
-				m_sPrevLongStyle = longStyle + "¥";
+				m_sPrevLongStyle = longStyle + "â–¼";
 
-				// FIXME: ‰üs‚µ‚È‚¢‚æ‚¤‚É“`‚¦‚½‚¢
-				return "<ParaStyle:–{•¶><TableStyle:ƒƒ‚><TableStart:1,1:0:0<tCellDefaultCellType:Text>><ColStart:<tColAttrWidth:238.52362204733453>><RowStart:<tRowAttrHeight:167.89844595841532><tRowAttrMinRowSize:167.89844595841532>><CellStyle:ƒƒ‚><StylePriority:1><CellStart:1,1>";
+				// FIXME: æ”¹è¡Œã—ãªã„ã‚ˆã†ã«ä¼ãˆãŸã„
+				return "<ParaStyle:æœ¬æ–‡><TableStyle:ãƒ¡ãƒ¢><TableStart:1,1:0:0<tCellDefaultCellType:Text>><ColStart:<tColAttrWidth:238.52362204733453>><RowStart:<tRowAttrHeight:167.89844595841532><tRowAttrMinRowSize:167.89844595841532>><CellStyle:ãƒ¡ãƒ¢><StylePriority:1><CellStart:1,1>";
 			}
 		}
 
-		if (longStyle.equals("yƒƒ‚zy‰Óğ‘‚«Ezy‰Óğ‘‚«Ez")) {
+		if (longStyle.equals("ã€ãƒ¡ãƒ¢ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			String text = iText.getText();
-			text = text.replaceFirst("E", "<2022>");
+			text = text.replaceFirst("ãƒ»", "â€¢");
 			iText.setText(text);
-			return "<ParaStyle:ƒoƒŒƒbƒg>";
+			return "<ParaStyle:ãƒãƒ¬ãƒƒãƒˆ>";
 		}
 
-		if (longStyle.equals("yƒƒ‚zy‰Óğ‘‚«Ezy‰Óğ‘‚«Ezyè‡zyè‡z")) {
+		if (longStyle.equals("ã€ãƒ¡ãƒ¢ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€æ‰‹é †ã€‘ã€æ‰‹é †ã€‘")) {
 			m_sPrevLongStyle = longStyle;
-			// è‡”š‚Ì’u‚«Š·‚¦
+			// æ‰‹é †æ•°å­—ã®ç½®ãæ›ãˆ
 			String text = iText.getText();
-			text = text.replaceFirst("^‚O", ""); // "‚O\t"‚Ííœ‚·‚é
-			Pattern pattern = Pattern.compile("^([‚O-‚X]+)");
+			text = text.replaceFirst("^ï¼", ""); // "ï¼\t"ã¯å‰Šé™¤ã™ã‚‹
+			Pattern pattern = Pattern.compile("^([ï¼-ï¼™]+)");
 			Matcher matcher = pattern.matcher(text);
 			if (matcher.find()) {
 				text = matcher
@@ -852,33 +852,33 @@ public class LongStyleManager {
 								.group(1)) + ".");
 			}
 			iText.setText(text);
-			return "<ParaStyle:ƒoƒŒƒbƒg•â‘«ƒoƒŒƒbƒg>";
+			return "<ParaStyle:ãƒãƒ¬ãƒƒãƒˆè£œè¶³ãƒãƒ¬ãƒƒãƒˆ>";
 		}
 
-		if (longStyle.equals("yƒƒ‚zy‰Óğ‘‚«Ezy‰Óğ‘‚«Ezyè‡zyè‡zy–{•¶zy–{•¶z")) {
+		if (longStyle.equals("ã€ãƒ¡ãƒ¢ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€æ‰‹é †ã€‘ã€æ‰‹é †ã€‘ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘")) {
 			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:ƒoƒŒƒbƒg•â‘«ƒoƒŒƒbƒg>\t";
+			return "<ParaStyle:ãƒãƒ¬ãƒƒãƒˆè£œè¶³ãƒãƒ¬ãƒƒãƒˆ>\t";
 		}
 
-		if (longStyle.compareTo("yƒƒ‚zy‰Óğ‘‚«Ezy‰Óğ‘‚«Ezy‰Óğ‘‚«Ezy‰Óğ‘‚«Ez") == 0) {
+		if (longStyle.compareTo("ã€ãƒ¡ãƒ¢ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘") == 0) {
 			m_sPrevLongStyle = longStyle;
 			String text = iText.getText();
-			text = text.replaceFirst("E", "<2022>");
+			text = text.replaceFirst("ãƒ»", "â€¢");
 			iText.setText(text);
-			return "<ParaStyle:ƒoƒŒƒbƒg•â‘«ƒoƒŒƒbƒg>";
+			return "<ParaStyle:ãƒãƒ¬ãƒƒãƒˆè£œè¶³ãƒãƒ¬ãƒƒãƒˆ>";
 		}
 
-		if (longStyle.compareTo("yƒƒ‚zy‰Óğ‘‚«Ezy‰Óğ‘‚«Ezy‰Óğ‘‚«Ezy‰Óğ‘‚«Ezy–{•¶zy–{•¶z") == 0) {
+		if (longStyle.compareTo("ã€ãƒ¡ãƒ¢ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘") == 0) {
 			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:ƒoƒŒƒbƒg•â‘«ƒoƒŒƒbƒg>\t";
+			return "<ParaStyle:ãƒãƒ¬ãƒƒãƒˆè£œè¶³ãƒãƒ¬ãƒƒãƒˆ>\t";
 		}
 
-		if (longStyle.equals("yè‡zyè‡z") || longStyle.equals("y•t˜^zyè‡zyè‡z")) {
-			// è‡”š‚Ì’u‚«Š·‚¦
+		if (longStyle.equals("ã€æ‰‹é †ã€‘ã€æ‰‹é †ã€‘") || longStyle.equals("ã€ä»˜éŒ²ã€‘ã€æ‰‹é †ã€‘ã€æ‰‹é †ã€‘")) {
+			// æ‰‹é †æ•°å­—ã®ç½®ãæ›ãˆ
 			String text = iText.getText();
 			String sStepNumber = text.substring(0, text.indexOf("\t"));
-			text = text.replaceFirst("^‚O", ""); // "‚O\t"‚Ííœ‚·‚é
-			Pattern pattern = Pattern.compile("^([‚O-‚X]+)");
+			text = text.replaceFirst("^ï¼", ""); // "ï¼\t"ã¯å‰Šé™¤ã™ã‚‹
+			Pattern pattern = Pattern.compile("^([ï¼-ï¼™]+)");
 			Matcher matcher = pattern.matcher(text);
 			if (matcher.find()) {
 				text = matcher
@@ -888,29 +888,29 @@ public class LongStyleManager {
 
 			iText.setText(text);
 
-			// •\‘g‚İ‚É‚·‚é‚©”»’f
-			// è‡‚ÌŠJn
+			// è¡¨çµ„ã¿ã«ã™ã‚‹ã‹åˆ¤æ–­
+			// æ‰‹é †ã®é–‹å§‹
 			String ret = "";
 
-			// è‡‚Ìê‡‚Í‚±‚Ìs‚ğ•\‘g‚İ‚É‚·‚é‚©ŒŸ“¢‚·‚é
-			// System.out.println("‚±‚Ìs‚ğ•\‘g‚İ‚É‚·‚é‚©ŒŸ“¢‚µ‚Ü‚·B");
+			// æ‰‹é †ã®å ´åˆã¯ã“ã®è¡Œã‚’è¡¨çµ„ã¿ã«ã™ã‚‹ã‹æ¤œè¨ã™ã‚‹
+			// System.out.println("ã“ã®è¡Œã‚’è¡¨çµ„ã¿ã«ã™ã‚‹ã‹æ¤œè¨ã—ã¾ã™ã€‚");
 			m_nStepTableType = 0;
-			if (iText.getText().matches(".*	y‰æ–Ê.*")) {
-				// ‰æ–Ê‚ ‚è
+			if (iText.getText().matches(".*	ã€ç”»é¢.*")) {
+				// ç”»é¢ã‚ã‚Š
 				m_nStepTableType |= 0x1;
 				m_nStepTableWidth = 3;
 				m_sStepCaption = iText.getText().substring(
-						1 + iText.getText().indexOf("zs"));
+						1 + iText.getText().indexOf("ã€‘ã€Š"));
 				iText.setText(iText.getText().substring(0,
-						iText.getText().indexOf("	y‰æ–Ê")));
+						iText.getText().indexOf("	ã€ç”»é¢")));
 			}
 			if (iText.getText().equals("\t")
 					|| iText.getText()
 							.matches(
 									"<CharStyle:step\\\\_number01><cOTFContAlt:0><cOTFeatureList:nalt\\\\,7>[0-9]+<cOTFContAlt:><cOTFeatureList:><CharStyle:>\\t")) {
-				// "[‚O-‚X]+\\t")) {
+				// "[ï¼-ï¼™]+\\t")) {
 
-				// ’¼Œã‚É•\‘g‚İ‚ª‚ ‚é‘€ì•¶
+				// ç›´å¾Œã«è¡¨çµ„ã¿ãŒã‚ã‚‹æ“ä½œæ–‡
 				m_nStepTableType |= 0x2;
 				m_nStepTableWidth = 0;
 				m_sStepCaption = iText.getText().substring(0,
@@ -926,9 +926,9 @@ public class LongStyleManager {
 			}
 
 			if (m_nPrevStepTableType == 0x1) {
-				// ‰æ–Ê‚ ‚èè‡‚ÌI—¹
+				// ç”»é¢ã‚ã‚Šæ‰‹é †ã®çµ‚äº†
 				String tCellAttrTopInset = "5.669291338582678";
-				if (m_sStepNumber.equals("‚P")) {
+				if (m_sStepNumber.equals("ï¼‘")) {
 					tCellAttrTopInset = "0";
 				}
 				ret += "<CellEnd:><CellStart:1,1<tCellAttrLeftInset:0><tCellAttrTopInset:"
@@ -951,23 +951,23 @@ public class LongStyleManager {
 
 				if (m_nStepTableType != m_nPrevStepTableType) {
 					// System.out
-					// .println("—ñ”:" + m_nStepTableWidth + "‚Ì•\‘g‚İ‚É‚µ‚Ü‚µ‚½B");
+					// .println("åˆ—æ•°:" + m_nStepTableWidth + "ã®è¡¨çµ„ã¿ã«ã—ã¾ã—ãŸã€‚");
 					ret += "<TableEnd:>" + Tx2x.getCRLF(m_bMac);
 					m_nStepTableType = 0;
 				}
 			}
 
-			m_sStepNumber = sStepNumber; // ”½‰f‚·‚éi’x‰„j
-			// o—Í‚·‚é
+			m_sStepNumber = sStepNumber; // åæ˜ ã™ã‚‹ï¼ˆé…å»¶ï¼‰
+			// å‡ºåŠ›ã™ã‚‹
 			if (m_nStepTableType == 0) {
-				// System.out.println("•\‘g‚İ‚É‚µ‚Ü‚¹‚ñB");
+				// System.out.println("è¡¨çµ„ã¿ã«ã—ã¾ã›ã‚“ã€‚");
 			} else if (m_nStepTableType == 0x1) {
-				// ‰æ–Ê‚ ‚è‚È‚¾‚¯B
+				// ç”»é¢ã‚ã‚Šãªã ã‘ã€‚
 				if (m_nStepTableType != m_nPrevStepTableType) {
 					// TableStart
-					// ‚»‚Ì‘O‚ÉtBeforeSpace‚ğŒˆ‚ß‚é
+					// ãã®å‰ã«tBeforeSpaceã‚’æ±ºã‚ã‚‹
 					String tBeforeSpace;
-					if (m_sPrevLongStyle.equals("yßzyßz")) {
+					if (m_sPrevLongStyle.equals("ã€ç¯€ã€‘ã€ç¯€ã€‘")) {
 						tBeforeSpace = "1.4173228346456694";
 					} else {
 						tBeforeSpace = "0";
@@ -979,7 +979,7 @@ public class LongStyleManager {
 				}
 				// RowStart
 				String tCellAttrTopInset = "5.669291338582678";
-				if (m_sStepNumber.equals("‚P")) {
+				if (m_sStepNumber.equals("ï¼‘")) {
 					tCellAttrTopInset = "0";
 				}
 				ret += "<RowStart:<tRowAttrHeight:5.669291338582678><tRowAttrMinRowSize:5.669291338582678>><CellStart:1,1<tCellAttrLeftInset:0><tCellAttrTopInset:"
@@ -995,7 +995,7 @@ public class LongStyleManager {
 				return "";
 			}
 
-			ret += "<ParaStyle:ƒŠƒXƒg>";
+			ret += "<ParaStyle:ãƒªã‚¹ãƒˆ>";
 
 			m_nPrevStepTableType = m_nStepTableType;
 			m_nPrevStepTableWidth = m_nStepTableWidth;
@@ -1004,21 +1004,21 @@ public class LongStyleManager {
 			return ret;
 		}
 
-		if (longStyle.equals("yè‡zyè‡zy–{•¶zy–{•¶z")
-				|| longStyle.equals("yè‡zyè‡zy‰æ–Êzy‰æ–Êz")) {
+		if (longStyle.equals("ã€æ‰‹é †ã€‘ã€æ‰‹é †ã€‘ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘")
+				|| longStyle.equals("ã€æ‰‹é †ã€‘ã€æ‰‹é †ã€‘ã€ç”»é¢ã€‘ã€ç”»é¢ã€‘")) {
 			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:ƒŠƒXƒg•â‘«>";
+			return "<ParaStyle:ãƒªã‚¹ãƒˆè£œè¶³>";
 		}
 
-		if (longStyle.equals("yè‡zyè‡zy‰Óğ‘‚«Ezy‰Óğ‘‚«Ez")) {
+		if (longStyle.equals("ã€æ‰‹é †ã€‘ã€æ‰‹é †ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘")) {
 			String text = iText.getText();
-			text = text.replaceFirst("E", "<2022>");
+			text = text.replaceFirst("ãƒ»", "â€¢");
 			iText.setText(text);
 			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:ƒŠƒXƒg•â‘«ƒoƒŒƒbƒg>";
+			return "<ParaStyle:ãƒªã‚¹ãƒˆè£œè¶³ãƒãƒ¬ãƒƒãƒˆ>";
 		}
 
-		if (longStyle.compareTo("yè‡zyè‡zy‰Óğ‘‚«Ezy‰Óğ‘‚«Ezy–{•¶zy–{•¶z") == 0) {
+		if (longStyle.compareTo("ã€æ‰‹é †ã€‘ã€æ‰‹é †ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘") == 0) {
 			m_sPrevLongStyle = longStyle;
 
 			String text = iText.getText();
@@ -1031,11 +1031,11 @@ public class LongStyleManager {
 			return "<ParaStyle:step-body01\\_a>\t";
 		}
 
-		if (longStyle.compareTo("yè‡zyè‡zy‰Óğ‘‚«Ezy‰Óğ‘‚«EzyƒL[à–¾zyƒL[à–¾z") == 0) {
+		if (longStyle.compareTo("ã€æ‰‹é †ã€‘ã€æ‰‹é †ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ã‚­ãƒ¼èª¬æ˜ã€‘ã€ã‚­ãƒ¼èª¬æ˜ã€‘") == 0) {
 			m_sPrevLongStyle = longStyle;
 
 			String text = iText.getText();
-			text = text.replaceFirst("F", "F" + KOKOMADE_INDENT_CHAR);
+			text = text.replaceFirst("ï¼š", "ï¼š" + KOKOMADE_INDENT_CHAR);
 
 			// <b></b>
 			text = text.replace("\\<b\\>", "<CharStyle:body-M>");
@@ -1045,12 +1045,12 @@ public class LongStyleManager {
 			return "<ParaStyle:step-body01\\_a>\t";
 		}
 
-		if (longStyle.compareTo("yè‡zyè‡zy‰Óğ‘‚«Ezy‰Óğ‘‚«Ezy¦zy¦z") == 0) {
+		if (longStyle.compareTo("ã€æ‰‹é †ã€‘ã€æ‰‹é †ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€â€»ã€‘ã€â€»ã€‘") == 0) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:step-body02\\_02\\_kome>";
 		}
 
-		if (longStyle.compareTo("yè‡zyè‡zy‰Óğ‘‚«Ezy‰Óğ‘‚«Ezy‰Óğ‘‚«|zy‰Óğ‘‚«|z") == 0) {
+		if (longStyle.compareTo("ã€æ‰‹é †ã€‘ã€æ‰‹é †ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ãï¼ã€‘ã€ç®‡æ¡æ›¸ãï¼ã€‘") == 0) {
 			String text = iText.getText();
 			text = text.replaceFirst("\t", KOKOMADE_INDENT_CHAR);
 			iText.setText(text);
@@ -1058,66 +1058,66 @@ public class LongStyleManager {
 			return "<ParaStyle:step-body01\\_a>\t";
 		}
 
-		if (longStyle.compareTo("yè‡zyè‡zy‰Óğ‘‚«Ezy‰Óğ‘‚«Ezy—áFzy—áFz") == 0) {
+		if (longStyle.compareTo("ã€æ‰‹é †ã€‘ã€æ‰‹é †ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ä¾‹ï¼šã€‘ã€ä¾‹ï¼šã€‘") == 0) {
 			String text = iText.getText();
-			int c = text.indexOf("—áF");
+			int c = text.indexOf("ä¾‹ï¼š");
 			if (c != -1) {
-				text = "—áF" + KOKOMADE_INDENT_CHAR + text.substring(c + 2);
+				text = "ä¾‹ï¼š" + KOKOMADE_INDENT_CHAR + text.substring(c + 2);
 			}
 			iText.setText(text);
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:step-body01\\_a>\t";
 		}
 
-		if (longStyle.equals("yè‡zyè‡zy‰Óğ‘‚«Ezy‰Óğ‘‚«Ezy•\z")) {
+		if (longStyle.equals("ã€æ‰‹é †ã€‘ã€æ‰‹é †ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€è¡¨ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:step-body01\\_a>";
 		}
 
-		if (longStyle.compareTo("yè‡zyè‡zy‰Óğ‘‚«Ezy‰Óğ‘‚«Ezy•\zyszyƒZƒ‹zy–{•¶z") == 0) {
+		if (longStyle.compareTo("ã€æ‰‹é †ã€‘ã€æ‰‹é †ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€è¡¨ã€‘ã€è¡Œã€‘ã€ã‚»ãƒ«ã€‘ã€æœ¬æ–‡ã€‘") == 0) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:table-body02>";
 		}
-		if (longStyle.compareTo("yè‡zyè‡zy‰Óğ‘‚«Ezy‰Óğ‘‚«Ezy•\zyszyƒZƒ‹Fƒwƒbƒ_[zy–{•¶z") == 0) {
+		if (longStyle.compareTo("ã€æ‰‹é †ã€‘ã€æ‰‹é †ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€è¡¨ã€‘ã€è¡Œã€‘ã€ã‚»ãƒ«ï¼šãƒ˜ãƒƒãƒ€ãƒ¼ã€‘ã€æœ¬æ–‡ã€‘") == 0) {
 			String text = iText.getText();
 			m_sPrevLongStyle = longStyle;
-			if (text.matches(".*y’†‰›‘µ‚¦z.*")) {
-				iText.setText(text.replaceFirst("y’†‰›‘µ‚¦z", ""));
+			if (text.matches(".*ã€ä¸­å¤®æƒãˆã€‘.*")) {
+				iText.setText(text.replaceFirst("ã€ä¸­å¤®æƒãˆã€‘", ""));
 				return "<ParaStyle:table-body01-center01>";
 			} else {
 				return "<ParaStyle:table-body02>";
 			}
 		}
-		if (longStyle.compareTo("yè‡zyè‡zy¦zy¦z") == 0) {
+		if (longStyle.compareTo("ã€æ‰‹é †ã€‘ã€æ‰‹é †ã€‘ã€â€»ã€‘ã€â€»ã€‘") == 0) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:cap02>";
 		}
 
-		if (longStyle.compareTo("yè‡zyè‡zy¦0zy¦0z") == 0) {
+		if (longStyle.compareTo("ã€æ‰‹é †ã€‘ã€æ‰‹é †ã€‘ã€â€»0ã€‘ã€â€»0ã€‘") == 0) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:cap02\\_a>";
 		}
 
-		if (longStyle.compareTo("yè‡zyè‡zy•\z") == 0) {
+		if (longStyle.compareTo("ã€æ‰‹é †ã€‘ã€æ‰‹é †ã€‘ã€è¡¨ã€‘") == 0) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:step-body01>";
 		}
 
-		if (longStyle.compareTo("yè‡zyè‡zy•\zyszyƒZƒ‹Fƒwƒbƒ_[zy–{•¶z") == 0) {
+		if (longStyle.compareTo("ã€æ‰‹é †ã€‘ã€æ‰‹é †ã€‘ã€è¡¨ã€‘ã€è¡Œã€‘ã€ã‚»ãƒ«ï¼šãƒ˜ãƒƒãƒ€ãƒ¼ã€‘ã€æœ¬æ–‡ã€‘") == 0) {
 			String text = iText.getText();
 			m_sPrevLongStyle = longStyle;
-			if (text.matches(".*y’†‰›‘µ‚¦z.*")) {
-				iText.setText(text.replaceFirst("y’†‰›‘µ‚¦z", ""));
+			if (text.matches(".*ã€ä¸­å¤®æƒãˆã€‘.*")) {
+				iText.setText(text.replaceFirst("ã€ä¸­å¤®æƒãˆã€‘", ""));
 				return "<ParaStyle:table-body01-center01>";
 			} else {
 				return "<ParaStyle:table-body01>";
 			}
 		}
 
-		if (longStyle.compareTo("yè‡zyè‡zy•\zyszyƒZƒ‹zy–{•¶z") == 0) {
+		if (longStyle.compareTo("ã€æ‰‹é †ã€‘ã€æ‰‹é †ã€‘ã€è¡¨ã€‘ã€è¡Œã€‘ã€ã‚»ãƒ«ã€‘ã€æœ¬æ–‡ã€‘") == 0) {
 			m_sPrevLongStyle = longStyle;
 			String text = iText.getText();
-			// int c2 = text.indexOf("F");
+			// int c2 = text.indexOf("ï¼š");
 			// if (c2 != -1) {
 			// text = "<CharStyle:body-M>" + text.substring(0, c2)
 			// + "<CharStyle:>" + text.substring(c2);
@@ -1125,8 +1125,8 @@ public class LongStyleManager {
 			// <b></b>
 			text = text.replace("\\<b\\>", "<CharStyle:body-M>");
 			text = text.replace("\\</b\\>", "<CharStyle:>");
-			if (text.matches(".*y’†‰›‘µ‚¦z.*")) {
-				iText.setText(text.replaceFirst("y’†‰›‘µ‚¦z", "")
+			if (text.matches(".*ã€ä¸­å¤®æƒãˆã€‘.*")) {
+				iText.setText(text.replaceFirst("ã€ä¸­å¤®æƒãˆã€‘", "")
 						+ "<pTextAlignment:>");
 				return "<ParaStyle:table-body02><pTextAlignment:Center>";
 			} else {
@@ -1135,109 +1135,109 @@ public class LongStyleManager {
 			}
 		}
 
-		if (longStyle.compareTo("yè‡zyè‡zy•\zyszyƒZƒ‹zy—áFzy—áFz") == 0) {
+		if (longStyle.compareTo("ã€æ‰‹é †ã€‘ã€æ‰‹é †ã€‘ã€è¡¨ã€‘ã€è¡Œã€‘ã€ã‚»ãƒ«ã€‘ã€ä¾‹ï¼šã€‘ã€ä¾‹ï¼šã€‘") == 0) {
 			String text = iText.getText();
-			int c = text.indexOf("—áF");
+			int c = text.indexOf("ä¾‹ï¼š");
 			if (c != -1) {
-				text = "—áF" + KOKOMADE_INDENT_CHAR + text.substring(c + 2);
+				text = "ä¾‹ï¼š" + KOKOMADE_INDENT_CHAR + text.substring(c + 2);
 			}
 			iText.setText(text);
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:table-body02>";
 		}
 
-		if (longStyle.compareTo("yè‡zyè‡zy•\zyszyƒZƒ‹zy‰Óğ‘‚«Ezy‰Óğ‘‚«Ez") == 0) {
+		if (longStyle.compareTo("ã€æ‰‹é †ã€‘ã€æ‰‹é †ã€‘ã€è¡¨ã€‘ã€è¡Œã€‘ã€ã‚»ãƒ«ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘") == 0) {
 			String text = iText.getText();
-			text = text.replaceFirst("E", "<2022>");
+			text = text.replaceFirst("ãƒ»", "â€¢");
 			iText.setText(text);
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:table-body02\\_a>";
 		}
 
-		if (longStyle.compareTo("yè‡zyè‡zy•\zyszyƒZƒ‹zy‰Óğ‘‚«Ezy‰Óğ‘‚«Ezy–{•¶zy–{•¶z") == 0) {
+		if (longStyle.compareTo("ã€æ‰‹é †ã€‘ã€æ‰‹é †ã€‘ã€è¡¨ã€‘ã€è¡Œã€‘ã€ã‚»ãƒ«ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘") == 0) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:table-body02\\_a>\t";
 		}
 
-		if (longStyle.compareTo("yè‡zyè‡zy•\zyszyƒZƒ‹zy‰Óğ‘‚«Ezy‰Óğ‘‚«Ezy¦zy¦z") == 0) {
+		if (longStyle.compareTo("ã€æ‰‹é †ã€‘ã€æ‰‹é †ã€‘ã€è¡¨ã€‘ã€è¡Œã€‘ã€ã‚»ãƒ«ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€â€»ã€‘ã€â€»ã€‘") == 0) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:cap03>";
 		}
 
-		if (longStyle.compareTo("yè‡zyè‡zy•\zyszyƒZƒ‹zy‰Óğ‘‚«Ezy‰Óğ‘‚«EzyQÆzyQÆz") == 0) {
+		if (longStyle.compareTo("ã€æ‰‹é †ã€‘ã€æ‰‹é †ã€‘ã€è¡¨ã€‘ã€è¡Œã€‘ã€ã‚»ãƒ«ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€å‚ç…§ã€‘ã€å‚ç…§ã€‘") == 0) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:table-body02\\_a>\t";
 		}
 
-		if (longStyle.compareTo("yè‡zyè‡zy•\zyszyƒZƒ‹zyQÆzyQÆz") == 0) {
+		if (longStyle.compareTo("ã€æ‰‹é †ã€‘ã€æ‰‹é †ã€‘ã€è¡¨ã€‘ã€è¡Œã€‘ã€ã‚»ãƒ«ã€‘ã€å‚ç…§ã€‘ã€å‚ç…§ã€‘") == 0) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:table-body02\\_a>";
 		}
 
-		if (longStyle.compareTo("yè‡zyè‡zy•\zyszyƒZƒ‹zy¦zy¦z") == 0) {
+		if (longStyle.compareTo("ã€æ‰‹é †ã€‘ã€æ‰‹é †ã€‘ã€è¡¨ã€‘ã€è¡Œã€‘ã€ã‚»ãƒ«ã€‘ã€â€»ã€‘ã€â€»ã€‘") == 0) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:cap01>";
 		}
 
-		if (longStyle.compareTo("yè‡zyè‡zy•\zyszyƒZƒ‹zyè‡•ªŠòzyè‡•ªŠòz") == 0) {
-			iText.setText(iText.getText().substring(1)); // ¡‚ğíœ‚·‚é‚Â‚à‚è
+		if (longStyle.compareTo("ã€æ‰‹é †ã€‘ã€æ‰‹é †ã€‘ã€è¡¨ã€‘ã€è¡Œã€‘ã€ã‚»ãƒ«ã€‘ã€æ‰‹é †åˆ†å²ã€‘ã€æ‰‹é †åˆ†å²ã€‘") == 0) {
+			iText.setText(iText.getText().substring(1)); // â– ã‚’å‰Šé™¤ã™ã‚‹ã¤ã‚‚ã‚Š
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:table-body01-Bold01>";
 		}
 
-		if (longStyle.compareTo("yè‡zyè‡zyè‡•ªŠòzyè‡•ªŠòz") == 0) {
+		if (longStyle.compareTo("ã€æ‰‹é †ã€‘ã€æ‰‹é †ã€‘ã€æ‰‹é †åˆ†å²ã€‘ã€æ‰‹é †åˆ†å²ã€‘") == 0) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:step-body02\\_01\\_M>";
 		}
 
-		if (longStyle.compareTo("yè‡zyè‡zyè‡•ªŠòzyè‡•ªŠòzy–{•¶zy–{•¶z") == 0) {
+		if (longStyle.compareTo("ã€æ‰‹é †ã€‘ã€æ‰‹é †ã€‘ã€æ‰‹é †åˆ†å²ã€‘ã€æ‰‹é †åˆ†å²ã€‘ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘") == 0) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:step-body02\\_02>";
 		}
 
-		if (longStyle.compareTo("yè‡zyè‡zyè‡•ªŠòzyè‡•ªŠòzy—áFzy—áFz") == 0) {
+		if (longStyle.compareTo("ã€æ‰‹é †ã€‘ã€æ‰‹é †ã€‘ã€æ‰‹é †åˆ†å²ã€‘ã€æ‰‹é †åˆ†å²ã€‘ã€ä¾‹ï¼šã€‘ã€ä¾‹ï¼šã€‘") == 0) {
 			String text = iText.getText();
-			int c = text.indexOf("—áF");
+			int c = text.indexOf("ä¾‹ï¼š");
 			if (c != -1) {
-				text = "—áF" + KOKOMADE_INDENT_CHAR + text.substring(c + 2);
+				text = "ä¾‹ï¼š" + KOKOMADE_INDENT_CHAR + text.substring(c + 2);
 			}
 			iText.setText(text);
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:step-body02\\_02>";
 		}
 
-		if (longStyle.compareTo("yè‡zyè‡zyè‡•ªŠòzyè‡•ªŠòzy¦zy¦z") == 0) {
+		if (longStyle.compareTo("ã€æ‰‹é †ã€‘ã€æ‰‹é †ã€‘ã€æ‰‹é †åˆ†å²ã€‘ã€æ‰‹é †åˆ†å²ã€‘ã€â€»ã€‘ã€â€»ã€‘") == 0) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:step-body02\\_02\\_kome>";
 		}
 
-		if (longStyle.compareTo("yè‡zyè‡zyè‡•ªŠòzyè‡•ªŠòzy‰Óğ‘‚«Ezy‰Óğ‘‚«Ez") == 0) {
+		if (longStyle.compareTo("ã€æ‰‹é †ã€‘ã€æ‰‹é †ã€‘ã€æ‰‹é †åˆ†å²ã€‘ã€æ‰‹é †åˆ†å²ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘") == 0) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:step-body02\\_03\\_bullet>";
 		}
 
-		if (longStyle.compareTo("yè‡zyè‡zyè‡•ªŠòzyè‡•ªŠòzy‰Óğ‘‚«Ezy‰Óğ‘‚«Ezy–{•¶zy–{•¶z") == 0) {
+		if (longStyle.compareTo("ã€æ‰‹é †ã€‘ã€æ‰‹é †ã€‘ã€æ‰‹é †åˆ†å²ã€‘ã€æ‰‹é †åˆ†å²ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘") == 0) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:step-body02\\_03\\_bullet>\t";
 		}
 
-		if (longStyle.compareTo("y•\zyszyƒZƒ‹zyè‡zyè‡z") == 0
-				|| longStyle.compareTo("yè‡zyè‡zy•\zyszyƒZƒ‹zyè‡zyè‡z") == 0) {
+		if (longStyle.compareTo("ã€è¡¨ã€‘ã€è¡Œã€‘ã€ã‚»ãƒ«ã€‘ã€æ‰‹é †ã€‘ã€æ‰‹é †ã€‘") == 0
+				|| longStyle.compareTo("ã€æ‰‹é †ã€‘ã€æ‰‹é †ã€‘ã€è¡¨ã€‘ã€è¡Œã€‘ã€ã‚»ãƒ«ã€‘ã€æ‰‹é †ã€‘ã€æ‰‹é †ã€‘") == 0) {
 			String ret;
 			String text = iText.getText();
-			if (text.matches("^‚O\t.*")) {
-				text = text.replaceFirst("^‚O\t", "");
+			if (text.matches("^ï¼\t.*")) {
+				text = text.replaceFirst("^ï¼\t", "");
 				ret = "<ParaStyle:table-body01-Bold02>";
 			} else {
-				text = text.replaceFirst("^‚P", "1.");
-				text = text.replaceFirst("^‚Q", "2.");
-				text = text.replaceFirst("^‚R", "3.");
-				text = text.replaceFirst("^‚S", "4.");
-				text = text.replaceFirst("^‚T", "5.");
-				text = text.replaceFirst("^‚U", "6.");
-				text = text.replaceFirst("^‚V", "7.");
-				text = text.replaceFirst("^‚W", "8.");
-				text = text.replaceFirst("^‚X", "9.");
+				text = text.replaceFirst("^ï¼‘", "1.");
+				text = text.replaceFirst("^ï¼’", "2.");
+				text = text.replaceFirst("^ï¼“", "3.");
+				text = text.replaceFirst("^ï¼”", "4.");
+				text = text.replaceFirst("^ï¼•", "5.");
+				text = text.replaceFirst("^ï¼–", "6.");
+				text = text.replaceFirst("^ï¼—", "7.");
+				text = text.replaceFirst("^ï¼˜", "8.");
+				text = text.replaceFirst("^ï¼™", "9.");
 				ret = "<ParaStyle:table-body01-Bold01>";
 			}
 			iText.setText(text);
@@ -1245,58 +1245,58 @@ public class LongStyleManager {
 			return ret;
 		}
 
-		if (longStyle.compareTo("yè‡zyè‡zy•\zyszyƒZƒ‹zyè‡zyè‡zy–{•¶zy–{•¶z") == 0) {
+		if (longStyle.compareTo("ã€æ‰‹é †ã€‘ã€æ‰‹é †ã€‘ã€è¡¨ã€‘ã€è¡Œã€‘ã€ã‚»ãƒ«ã€‘ã€æ‰‹é †ã€‘ã€æ‰‹é †ã€‘ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘") == 0) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:table-body02\\_b>\t";
 		}
 
-		if (longStyle.compareTo("yè‡zyè‡zyƒL[à–¾zyƒL[à–¾z") == 0) {
+		if (longStyle.compareTo("ã€æ‰‹é †ã€‘ã€æ‰‹é †ã€‘ã€ã‚­ãƒ¼èª¬æ˜ã€‘ã€ã‚­ãƒ¼èª¬æ˜ã€‘") == 0) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:step-body01>";
 		}
 
-		if (longStyle.compareTo("yè‡zyè‡zyƒL[à–¾zy–{•¶z") == 0) {
+		if (longStyle.compareTo("ã€æ‰‹é †ã€‘ã€æ‰‹é †ã€‘ã€ã‚­ãƒ¼èª¬æ˜ã€‘ã€æœ¬æ–‡ã€‘") == 0) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:step-body01>";
 		}
 
-		if (longStyle.compareTo("yè‡•ªŠòzyè‡•ªŠòz") == 0) {
-			iText.setText("¡\t" + iText.getText().substring(1));
+		if (longStyle.compareTo("ã€æ‰‹é †åˆ†å²ã€‘ã€æ‰‹é †åˆ†å²ã€‘") == 0) {
+			iText.setText("â– \t" + iText.getText().substring(1));
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:body02-Bold01\\_02>";
 		}
 
-		if (longStyle.compareTo("y•t˜^zyè‡•ªŠòzyè‡•ªŠòz") == 0) {
-			iText.setText("¡\t" + iText.getText().substring(1));
+		if (longStyle.compareTo("ã€ä»˜éŒ²ã€‘ã€æ‰‹é †åˆ†å²ã€‘ã€æ‰‹é †åˆ†å²ã€‘") == 0) {
+			iText.setText("â– \t" + iText.getText().substring(1));
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:step-title02>";
 		}
 
-		if (longStyle.compareTo("y•t˜^zyè‡•ªŠòzyè‡•ªŠòzy–{•¶zy–{•¶z") == 0) {
+		if (longStyle.compareTo("ã€ä»˜éŒ²ã€‘ã€æ‰‹é †åˆ†å²ã€‘ã€æ‰‹é †åˆ†å²ã€‘ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘") == 0) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:step-title02>\t";
 		}
 
-		if (longStyle.compareTo("y•t˜^zyè‡•ªŠòzyè‡•ªŠòzy¦zy¦z") == 0) {
+		if (longStyle.compareTo("ã€ä»˜éŒ²ã€‘ã€æ‰‹é †åˆ†å²ã€‘ã€æ‰‹é †åˆ†å²ã€‘ã€â€»ã€‘ã€â€»ã€‘") == 0) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:cap04>";
 		}
 
-		if (longStyle.compareTo("yè‡zyè‡zy‡@zy‡@z") == 0) {
+		if (longStyle.compareTo("ã€æ‰‹é †ã€‘ã€æ‰‹é †ã€‘ã€â‘ ã€‘ã€â‘ ã€‘") == 0) {
 			m_sPrevLongStyle = longStyle;
 			String text = iText.getText();
 
 			int c1 = text.indexOf("\t");
-			int c2 = text.indexOf("F");
+			int c2 = text.indexOf("ï¼š");
 			if (c1 != -1 && c2 != -1) {
-				// ‡@ xxxxxFabcdefghijklmnopqrstuvwxyz
-				// "xxxxx"‚Í‘¾š‚É‚È‚é
+				// â‘  xxxxxï¼šabcdefghijklmnopqrstuvwxyz
+				// "xxxxx"ã¯å¤ªå­—ã«ãªã‚‹
 				text = text.substring(0, c1 + 1) + "<CharStyle:body-M>"
 						+ text.substring(c1 + 1, c2) + "<CharStyle:>"
 						+ text.substring(c2);
-			} else if (text.matches("^.*[^B]$")) {
-				// ‡@ xxxxx i“r’†‚ÉF‚ª–³‚­uBv‚ÅI‚í‚Á‚Ä‚¢‚È‚¢ê‡j
-				// "xxxxx"‚Í‘¾š‚É‚È‚é
+			} else if (text.matches("^.*[^ã€‚]$")) {
+				// â‘  xxxxx ï¼ˆé€”ä¸­ã«ï¼šãŒç„¡ãã€Œã€‚ã€ã§çµ‚ã‚ã£ã¦ã„ãªã„å ´åˆï¼‰
+				// "xxxxx"ã¯å¤ªå­—ã«ãªã‚‹
 				text = text.substring(0, c1 + 1) + "<CharStyle:body-M>"
 						+ text.substring(c1 + 1) + "<CharStyle:>";
 			}
@@ -1304,38 +1304,38 @@ public class LongStyleManager {
 			return "<ParaStyle:step-body01\\_b>";
 		}
 
-		if (longStyle.compareTo("yè‡zyè‡zyiMj‡@zyiMj‡@z") == 0) {
+		if (longStyle.compareTo("ã€æ‰‹é †ã€‘ã€æ‰‹é †ã€‘ã€ï¼ˆMï¼‰â‘ ã€‘ã€ï¼ˆMï¼‰â‘ ã€‘") == 0) {
 			String text = iText.getText();
-			text = text.replaceAll("iMj", "");
+			text = text.replaceAll("ï¼ˆMï¼‰", "");
 			iText.setText(text);
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:step-body01\\_b>";
 		}
 
-		if (longStyle.equals("yè‡zyè‡zy‡@zy‡@zy–{•¶zy–{•¶z")
-				|| longStyle.equals("yè‡zyè‡zyiMj‡@zyiMj‡@zy–{•¶zy–{•¶z")) {
+		if (longStyle.equals("ã€æ‰‹é †ã€‘ã€æ‰‹é †ã€‘ã€â‘ ã€‘ã€â‘ ã€‘ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘")
+				|| longStyle.equals("ã€æ‰‹é †ã€‘ã€æ‰‹é †ã€‘ã€ï¼ˆMï¼‰â‘ ã€‘ã€ï¼ˆMï¼‰â‘ ã€‘ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:step-body01\\_b>\t";
 		}
 
-		if (longStyle.compareTo("yè‡zyè‡zy‡@zy‡@zy‰Óğ‘‚«Ezy‰Óğ‘‚«Ez") == 0) {
+		if (longStyle.compareTo("ã€æ‰‹é †ã€‘ã€æ‰‹é †ã€‘ã€â‘ ã€‘ã€â‘ ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘") == 0) {
 			String text = iText.getText();
-			text = text.replaceFirst("E\t", "<2022>" + KOKOMADE_INDENT_CHAR);
+			text = text.replaceFirst("ãƒ»\t", "â€¢" + KOKOMADE_INDENT_CHAR);
 			iText.setText(text);
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:step-body01\\_b>\t";
 		}
 
-		if (longStyle.compareTo("y‡@zy‡@z") == 0) {
+		if (longStyle.compareTo("ã€â‘ ã€‘ã€â‘ ã€‘") == 0) {
 			String text = iText.getText();
 			int c1 = text.indexOf("\t");
-			int c2 = text.indexOf("F");
+			int c2 = text.indexOf("ï¼š");
 			if (c1 != -1 && c2 != -1) {
 				text = text.substring(0, c1 + 1) + "<CharStyle:body-M>"
 						+ text.substring(c1 + 1, c2) + "<CharStyle:>"
 						+ text.substring(c2, c2 + 1) + KOKOMADE_INDENT_CHAR
 						+ text.substring(c2 + 1);
-			} else if (text.matches("^.*[^B]$")) {
+			} else if (text.matches("^.*[^ã€‚]$")) {
 				text = text.substring(0, c1 + 1) + "<CharStyle:body-M>"
 						+ text.substring(c1 + 1) + "<CharStyle:>";
 			}
@@ -1344,40 +1344,40 @@ public class LongStyleManager {
 			return "<ParaStyle:body02>";
 		}
 
-		if (longStyle.compareTo("y‡@zy‡@zy–{•¶zy–{•¶z") == 0
-				|| longStyle.equals("yiMj‡@zyiMj‡@zy–{•¶zy–{•¶z")
-				|| longStyle.equals("yiMjzyiMjzy–{•¶zy–{•¶z")) {
+		if (longStyle.compareTo("ã€â‘ ã€‘ã€â‘ ã€‘ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘") == 0
+				|| longStyle.equals("ã€ï¼ˆMï¼‰â‘ ã€‘ã€ï¼ˆMï¼‰â‘ ã€‘ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘")
+				|| longStyle.equals("ã€ï¼ˆMï¼‰ã€‘ã€ï¼ˆMï¼‰ã€‘ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:body02>\t";
 		}
 
-		if (longStyle.compareTo("y‡@zy‡@zy‰Óğ‘‚«Ezy‰Óğ‘‚«Ez") == 0) {
+		if (longStyle.compareTo("ã€â‘ ã€‘ã€â‘ ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘") == 0) {
 			String text = iText.getText();
-			text = text.replaceFirst("E", "<2022>");
+			text = text.replaceFirst("ãƒ»", "â€¢");
 			iText.setText(text);
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:body02\\_a>";
 		}
 
-		if (longStyle.compareTo("y‡@zy‡@zy¦zy¦z") == 0) {
+		if (longStyle.compareTo("ã€â‘ ã€‘ã€â‘ ã€‘ã€â€»ã€‘ã€â€»ã€‘") == 0) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:cap04>";
 		}
 
-		if (longStyle.equals("y‡@zy‡@zy•\z")) {
+		if (longStyle.equals("ã€â‘ ã€‘ã€â‘ ã€‘ã€è¡¨ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:body02>";
 		}
 
-		if (longStyle.compareTo("y‡@zy‡@zy•\zyszyƒZƒ‹Fƒwƒbƒ_[zy–{•¶z") == 0) {
+		if (longStyle.compareTo("ã€â‘ ã€‘ã€â‘ ã€‘ã€è¡¨ã€‘ã€è¡Œã€‘ã€ã‚»ãƒ«ï¼šãƒ˜ãƒƒãƒ€ãƒ¼ã€‘ã€æœ¬æ–‡ã€‘") == 0) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:table-body01>";
 		}
 
-		if (longStyle.compareTo("y‡@zy‡@zy•\zyszyƒZƒ‹zy–{•¶z") == 0) {
+		if (longStyle.compareTo("ã€â‘ ã€‘ã€â‘ ã€‘ã€è¡¨ã€‘ã€è¡Œã€‘ã€ã‚»ãƒ«ã€‘ã€æœ¬æ–‡ã€‘") == 0) {
 			m_sPrevLongStyle = longStyle;
 			// String text = iText.getText();
-			// int c2 = text.indexOf("F");
+			// int c2 = text.indexOf("ï¼š");
 			// if (c2 != -1) {
 			// text = "<CharStyle:body-M>" + text.substring(0, c2)
 			// + "<CharStyle:>" + text.substring(c2);
@@ -1386,11 +1386,11 @@ public class LongStyleManager {
 			return "<ParaStyle:table-body02>";
 		}
 
-		if (longStyle.equals("yiMj‡@zyiMj‡@z") || longStyle.equals("yiMjzyiMjz")) {
+		if (longStyle.equals("ã€ï¼ˆMï¼‰â‘ ã€‘ã€ï¼ˆMï¼‰â‘ ã€‘") || longStyle.equals("ã€ï¼ˆMï¼‰ã€‘ã€ï¼ˆMï¼‰ã€‘")) {
 			String text = iText.getText();
 			int c1 = text.indexOf("\t");
 			if (c1 != -1) {
-				text = text.substring(0, c1 + 1).replaceAll("iMj", "")
+				text = text.substring(0, c1 + 1).replaceAll("ï¼ˆMï¼‰", "")
 						+ "<CharStyle:body-M>" + text.substring(c1 + 1)
 						+ "<CharStyle:>";
 			}
@@ -1398,111 +1398,111 @@ public class LongStyleManager {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:body02>";
 		}
-		if (longStyle.compareTo("yƒL[à–¾zyƒL[à–¾z") == 0) {
+		if (longStyle.compareTo("ã€ã‚­ãƒ¼èª¬æ˜ã€‘ã€ã‚­ãƒ¼èª¬æ˜ã€‘") == 0) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:body00>";
 		}
 
-		if (longStyle.equals("y‰Óğ‘‚«œzy‰Óğ‘‚«œz")) {
+		if (longStyle.equals("ã€ç®‡æ¡æ›¸ãâ—ã€‘ã€ç®‡æ¡æ›¸ãâ—ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:body02>";
 		}
 
-		if (longStyle.equals("y•t˜^zy‰Óğ‘‚«œzy‰Óğ‘‚«œz")) {
+		if (longStyle.equals("ã€ä»˜éŒ²ã€‘ã€ç®‡æ¡æ›¸ãâ—ã€‘ã€ç®‡æ¡æ›¸ãâ—ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:body02-Bold01\\_01>";
 		}
 
-		if (longStyle.equals("y‰Óğ‘‚«œzy‰Óğ‘‚«œzy–{•¶zy–{•¶z")
-				|| longStyle.equals("y•t˜^zy‰Óğ‘‚«œzy‰Óğ‘‚«œzy–{•¶zy–{•¶z")) {
+		if (longStyle.equals("ã€ç®‡æ¡æ›¸ãâ—ã€‘ã€ç®‡æ¡æ›¸ãâ—ã€‘ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘")
+				|| longStyle.equals("ã€ä»˜éŒ²ã€‘ã€ç®‡æ¡æ›¸ãâ—ã€‘ã€ç®‡æ¡æ›¸ãâ—ã€‘ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:body02>\t";
 		}
 
-		if (longStyle.compareTo("y1.zy1.z") == 0) {
+		if (longStyle.compareTo("ã€1.ã€‘ã€1.ã€‘") == 0) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:body02>";
 		}
 
-		if (longStyle.compareTo("y1.zy1.zy–{•¶zy–{•¶z") == 0) {
+		if (longStyle.compareTo("ã€1.ã€‘ã€1.ã€‘ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘") == 0) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:body02>\t";
 		}
 
-		if (longStyle.compareTo("y1.zy1.zy‰Óğ‘‚«Ezy‰Óğ‘‚«Ez") == 0) {
+		if (longStyle.compareTo("ã€1.ã€‘ã€1.ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘") == 0) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:body02\\_a>";
 		}
 
-		if (longStyle.compareTo("y1.zy1.zy‰Óğ‘‚«Ezy‰Óğ‘‚«Ezy–{•¶zy–{•¶z") == 0) {
+		if (longStyle.compareTo("ã€1.ã€‘ã€1.ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€æœ¬æ–‡ã€‘ã€æœ¬æ–‡ã€‘") == 0) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:body02\\_a>\t";
 		}
 
-		if (longStyle.compareTo("y1.zy1.zy1zy1z") == 0) {
+		if (longStyle.compareTo("ã€1.ã€‘ã€1.ã€‘ã€1ã€‘ã€1ã€‘") == 0) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:body02\\_a>";
 		}
 
-		if (longStyle.compareTo("y1.zy1.zy•\z") == 0) {
+		if (longStyle.compareTo("ã€1.ã€‘ã€1.ã€‘ã€è¡¨ã€‘") == 0) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:body02>";
 		}
 
-		if (longStyle.equals("y1.zy1.zy•\zyszyƒZƒ‹zy–{•¶z")) {
+		if (longStyle.equals("ã€1.ã€‘ã€1.ã€‘ã€è¡¨ã€‘ã€è¡Œã€‘ã€ã‚»ãƒ«ã€‘ã€æœ¬æ–‡ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			String text = iText.getText();
-			if (text.matches(".*y’†‰›‘µ‚¦z.*")) {
-				// ­‚µ‰ö‚µ‚¢‚Ì‚Ådummy‚É‚µ‚Ü‚·B
-				iText.setText(text.replaceFirst("y’†‰›‘µ‚¦z", ""));
+			if (text.matches(".*ã€ä¸­å¤®æƒãˆã€‘.*")) {
+				// å°‘ã—æ€ªã—ã„ã®ã§dummyã«ã—ã¾ã™ã€‚
+				iText.setText(text.replaceFirst("ã€ä¸­å¤®æƒãˆã€‘", ""));
 				return "<ParaStyle:table-body01-center01>";
 			} else {
 				return "<ParaStyle:table-body02>";
 			}
 		}
 
-		if (longStyle.equals("y1.zy1.zy•\zyszyƒZƒ‹Fƒwƒbƒ_[zy–{•¶z")) {
+		if (longStyle.equals("ã€1.ã€‘ã€1.ã€‘ã€è¡¨ã€‘ã€è¡Œã€‘ã€ã‚»ãƒ«ï¼šãƒ˜ãƒƒãƒ€ãƒ¼ã€‘ã€æœ¬æ–‡ã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			String text = iText.getText();
-			if (text.matches(".*y’†‰›‘µ‚¦z.*")) {
-				iText.setText(text.replaceFirst("y’†‰›‘µ‚¦z", ""));
+			if (text.matches(".*ã€ä¸­å¤®æƒãˆã€‘.*")) {
+				iText.setText(text.replaceFirst("ã€ä¸­å¤®æƒãˆã€‘", ""));
 				return "<ParaStyle:table-title01>";
 			} else {
 				return "<ParaStyle:table-body01>";
 			}
 		}
 
-		if (longStyle.equals("y—áFzy—áFz")) {
+		if (longStyle.equals("ã€ä¾‹ï¼šã€‘ã€ä¾‹ï¼šã€‘")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:body02-Bold01\\_01>";
 		}
 
-		if (longStyle.equals("yStep 1zyStep 1z")) {
+		if (longStyle.equals("ã€Step 1ã€‘ã€Step 1ã€‘")) {
 			m_sPrevLongStyle = longStyle;
-			String text = "<CharStyle:ƒiƒ“ƒo[ƒXƒeƒbƒv>" + iText.getText();
+			String text = "<CharStyle:ãƒŠãƒ³ãƒãƒ¼ã‚¹ãƒ†ãƒƒãƒ—>" + iText.getText();
 			text = text.replaceFirst("\t", "<CharStyle:>\t");
 			iText.setText(text);
-			return "<ParaStyle:ƒXƒeƒbƒv>";
+			return "<ParaStyle:ã‚¹ãƒ†ãƒƒãƒ—>";
 		}
 
-		if (longStyle.equals("y•Ê†ƒ^ƒCƒgƒ‹zy•Ê†ƒ^ƒCƒgƒ‹z")
-				|| longStyle.equals("yˆÀ‘Sã‚Ì‚²’ˆÓzy•Ê†ƒ^ƒCƒgƒ‹zy•Ê†ƒ^ƒCƒgƒ‹z")
-				|| longStyle.equals("y•t˜^zy•Ê†ƒ^ƒCƒgƒ‹zy•Ê†ƒ^ƒCƒgƒ‹z")
-				|| longStyle.equals("y—˜—p‹–‘øzy•Ê†ƒ^ƒCƒgƒ‹zy•Ê†ƒ^ƒCƒgƒ‹z")) {
+		if (longStyle.equals("ã€åˆ¥ç´™ã‚¿ã‚¤ãƒˆãƒ«ã€‘ã€åˆ¥ç´™ã‚¿ã‚¤ãƒˆãƒ«ã€‘")
+				|| longStyle.equals("ã€å®‰å…¨ä¸Šã®ã”æ³¨æ„ã€‘ã€åˆ¥ç´™ã‚¿ã‚¤ãƒˆãƒ«ã€‘ã€åˆ¥ç´™ã‚¿ã‚¤ãƒˆãƒ«ã€‘")
+				|| longStyle.equals("ã€ä»˜éŒ²ã€‘ã€åˆ¥ç´™ã‚¿ã‚¤ãƒˆãƒ«ã€‘ã€åˆ¥ç´™ã‚¿ã‚¤ãƒˆãƒ«ã€‘")
+				|| longStyle.equals("ã€åˆ©ç”¨è¨±è«¾ã€‘ã€åˆ¥ç´™ã‚¿ã‚¤ãƒˆãƒ«ã€‘ã€åˆ¥ç´™ã‚¿ã‚¤ãƒˆãƒ«ã€‘")) {
 			m_sStepCaption = "";
-			// •Ê†xxx-x‚ğ“Ç‚İæ‚Á‚ÄA‰üƒy[ƒW‚ÌˆÊ’u‚ğ’²®‚·‚é
+			// åˆ¥ç´™xxx-xã‚’èª­ã¿å–ã£ã¦ã€æ”¹ãƒšãƒ¼ã‚¸ã®ä½ç½®ã‚’èª¿æ•´ã™ã‚‹
 			String text = iText.getText();
-			text = text.replaceAll("¡+", "");
-			text = text.replaceFirst("•Ê†k?", "");
+			text = text.replaceAll("â– +", "");
+			text = text.replaceFirst("åˆ¥ç´™k?", "");
 			if (m_bMac) {
 				text = text.replaceFirst("(<2013>|-)[0-9-A-Z].*", "");
 			} else {
 				text = text.replaceFirst("-[0-9-A-Z].*", "");
 			}
-			text = text.replaceFirst("•\1", "0000");
-			text = text.replaceFirst("•\2", "0000");
-			text = text.replaceFirst("•\3", "50000");
-			text = text.replaceFirst("•\4", "50000");
+			text = text.replaceFirst("è¡¨1", "0000");
+			text = text.replaceFirst("è¡¨2", "0000");
+			text = text.replaceFirst("è¡¨3", "50000");
+			text = text.replaceFirst("è¡¨4", "50000");
 
 			Integer nPrefix = 0;
 			String sPrefix = text.replaceFirst("[0-9]+$", "");
@@ -1515,7 +1515,7 @@ public class LongStyleManager {
 				}
 			}
 
-			// ƒy[ƒW”Ô†‚ğŠÜ‚ñ‚Å‚¢‚½ê‡‚Í‰üƒy[ƒWˆ—‚ğ‚·‚é
+			// ãƒšãƒ¼ã‚¸ç•ªå·ã‚’å«ã‚“ã§ã„ãŸå ´åˆã¯æ”¹ãƒšãƒ¼ã‚¸å‡¦ç†ã‚’ã™ã‚‹
 			int pageNum;
 			String ret = "";
 			try {
@@ -1528,36 +1528,36 @@ public class LongStyleManager {
 				}
 				m_nPrevPageNum = pageNum;
 			} catch (NumberFormatException e) {
-				// ƒpƒX
+				// ãƒ‘ã‚¹
 			}
 
-			// •t˜^‚Ìê‡‚ÍAi•t˜^j‚Æ“ü‚ê‚é
-			if (longStyle.indexOf("y•t˜^z") == 0) {
+			// ä»˜éŒ²ã®å ´åˆã¯ã€ï¼ˆä»˜éŒ²ï¼‰ã¨å…¥ã‚Œã‚‹
+			if (longStyle.indexOf("ã€ä»˜éŒ²ã€‘") == 0) {
 				text = iText.getText();
-				Pattern pattern = Pattern.compile("(¡+)");
+				Pattern pattern = Pattern.compile("(â– +)");
 				Matcher matcher = pattern.matcher(text);
 				if (matcher.find())
-					text = text.replaceFirst("¡+", matcher.group(1) + "i•t˜^j");
+					text = text.replaceFirst("â– +", matcher.group(1) + "ï¼ˆä»˜éŒ²ï¼‰");
 				iText.setText(text);
 			}
 
-			// —˜—p‹–‘ø‚Ìê‡‚ÍAi—˜—p‹–‘øj‚Æ“ü‚ê‚é
-			if (longStyle.indexOf("y—˜—p‹–‘øz") == 0) {
+			// åˆ©ç”¨è¨±è«¾ã®å ´åˆã¯ã€ï¼ˆåˆ©ç”¨è¨±è«¾ï¼‰ã¨å…¥ã‚Œã‚‹
+			if (longStyle.indexOf("ã€åˆ©ç”¨è¨±è«¾ã€‘") == 0) {
 				text = iText.getText();
-				Pattern pattern = Pattern.compile("(¡+)");
+				Pattern pattern = Pattern.compile("(â– +)");
 				Matcher matcher = pattern.matcher(text);
 				if (matcher.find())
-					text = text.replaceFirst("¡+", matcher.group(1) + "i—˜—p‹–‘øj");
+					text = text.replaceFirst("â– +", matcher.group(1) + "ï¼ˆåˆ©ç”¨è¨±è«¾ï¼‰");
 				iText.setText(text);
 			}
 
-			// Eng‚Ìê‡‚ÍAiEngj‚Æ“ü‚ê‚é
-			if (longStyle.indexOf("yEngz") == 0) {
+			// Engã®å ´åˆã¯ã€ï¼ˆEngï¼‰ã¨å…¥ã‚Œã‚‹
+			if (longStyle.indexOf("ã€Engã€‘") == 0) {
 				text = iText.getText();
-				Pattern pattern = Pattern.compile("(¡+)");
+				Pattern pattern = Pattern.compile("(â– +)");
 				Matcher matcher = pattern.matcher(text);
 				if (matcher.find())
-					text = text.replaceFirst("¡+", matcher.group(1) + "iEngj");
+					text = text.replaceFirst("â– +", matcher.group(1) + "ï¼ˆEngï¼‰");
 				iText.setText(text);
 			}
 
@@ -1566,7 +1566,7 @@ public class LongStyleManager {
 			return ret;
 		}
 
-		// ˆÈ~Aƒ_ƒ~[ƒXƒ^ƒCƒ‹‚Ìˆ—
+		// ä»¥é™ã€ãƒ€ãƒŸãƒ¼ã‚¹ã‚¿ã‚¤ãƒ«ã®å‡¦ç†
 		m_sPrevLongStyle = longStyle;
 		return dummyStyle(longStyle);// + longStyle;
 		// throw new IOException("Unknown Style:" + longStyle);
@@ -1580,7 +1580,7 @@ public class LongStyleManager {
 		DecimalFormat df = new DecimalFormat();
 		df.applyLocalizedPattern("0000");
 		style = "<ParaStyle:dummy" + df.format(m_nDummyCounter) + ">";
-		System.out.println(longStyle + "‚ÍA" + style + "‚Æ‚µ‚Äo—Í‚³‚ê‚Ü‚µ‚½B");
+		System.out.println(longStyle + "ã¯ã€" + style + "ã¨ã—ã¦å‡ºåŠ›ã•ã‚Œã¾ã—ãŸã€‚");
 		m_cDummyStyleHashTable.put(longStyle, style);
 		m_nDummyCounter++;
 		return style;
@@ -1598,11 +1598,11 @@ public class LongStyleManager {
 		String longStyle = "";
 		Iterator<Style> it2 = m_StyleLinkedList.iterator();
 
-		// longStyle‚Ìæ“¾
+		// longStyleã®å–å¾—
 		while (it2.hasNext()) {
 			Style r2 = it2.next();
 			if (r2 == null) {
-				longStyle += "y–{•¶z";
+				longStyle += "ã€æœ¬æ–‡ã€‘";
 			} else {
 				longStyle += r2.getStyleName();
 			}
@@ -1620,7 +1620,7 @@ public class LongStyleManager {
 
 	public String getLongStyleFromArrayList(int nLsIndex) {
 		if (nLsIndex == m_cLongStyleArrayList.size()) {
-			return ""; // ƒXƒ^ƒCƒ‹‚È‚µ
+			return ""; // ã‚¹ã‚¿ã‚¤ãƒ«ãªã—
 		}
 		return m_cLongStyleArrayList.get(nLsIndex);
 	}
@@ -1633,8 +1633,8 @@ public class LongStyleManager {
 		StringBuffer sb = new StringBuffer(s);
 		for (int i = 0; i < sb.length(); i++) {
 			char c = sb.charAt(i);
-			if (c >= '‚O' && c <= '‚X') {
-				sb.setCharAt(i, (char) (c - '‚O' + '0'));
+			if (c >= 'ï¼' && c <= 'ï¼™') {
+				sb.setCharAt(i, (char) (c - 'ï¼' + '0'));
 			}
 		}
 		return sb.toString();

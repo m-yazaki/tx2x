@@ -1,86 +1,88 @@
 /**
- * InDesignƒ^ƒO•t‚«ƒeƒLƒXƒg‚ğ‘‚«o‚·‚Æ‚«‚Ég‚¤FileWriter
- * ”÷–­‚È’²®‚ğˆø‚«ó‚¯‚Ä‚¢‚é
+ * InDesignã‚¿ã‚°ä»˜ããƒ†ã‚­ã‚¹ãƒˆã‚’æ›¸ãå‡ºã™ã¨ãã«ä½¿ã†FileWriter
+ * å¾®å¦™ãªèª¿æ•´ã‚’å¼•ãå—ã‘ã¦ã„ã‚‹
  */
 package tx2x;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 
 public class IDTTG_FileWriter {
-	FileOutputStream m_fwInDesign;
-	boolean m_bCRLFBuffer; // write()‚É“n‚³‚ê‚½bCRLF‚ğ•Û‚·‚éBŸ‚Ìwrite()ŒÄ‚Ñ‚¾‚µ‚É‰üsƒR[ƒhiCRLF‚È‚Çj‚ğ‘‚«‚Ş
+	OutputStreamWriter m_fwInDesign;
+	boolean m_bCRLFBuffer; // write()ã«æ¸¡ã•ã‚ŒãŸbCRLFã‚’ä¿æŒã™ã‚‹ã€‚æ¬¡ã®write()å‘¼ã³ã ã—æ™‚ã«æ”¹è¡Œã‚³ãƒ¼ãƒ‰ï¼ˆCRLFãªã©ï¼‰ã‚’æ›¸ãè¾¼ã‚€
 
 	public IDTTG_FileWriter(File inDesign) throws IOException {
 		// m_fwInDesign = new DataOutputStream(new FileOutputStream(inDesign));
-		m_fwInDesign = new FileOutputStream(inDesign);
+		m_fwInDesign = new OutputStreamWriter(new FileOutputStream(inDesign),
+				"UnicodeLittleUnmarked");
 		m_bCRLFBuffer = false;
 	}
 
 	public void close(boolean bMac) throws IOException {
 		if (m_bCRLFBuffer)
-			m_fwInDesign.write(Tx2x.getCRLF(bMac).getBytes());
+			m_fwInDesign.write(Tx2x.getCRLF(bMac).toCharArray());
 
 		m_fwInDesign.close();
 	}
 
 	/**
-	 * FileWriter.write()‚ÉA’uŠ·‹@”\‚ğ’Ç‰Á‚·‚é
+	 * FileWriter.write()ã«ã€ç½®æ›æ©Ÿèƒ½ã‚’è¿½åŠ ã™ã‚‹
 	 *
 	 * @param string
-	 *            ‘‚«‚Ş•¶š—ñ
+	 *            æ›¸ãè¾¼ã‚€æ–‡å­—åˆ—
 	 * @param bCRLF
-	 *            ‰üs•¶š‚ª•K—v‚©‚Ç‚¤‚©B‰üs•¶š‚ÍAŸ‚Ìwrite()‚Ü‚½‚Íclose()‚ğŒÄ‚Ño‚µ‚½‚Æ‚«‚Éo—Í‚³‚ê‚Ü‚·B
+	 *            æ”¹è¡Œæ–‡å­—ãŒå¿…è¦ã‹ã©ã†ã‹ã€‚æ”¹è¡Œæ–‡å­—ã¯ã€æ¬¡ã®write()ã¾ãŸã¯close()ã‚’å‘¼ã³å‡ºã—ãŸã¨ãã«å‡ºåŠ›ã•ã‚Œã¾ã™ã€‚
 	 * @param bMac
-	 *            Mac—p‚ÌƒeƒLƒXƒg‚É‚·‚éê‡‚Ítrue
+	 *            Macç”¨ã®ãƒ†ã‚­ã‚¹ãƒˆã«ã™ã‚‹å ´åˆã¯true
 	 * @throws IOException
 	 */
 	public void write(String string, boolean bCRLF, boolean bMac)
 			throws IOException {
 
-		/* CellEnd‚ÌŸ‚Ì‰üs‚ÍÈ—ª */
+		/* CellEndã®æ¬¡ã®æ”¹è¡Œã¯çœç•¥ */
 		if (string.indexOf("<CellEnd:>") == 0) {
 			m_bCRLFBuffer = false;
 		}
 
-		/* ‰üs‚ğ’Ç‰Á */
+		/* æ”¹è¡Œã‚’è¿½åŠ  */
 		if (m_bCRLFBuffer)
-			m_fwInDesign.write(Tx2x.getCRLF(bMac).getBytes());
+			m_fwInDesign.write(Tx2x.getCRLF(bMac).toCharArray());
 
-		/* ƒZƒ‹‚ÌƒRƒ“ƒgƒ[ƒ‹ƒR[ƒh‚ğíœ */
-		string = string.replaceAll("y•[0-9]+%z", "");
+		/* ã‚»ãƒ«ã®ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã‚³ãƒ¼ãƒ‰ã‚’å‰Šé™¤ */
+		string = string.replaceAll("ã€é»’[0-9]+%ã€‘", "");
 
-		string = string.replaceAll("<ParaStyle:table-body[0-9]+>y[ã‰º¶‰E]‚ÆŒ‹‡z",
+		string = string.replaceAll("<ParaStyle:table-body[0-9]+>ã€[ä¸Šä¸‹å·¦å³]ã¨çµåˆã€‘",
 				"");
-		string = string.replaceAll("<ParaStyle:memo[0-9]+>y[ã‰º¶‰E]‚ÆŒ‹‡z", "");
-		string = string.replaceAll("<ParaStyle:table-body[0-9]+>y[¶‰E]ã‚©‚çÎüz",
+		string = string.replaceAll("<ParaStyle:memo[0-9]+>ã€[ä¸Šä¸‹å·¦å³]ã¨çµåˆã€‘", "");
+		string = string.replaceAll("<ParaStyle:table-body[0-9]+>ã€[å·¦å³]ä¸Šã‹ã‚‰æ–œç·šã€‘",
 				"");
 
-		string = string.replaceAll("yã‰ºƒZƒ“ƒ^[z", "");
+		string = string.replaceAll("ã€ä¸Šä¸‹ã‚»ãƒ³ã‚¿ãƒ¼ã€‘", "");
 
-		/* ƒRƒ“ƒgƒ[ƒ‹ƒR[ƒh‚ğ’uŠ· */
-		string = string.replaceAll("y‚±‚±‚Ü‚ÅƒCƒ“ƒfƒ“ƒgz", "");
+		/* ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã‚³ãƒ¼ãƒ‰ã‚’ç½®æ› */
+		string = string.replaceAll("ã€ã“ã“ã¾ã§ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆã€‘", "");
 
 		if (bMac) {
-			/* DTP—pi‹ŒMac—pj‚ÌƒeƒLƒXƒg‚É‚·‚éê‡‚Ì“Á•Êˆ— */
+			/* DTPç”¨ï¼ˆæ—§Macç”¨ï¼‰ã®ãƒ†ã‚­ã‚¹ãƒˆã«ã™ã‚‹å ´åˆã®ç‰¹åˆ¥å‡¦ç† */
 			if (!Tx2xOptions.getInstance().getBoolean("InDesignCS5")) {
 				while (true) {
 					int n = string.indexOf("\\");
 					if (n == -1) {
-						m_fwInDesign.write(string.getBytes());
+						m_fwInDesign.write(string.toCharArray());
 						break;
 					}
 					// System.out.println("-----");
 					// System.out.println("string: " + string);
 					// System.out.println("n: " + n);
-					// \‚Ü‚Å‘‚«‚Şi’Êí•¶š—ñj
-					m_fwInDesign.write(string.substring(0, n).getBytes());
+					// \ã¾ã§æ›¸ãè¾¼ã‚€ï¼ˆé€šå¸¸æ–‡å­—åˆ—ï¼‰
+					m_fwInDesign.write(string.substring(0, n).toCharArray());
 					string = string.substring(n);
 
-					// \‚Ìˆ—
+					// \ã®å‡¦ç†
 					if (string.substring(1).indexOf("\\") == 0) {
-						// Ÿ‚à\‚È‚ç
+						// æ¬¡ã‚‚\ãªã‚‰
 						m_fwInDesign.write('\\');
 						string = string.substring(2);
 					} else {
@@ -89,11 +91,11 @@ public class IDTTG_FileWriter {
 					}
 				}
 			} else {
-				m_fwInDesign.write(string.getBytes());
+				m_fwInDesign.write(string.toCharArray());
 			}
 		} else {
-			/* Windows—p‚ÌƒeƒLƒXƒg‚É‚·‚éê‡‚Ì“Á•Êˆ— */
-			m_fwInDesign.write(string.getBytes());
+			/* Windowsç”¨ã®ãƒ†ã‚­ã‚¹ãƒˆã«ã™ã‚‹å ´åˆã®ç‰¹åˆ¥å‡¦ç† */
+			m_fwInDesign.write(string.toCharArray());
 		}
 
 		m_bCRLFBuffer = bCRLF;

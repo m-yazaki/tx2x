@@ -1,5 +1,5 @@
 /**
- * IntermediateText‚ğAInDesign‚Ìƒ^ƒO•t‚«ƒeƒLƒXƒg‚É•ÏŠ·‚·‚é
+ * IntermediateTextã‚’ã€InDesignã®ã‚¿ã‚°ä»˜ããƒ†ã‚­ã‚¹ãƒˆã«å¤‰æ›ã™ã‚‹
  */
 package tx2x;
 
@@ -37,50 +37,50 @@ public class IntermediateTextTreeToInDesign {
 		try {
 			fwInDesign = new IDTTG_FileWriter(aInDesign);
 		} catch (IOException e) {
-			// TODO ©“®¶¬‚³‚ê‚½ catch ƒuƒƒbƒN
+			// TODO è‡ªå‹•ç”Ÿæˆã•ã‚ŒãŸ catch ãƒ–ãƒ­ãƒƒã‚¯
 			e.printStackTrace();
 			return;
 		}
 
-		// ‘‚«‚İ
+		// æ›¸ãè¾¼ã¿
 		LongStyleManager lsManager = new LongStyleManager(m_sMaker, m_bMac);
-		preScan(resultRootText, lsManager); // ƒvƒŒƒXƒLƒƒƒ“BlsManager‚ÉƒXƒ^ƒCƒ‹î•ñilongStylej‚ÌArrayList‚ğ€”õ‚·‚é
+		preScan(resultRootText, lsManager); // ãƒ—ãƒ¬ã‚¹ã‚­ãƒ£ãƒ³ã€‚lsManagerã«ã‚¹ã‚¿ã‚¤ãƒ«æƒ…å ±ï¼ˆlongStyleï¼‰ã®ArrayListã‚’æº–å‚™ã™ã‚‹
 		outputHeader(fwInDesign);
 		outputResult(fwInDesign, resultRootText, lsManager);
 
 		try {
 			fwInDesign.close(m_bMac);
 		} catch (IOException e1) {
-			// TODO ©“®¶¬‚³‚ê‚½ catch ƒuƒƒbƒN
+			// TODO è‡ªå‹•ç”Ÿæˆã•ã‚ŒãŸ catch ãƒ–ãƒ­ãƒƒã‚¯
 			e1.printStackTrace();
 		}
 	}
 
 	private void preScan(ControlText resultText, LongStyleManager lsManager) {
-		// TODO ©“®¶¬‚³‚ê‚½ƒƒ\ƒbƒhEƒXƒ^ƒu
+		// TODO è‡ªå‹•ç”Ÿæˆã•ã‚ŒãŸãƒ¡ã‚½ãƒƒãƒ‰ãƒ»ã‚¹ã‚¿ãƒ–
 		Iterator<IntermediateText> it = resultText.getChildList().iterator();
 		while (it.hasNext()) {
 			IntermediateText iText = it.next();
 			if (iText.hasChild()) {
-				// q‹Ÿ‚ª‚¢‚éControlText‚Å‚ ‚é
+				// å­ä¾›ãŒã„ã‚‹ï¼ControlTextã§ã‚ã‚‹
 				ControlText cText = (ControlText) iText;
 				Style currentStyle = cText.getStyle();
 
 				lsManager.addStyle(currentStyle);
 
 				/*
-				 * ControlText‚Å‚àAè‡E•\‚Ìê‡‚Í­‚µ“Á•Ê‚Èo—Í•û–@‚ğ‚Æ‚é
+				 * ControlTextã§ã‚‚ã€æ‰‹é †ãƒ»è¡¨ã®å ´åˆã¯å°‘ã—ç‰¹åˆ¥ãªå‡ºåŠ›æ–¹æ³•ã‚’ã¨ã‚‹
 				 */
-				// •\EsEƒZƒ‹‚ÌŠJn
+				// è¡¨ãƒ»è¡Œãƒ»ã‚»ãƒ«ã®é–‹å§‹
 				if (currentStyle != null && currentStyle.bTableLikeStyle()) {
-					if (currentStyle.getStyleName().compareTo("y•\z") == 0) {
+					if (currentStyle.getStyleName().compareTo("ã€è¡¨ã€‘") == 0) {
 						if (m_bDebugMode)
-							System.out.println("y•\z");
-						// width‚ğæ“¾
+							System.out.println("ã€è¡¨ã€‘");
+						// widthã‚’å–å¾—
 						String sTableInfo = cText.getChildList().get(0)
 								.getText();
 						String sWidth = sTableInfo.replaceFirst(
-								"¥•\[\\(i]([0-9]+).*", "$1");
+								"â–¼è¡¨[\\(ï¼ˆ]([0-9]+).*", "$1");
 						// String sStyle = "";
 						// if (sTableInfo.indexOf("style:") != -1) {
 						// sStyle = sTableInfo.replaceFirst(
@@ -90,7 +90,7 @@ public class IntermediateTextTreeToInDesign {
 							Tx2x.appendWarn("sWidth==0");
 						}
 
-						// // height‚ğæ“¾
+						// // heightã‚’å–å¾—
 						// ArrayList<IntermediateText> child = cText
 						// .getChildList();
 						// int nHeight;
@@ -100,58 +100,58 @@ public class IntermediateTextTreeToInDesign {
 						// nHeight = child.size() - 2;
 						// }
 
-						/* ’–Ú‚µ‚Ä‚¢‚écText‚Í•\‚Ìn‚Ü‚è‚È‚Ì‚ÅAWidth,Height‚ğæ“¾‚µ‚Äˆ—‚ğn‚ß‚é */
+						/* æ³¨ç›®ã—ã¦ã„ã‚‹cTextã¯è¡¨ã®å§‹ã¾ã‚Šãªã®ã§ã€Width,Heightã‚’å–å¾—ã—ã¦å‡¦ç†ã‚’å§‹ã‚ã‚‹ */
 						TableManager currentTable = new TableManager(cText,
 								m_bDebugMode);
 						TableWriter tWriter = new TableWriter(currentTable);
 						m_TableWriterList.add(tWriter);
 
-					} else if (currentStyle.getStyleName().compareTo("ysz") == 0) {
+					} else if (currentStyle.getStyleName().compareTo("ã€è¡Œã€‘") == 0) {
 						// TableWriter tWriter = m_TableWriterList.getLast();
 						if (m_bDebugMode)
-							System.out.println("ysz");
-					} else if (currentStyle.getStyleName().compareTo("yƒZƒ‹z") == 0) {
+							System.out.println("ã€è¡Œã€‘");
+					} else if (currentStyle.getStyleName().compareTo("ã€ã‚»ãƒ«ã€‘") == 0) {
 						// TableWriter tWriter = m_TableWriterList.getLast();
 						if (m_bDebugMode)
-							System.out.println("yƒZƒ‹z");
+							System.out.println("ã€ã‚»ãƒ«ã€‘");
 						if (cText.getChildList().get(0).getText()
-								.matches(".*yƒwƒbƒ_[z.*")) {
+								.matches(".*ã€ãƒ˜ãƒƒãƒ€ãƒ¼ã€‘.*")) {
 							StyleManager styleManager = StyleManager
 									.getInstance();
-							Style newStyle = styleManager.getStyle("yƒZƒ‹Fƒwƒbƒ_[z");
+							Style newStyle = styleManager.getStyle("ã€ã‚»ãƒ«ï¼šãƒ˜ãƒƒãƒ€ãƒ¼ã€‘");
 							lsManager.removeLastStyle();
 							lsManager.addStyle(newStyle);
 						}
 					}
 				}
-				preScan(cText, lsManager); // ‚³‚ç‚É‰œ[‚­‚ÖiÄ‹Aj
-				// •\EsEƒZƒ‹‚ÌI—¹
+				preScan(cText, lsManager); // ã•ã‚‰ã«å¥¥æ·±ãã¸ï¼ˆå†å¸°ï¼‰
+				// è¡¨ãƒ»è¡Œãƒ»ã‚»ãƒ«ã®çµ‚äº†
 				if (currentStyle != null && currentStyle.bTableLikeStyle()) {
-					if (currentStyle.getStyleName().compareTo("y•\z") == 0) {
-						m_TableWriterList.removeLast(); // •\I—¹
-						lsManager.setPrevLongStyle("y•\z£");
-					} else if (currentStyle.getStyleName().compareTo("ysz") == 0) {
-					} else if (currentStyle.getStyleName().compareTo("yƒZƒ‹z") == 0) {
+					if (currentStyle.getStyleName().compareTo("ã€è¡¨ã€‘") == 0) {
+						m_TableWriterList.removeLast(); // è¡¨çµ‚äº†
+						lsManager.setPrevLongStyle("ã€è¡¨ã€‘â–²");
+					} else if (currentStyle.getStyleName().compareTo("ã€è¡Œã€‘") == 0) {
+					} else if (currentStyle.getStyleName().compareTo("ã€ã‚»ãƒ«ã€‘") == 0) {
 					}
 				}
 				lsManager.removeLastStyle();
 			} else {
-				// q‹Ÿ‚ª‚¢‚È‚¢
+				// å­ä¾›ãŒã„ãªã„
 				Style currentStyle = iText.getStyle();
 				if (currentStyle != null) {
-					// ƒXƒ^ƒCƒ‹‚ª‚ ‚é
-					if (currentStyle.getStyleName().compareTo("y•\z") == 0) {
-						// •\‚Ìê‡‚Í‰½‚à‚µ‚È‚¢cH
+					// ã‚¹ã‚¿ã‚¤ãƒ«ãŒã‚ã‚‹
+					if (currentStyle.getStyleName().compareTo("ã€è¡¨ã€‘") == 0) {
+						// è¡¨ã®å ´åˆã¯ä½•ã‚‚ã—ãªã„â€¦ï¼Ÿ
 					} else if (iText.getText() != null) {
-						// •\ˆÈŠO‚Ìê‡‚Íc
+						// è¡¨ä»¥å¤–ã®å ´åˆã¯â€¦
 
-						// i‹¤’ÊjƒeƒLƒXƒg‚ğo—Í
-						lsManager.addStyle(currentStyle); // ƒXƒ^ƒCƒ‹‚ğpush
+						// ï¼ˆå…±é€šï¼‰ãƒ†ã‚­ã‚¹ãƒˆã‚’å‡ºåŠ›
+						lsManager.addStyle(currentStyle); // ã‚¹ã‚¿ã‚¤ãƒ«ã‚’push
 						lsManager.addLongStyleToArrayList();
-						lsManager.removeLastStyle(); // ƒXƒ^ƒCƒ‹‚ğpop
+						lsManager.removeLastStyle(); // ã‚¹ã‚¿ã‚¤ãƒ«ã‚’pop
 					}
 				} else {
-					// ƒXƒ^ƒCƒ‹‚ª‚È‚¢‚Ì‚ÅƒeƒLƒXƒg‚ğo—Í‚·‚é‚Ì‚İ
+					// ã‚¹ã‚¿ã‚¤ãƒ«ãŒãªã„ã®ã§ãƒ†ã‚­ã‚¹ãƒˆã‚’å‡ºåŠ›ã™ã‚‹ã®ã¿
 					if (iText.getText() != null) {
 						lsManager.addLongStyleToArrayList();
 					}
@@ -162,9 +162,11 @@ public class IntermediateTextTreeToInDesign {
 
 	private void outputHeader(IDTTG_FileWriter fwInDesign) throws IOException {
 		if (m_bMac == true) {
-			fwInDesign.write("<SJIS-MAC>", true, m_bMac);
+			// fwInDesign.write("<SJIS-MAC>", true, m_bMac);
+			fwInDesign.write("<UNICODE-MAC>", true, m_bMac);
 		} else {
-			fwInDesign.write("<SJIS-WIN>", true, m_bMac);
+			// fwInDesign.write("<SJIS-WIN>", true, m_bMac);
+			fwInDesign.write("<UNICODE-WIN>", true, m_bMac);
 		}
 		fwInDesign.write(
 				"<Version:7><FeatureSet:InDesign-Japanese><ColorTable:=>",
@@ -178,23 +180,23 @@ public class IntermediateTextTreeToInDesign {
 		while (it.hasNext()) {
 			IntermediateText iText = it.next();
 			if (iText.hasChild()) {
-				// q‹Ÿ‚ª‚¢‚éControlText‚Å‚ ‚é
+				// å­ä¾›ãŒã„ã‚‹ï¼ControlTextã§ã‚ã‚‹
 				ControlText cText = (ControlText) iText;
 				Style currentStyle = cText.getStyle();
 
 				lsManager.addStyle(currentStyle);
 
 				/*
-				 * ControlText‚Å‚àAè‡E•\‚Ìê‡‚Í­‚µ“Á•Ê‚Èo—Í•û–@‚ğ‚Æ‚é
+				 * ControlTextã§ã‚‚ã€æ‰‹é †ãƒ»è¡¨ã®å ´åˆã¯å°‘ã—ç‰¹åˆ¥ãªå‡ºåŠ›æ–¹æ³•ã‚’ã¨ã‚‹
 				 */
-				// •\EsEƒZƒ‹‚ÌŠJn
+				// è¡¨ãƒ»è¡Œãƒ»ã‚»ãƒ«ã®é–‹å§‹
 				if (currentStyle != null && currentStyle.bTableLikeStyle()) {
-					if (currentStyle.getStyleName().compareTo("y•\z") == 0) {
-						// width‚ğæ“¾
+					if (currentStyle.getStyleName().compareTo("ã€è¡¨ã€‘") == 0) {
+						// widthã‚’å–å¾—
 						String sTableInfo = cText.getChildList().get(0)
 								.getText();
 						String sWidth = sTableInfo.replaceFirst(
-								"¥•\[\\(i]([0-9]+).*", "$1");
+								"â–¼è¡¨[\\(ï¼ˆ]([0-9]+).*", "$1");
 						// String sStyle = "";
 						// if (sTableInfo.indexOf("style:") != -1) {
 						// sStyle = sTableInfo.replaceFirst(
@@ -204,7 +206,7 @@ public class IntermediateTextTreeToInDesign {
 							Tx2x.appendWarn("sWidth==0");
 						}
 
-						// // height‚ğæ“¾
+						// // heightã‚’å–å¾—
 						// ArrayList<IntermediateText> child = cText
 						// .getChildList();
 						// int nHeight;
@@ -214,70 +216,70 @@ public class IntermediateTextTreeToInDesign {
 						// nHeight = child.size() - 2;
 						// }
 
-						/* ’–Ú‚µ‚Ä‚¢‚écText‚Í•\‚Ìn‚Ü‚è‚È‚Ì‚ÅAWidth,Height‚ğæ“¾‚µ‚Äˆ—‚ğn‚ß‚é */
+						/* æ³¨ç›®ã—ã¦ã„ã‚‹cTextã¯è¡¨ã®å§‹ã¾ã‚Šãªã®ã§ã€Width,Heightã‚’å–å¾—ã—ã¦å‡¦ç†ã‚’å§‹ã‚ã‚‹ */
 						TableManager currentTable = new TableManager(cText,
 								m_bDebugMode);
 						TableWriter tWriter = new TableWriter(currentTable);
 						m_TableWriterList.add(tWriter);
 
-						// coStart‚ğo—Í
-						// lsManager.getInDesignStyle(cText)‚ÍA•\‚ğ‘}“ü‚·‚és‚ÌƒXƒ^ƒCƒ‹‚ğ•Ô‚µ‚Ä‚­‚ê‚é
+						// coStartã‚’å‡ºåŠ›
+						// lsManager.getInDesignStyle(cText)ã¯ã€è¡¨ã‚’æŒ¿å…¥ã™ã‚‹è¡Œã®ã‚¹ã‚¿ã‚¤ãƒ«ã‚’è¿”ã—ã¦ãã‚Œã‚‹
 						fwInDesign.write(
 								lsManager.getInDesignStyle(cText,
 										m_nLsIndex + 1)
 										+ tWriter.getHeader(lsManager,
 												m_nLsIndex), false, m_bMac);
-					} else if (currentStyle.getStyleName().compareTo("ysz") == 0) {
+					} else if (currentStyle.getStyleName().compareTo("ã€è¡Œã€‘") == 0) {
 						TableWriter tWriter = m_TableWriterList.getLast();
 						fwInDesign.write(tWriter.getRowHeader(lsManager),
 								false, m_bMac);
-					} else if (currentStyle.getStyleName().compareTo("yƒZƒ‹z") == 0) {
+					} else if (currentStyle.getStyleName().compareTo("ã€ã‚»ãƒ«ã€‘") == 0) {
 						TableWriter tWriter = m_TableWriterList.getLast();
 						fwInDesign.write(tWriter.getCellHeader(lsManager),
 								false, m_bMac);
 
 						if (cText.getChildList().get(0).getText()
-								.matches(".*yƒwƒbƒ_[z.*")) {
+								.matches(".*ã€ãƒ˜ãƒƒãƒ€ãƒ¼ã€‘.*")) {
 							StyleManager styleManager = StyleManager
 									.getInstance();
-							Style newStyle = styleManager.getStyle("yƒZƒ‹Fƒwƒbƒ_[z");
+							Style newStyle = styleManager.getStyle("ã€ã‚»ãƒ«ï¼šãƒ˜ãƒƒãƒ€ãƒ¼ã€‘");
 							lsManager.removeLastStyle();
 							lsManager.addStyle(newStyle);
 						}
 					}
 				}
-				outputResult(fwInDesign, cText, lsManager); // ‚³‚ç‚É‰œ[‚­‚ÖiÄ‹Aj
-				// •\EsEƒZƒ‹‚ÌI—¹
+				outputResult(fwInDesign, cText, lsManager); // ã•ã‚‰ã«å¥¥æ·±ãã¸ï¼ˆå†å¸°ï¼‰
+				// è¡¨ãƒ»è¡Œãƒ»ã‚»ãƒ«ã®çµ‚äº†
 				if (currentStyle != null && currentStyle.bTableLikeStyle()) {
-					if (currentStyle.getStyleName().compareTo("y•\z") == 0) {
+					if (currentStyle.getStyleName().compareTo("ã€è¡¨ã€‘") == 0) {
 						fwInDesign.write("<TableEnd:>", true, m_bMac);
-						m_TableWriterList.removeLast(); // •\I—¹
-						lsManager.setPrevLongStyle("y•\z£");
-					} else if (currentStyle.getStyleName().compareTo("ysz") == 0) {
+						m_TableWriterList.removeLast(); // è¡¨çµ‚äº†
+						lsManager.setPrevLongStyle("ã€è¡¨ã€‘â–²");
+					} else if (currentStyle.getStyleName().compareTo("ã€è¡Œã€‘") == 0) {
 						fwInDesign.write("<RowEnd:>", false, m_bMac);
-					} else if (currentStyle.getStyleName().compareTo("yƒZƒ‹z") == 0) {
+					} else if (currentStyle.getStyleName().compareTo("ã€ã‚»ãƒ«ã€‘") == 0) {
 						fwInDesign.write("<CellEnd:>", false, m_bMac);
 					}
 				}
 				lsManager.removeLastStyle();
 			} else {
-				// q‹Ÿ‚ª‚¢‚È‚¢
+				// å­ä¾›ãŒã„ãªã„
 				Style currentStyle = iText.getStyle();
 				if (currentStyle != null) {
-					// ƒXƒ^ƒCƒ‹‚ª‚ ‚é
-					if (currentStyle.getStyleName().compareTo("y•\z") == 0) {
-						// •\‚Ìê‡‚ÍA•\‚ğŠJn‚·‚éu¥•\(xx)v‚Ü‚½‚ÍA•\‚ğ•Â‚¶‚éu£vB
-						// ¡‚Ì‚Æ‚±‚ë‰½‚à‚µ‚È‚¢
+					// ã‚¹ã‚¿ã‚¤ãƒ«ãŒã‚ã‚‹
+					if (currentStyle.getStyleName().compareTo("ã€è¡¨ã€‘") == 0) {
+						// è¡¨ã®å ´åˆã¯ã€è¡¨ã‚’é–‹å§‹ã™ã‚‹ã€Œâ–¼è¡¨(xx)ã€ã¾ãŸã¯ã€è¡¨ã‚’é–‰ã˜ã‚‹ã€Œâ–²ã€ã€‚
+						// ä»Šã®ã¨ã“ã‚ä½•ã‚‚ã—ãªã„
 					} else if (iText.getText() != null) {
-						// •\ˆÈŠO‚Ìê‡‚Íc
+						// è¡¨ä»¥å¤–ã®å ´åˆã¯â€¦
 
-						// i‹¤’ÊjƒeƒLƒXƒg‚ğo—Í
-						lsManager.addStyle(currentStyle); // ƒXƒ^ƒCƒ‹‚ğpush
+						// ï¼ˆå…±é€šï¼‰ãƒ†ã‚­ã‚¹ãƒˆã‚’å‡ºåŠ›
+						lsManager.addStyle(currentStyle); // ã‚¹ã‚¿ã‚¤ãƒ«ã‚’push
 						outputText(fwInDesign, lsManager, iText);
-						lsManager.removeLastStyle(); // ƒXƒ^ƒCƒ‹‚ğpop
+						lsManager.removeLastStyle(); // ã‚¹ã‚¿ã‚¤ãƒ«ã‚’pop
 					}
 				} else {
-					// ƒXƒ^ƒCƒ‹‚ª‚È‚¢‚Ì‚ÅƒeƒLƒXƒg‚ğo—Í‚·‚é‚Ì‚İ
+					// ã‚¹ã‚¿ã‚¤ãƒ«ãŒãªã„ã®ã§ãƒ†ã‚­ã‚¹ãƒˆã‚’å‡ºåŠ›ã™ã‚‹ã®ã¿
 					if (iText.getText() != null) {
 						outputText(fwInDesign, lsManager, iText);
 					}
@@ -290,7 +292,7 @@ public class IntermediateTextTreeToInDesign {
 			LongStyleManager lsManager, IntermediateText iText) {
 		if (iText.hasChild()) {
 			// System.out.println("outputText:" + iText.getText());
-			return; // ControlText‚ÍƒJƒGƒŒI
+			return; // ControlTextã¯ã‚«ã‚¨ãƒ¬ï¼
 		}
 		// System.out.println("outputText");
 		String realtimeStyle = lsManager.getLongStyle();
@@ -303,7 +305,7 @@ public class IntermediateTextTreeToInDesign {
 			System.out.println("longStyle NG:" + realtimeStyle + "/"
 					+ bufferingStyle);
 		}
-		// sLongStyle‚ğ³‚µ‚¢ƒXƒ^ƒCƒ‹‚É•ÏŠ·
+		// sLongStyleã‚’æ­£ã—ã„ã‚¹ã‚¿ã‚¤ãƒ«ã«å¤‰æ›
 		try {
 			String style = lsManager.getInDesignStyle(iText, m_nLsIndex + 1);
 			if (style.equals("") == false) {
@@ -316,7 +318,7 @@ public class IntermediateTextTreeToInDesign {
 					System.out.println("[" + style + "]" + iText.getText());
 			}
 		} catch (IOException e) {
-			// TODO ©“®¶¬‚³‚ê‚½ catch ƒuƒƒbƒN
+			// TODO è‡ªå‹•ç”Ÿæˆã•ã‚ŒãŸ catch ãƒ–ãƒ­ãƒƒã‚¯
 			e.printStackTrace();
 		}
 		m_nLsIndex++;

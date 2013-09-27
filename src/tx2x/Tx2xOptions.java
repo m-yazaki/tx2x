@@ -20,8 +20,8 @@ public class Tx2xOptions {
 
 	public String getString(String string) {
 		if (cOptions.containsKey(string) == false) {
-			System.out.println("Tx2xOptions–¢’è‹`ERROR: \"" + string
-					+ "\"‚Ì‰Šú’liStringj‚ğ’è‹`‚µ‚Ä‚­‚¾‚³‚¢B");
+			System.out.println("Tx2xOptionsæœªå®šç¾©ERROR: \"" + string
+					+ "\"ã®åˆæœŸå€¤ï¼ˆStringï¼‰ã‚’å®šç¾©ã—ã¦ãã ã•ã„ã€‚");
 			return null;
 		}
 		return (String) cOptions.get(string);
@@ -29,8 +29,8 @@ public class Tx2xOptions {
 
 	public boolean getBoolean(String string) {
 		if (cOptions.containsKey(string) == false) {
-			System.out.println("Tx2xOptions–¢’è‹`ERROR: \"" + string
-					+ "\"‚Ì‰Šú’liBooleanj‚ğ’è‹`‚µ‚Ä‚­‚¾‚³‚¢B");
+			System.out.println("Tx2xOptionsæœªå®šç¾©ERROR: \"" + string
+					+ "\"ã®åˆæœŸå€¤ï¼ˆBooleanï¼‰ã‚’å®šç¾©ã—ã¦ãã ã•ã„ã€‚");
 			return false;
 		}
 		return (Boolean) cOptions.get(string);

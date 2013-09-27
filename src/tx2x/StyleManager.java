@@ -16,73 +16,73 @@ public class StyleManager {
 	private ArrayList<Style> m_cStyleList;
 
 	private StyleManager() {
-		// StyleManager‚ÉStyle‚ğ“o˜^ƒZƒˆ
+		// StyleManagerã«Styleã‚’ç™»éŒ²ã‚»ãƒ¨
 		m_cStyleList = new ArrayList<Style>();
 
-		// ‰Óğ‘‚«‚Ì—Ş—•i
-		m_cStyleList.add(new Style_BulletLike("y‰Óğ‘‚«Ez", "^E\t.*", "^[^E].*")); // ‰Óğ‘‚«uEv
-		m_cStyleList.add(new Style_BulletLike("y‰Óğ‘‚«|z", "^|\t.*", "^[^|].*")); // ‰Óğ‘‚«u|v
-		m_cStyleList.add(new Style_BulletLike("y‰Óğ‘‚«z", "^\t.*", "^[^].*")); // ‰Óğ‘‚«uv
-		m_cStyleList.add(new Style_BulletLike("y‰Óğ‘‚«œz", "^œ\t.*", "^[^œ].*")); // ‰Óğ‘‚«uv
-		m_cStyleList.add(new Style_BulletLike("y¦z", "^¦\t.*", "^[^¦].*")); // ¦
-		m_cStyleList.add(new Style_BulletLike("y*z", "^\\*+\t.*", "^[^\\*].*")); // *
+		// ç®‡æ¡æ›¸ãã®é¡ä¼¼å“
+		m_cStyleList.add(new Style_BulletLike("ã€ç®‡æ¡æ›¸ããƒ»ã€‘", "^ãƒ»\t.*", "^[^ãƒ»].*")); // ç®‡æ¡æ›¸ãã€Œãƒ»ã€
+		m_cStyleList.add(new Style_BulletLike("ã€ç®‡æ¡æ›¸ãï¼ã€‘", "^ï¼\t.*", "^[^ï¼].*")); // ç®‡æ¡æ›¸ãã€Œï¼ã€
+		m_cStyleList.add(new Style_BulletLike("ã€ç®‡æ¡æ›¸ãâ—ã€‘", "^â—\t.*", "^[^â—].*")); // ç®‡æ¡æ›¸ãã€Œâ—ã€
+		m_cStyleList.add(new Style_BulletLike("ã€ç®‡æ¡æ›¸ãâ—ã€‘", "^â—\t.*", "^[^â—].*")); // ç®‡æ¡æ›¸ãã€Œâ—ã€
+		m_cStyleList.add(new Style_BulletLike("ã€â€»ã€‘", "^â€»\t.*", "^[^â€»].*")); // â€»
+		m_cStyleList.add(new Style_BulletLike("ã€*ã€‘", "^\\*+\t.*", "^[^\\*].*")); // *
 		m_cStyleList
-				.add(new Style_BulletLike("y¦0z", "^¦[0-9]\t.*", "^[^¦].*")); // ¦[0-9]
-		m_cStyleList.add(new Style_BulletLike("y¦Ez", "^¦E\t.*", "^[^¦].*")); // ¦E
-		m_cStyleList.add(new Style_BulletLike("yè‡z", "^[‚O-‚X]+\t.*",
-				"^[^‚O-‚X].*")); // è‡
-		m_cStyleList.add(new Style_BulletLike("yè‡•ªŠòz", "^¡[^¡].*", "^[^¡].*")); // è‡•ªŠò
-		m_cStyleList.add(new Style_BulletLike("y‡@z",
-				"^[‡@‡A‡B‡C‡D‡E‡F‡G‡H‡I‡J‡K‡L‡M‡N‡O‡P‡Q‡R‡S]\t.*", "[^‡@‡A‡B‡C‡D‡E‡F‡G‡H‡I‡J‡K‡L‡M‡N‡O‡P‡Q‡R‡S].*")); // ‡@`‡S
-		m_cStyleList.add(new Style_BulletLike("y‡@Fz",
-				"^[‡@‡A‡B‡C‡D‡E‡F‡G‡H‡I‡J‡K‡L‡M‡N‡O‡P‡Q‡R‡S]F\t.*", "[^‡@‡A‡B‡C‡D‡E‡F‡G‡H‡I‡J‡K‡L‡M‡N‡O‡P‡Q‡R‡S].*")); // ‡@F`‡SF
-		m_cStyleList.add(new Style_BulletLike("yiMj‡@z",
-				"^iMj[‡@‡A‡B‡C‡D‡E‡F‡G‡H‡I‡J‡K‡L‡M‡N‡O‡P‡Q‡R‡S]\t.*", "(^iMj).*"));
-		m_cStyleList.add(new Style_BulletLike("yiMjz", "^iMj\t.*", "(^iMj).*"));
-		m_cStyleList.add(new Style_BulletLike("yƒL[à–¾z", "^y.*ƒL[z(i.+j)?F.*",
-				"^[^y]].*")); // ƒL[à–¾BI‚í‚è‚Í‚¾‚¢‚Ô“K“–cB
-		m_cStyleList.add(new Style_BulletLike("y—˜—p‹–‘øŒ_–ñi1jz", "^i[0-9]+j\t.*",
-				"^[^i].*")); // —˜—p‹–‘øŒ_–ñ
-		m_cStyleList.add(new Style_BulletLike("y1.z", "^[0-9]+\\.\t.*",
+				.add(new Style_BulletLike("ã€â€»0ã€‘", "^â€»[0-9]\t.*", "^[^â€»].*")); // â€»[0-9]
+		m_cStyleList.add(new Style_BulletLike("ã€â€»ãƒ»ã€‘", "^â€»ãƒ»\t.*", "^[^â€»].*")); // â€»ãƒ»
+		m_cStyleList.add(new Style_BulletLike("ã€æ‰‹é †ã€‘", "^[ï¼-ï¼™]+\t.*",
+				"^[^ï¼-ï¼™].*")); // æ‰‹é †
+		m_cStyleList.add(new Style_BulletLike("ã€æ‰‹é †åˆ†å²ã€‘", "^â– [^â– ].*", "^[^â– ].*")); // æ‰‹é †åˆ†å²
+		m_cStyleList.add(new Style_BulletLike("ã€â‘ ã€‘",
+				"^[â‘ â‘¡â‘¢â‘£â‘¤â‘¥â‘¦â‘§â‘¨â‘©â‘ªâ‘«â‘¬â‘­â‘®â‘¯â‘°â‘±â‘²â‘³]\t.*", "[^â‘ â‘¡â‘¢â‘£â‘¤â‘¥â‘¦â‘§â‘¨â‘©â‘ªâ‘«â‘¬â‘­â‘®â‘¯â‘°â‘±â‘²â‘³].*")); // â‘ ï½â‘³
+		m_cStyleList.add(new Style_BulletLike("ã€â‘ ï¼šã€‘",
+				"^[â‘ â‘¡â‘¢â‘£â‘¤â‘¥â‘¦â‘§â‘¨â‘©â‘ªâ‘«â‘¬â‘­â‘®â‘¯â‘°â‘±â‘²â‘³]ï¼š\t.*", "[^â‘ â‘¡â‘¢â‘£â‘¤â‘¥â‘¦â‘§â‘¨â‘©â‘ªâ‘«â‘¬â‘­â‘®â‘¯â‘°â‘±â‘²â‘³].*")); // â‘ ï¼šï½â‘³ï¼š
+		m_cStyleList.add(new Style_BulletLike("ã€ï¼ˆMï¼‰â‘ ã€‘",
+				"^ï¼ˆMï¼‰[â‘ â‘¡â‘¢â‘£â‘¤â‘¥â‘¦â‘§â‘¨â‘©â‘ªâ‘«â‘¬â‘­â‘®â‘¯â‘°â‘±â‘²â‘³]\t.*", "(^ï¼ˆMï¼‰).*"));
+		m_cStyleList.add(new Style_BulletLike("ã€ï¼ˆMï¼‰ã€‘", "^ï¼ˆMï¼‰\t.*", "(^ï¼ˆMï¼‰).*"));
+		m_cStyleList.add(new Style_BulletLike("ã€ã‚­ãƒ¼èª¬æ˜ã€‘", "^ã€.*ã‚­ãƒ¼ã€‘(ï¼ˆ.+ï¼‰)?ï¼š.*",
+				"^[^ã€]].*")); // ã‚­ãƒ¼èª¬æ˜ã€‚çµ‚ã‚ã‚Šã¯ã ã„ã¶é©å½“â€¦ã€‚
+		m_cStyleList.add(new Style_BulletLike("ã€åˆ©ç”¨è¨±è«¾å¥‘ç´„ï¼ˆ1ï¼‰ã€‘", "^ï¼ˆ[0-9]+ï¼‰\t.*",
+				"^[^ï¼ˆ].*")); // åˆ©ç”¨è¨±è«¾å¥‘ç´„
+		m_cStyleList.add(new Style_BulletLike("ã€1.ã€‘", "^[0-9]+\\.\t.*",
 				"^[^0-9].*")); // 1.
 		m_cStyleList
-				.add(new Style_BulletLike("y1z", "^[0-9]+\t.*", "^[^0-9].*")); // 1.
-		m_cStyleList.add(new Style_BulletLike("yStep 1z", "^Step [0-9]+\t.*",
+				.add(new Style_BulletLike("ã€1ã€‘", "^[0-9]+\t.*", "^[^0-9].*")); // 1.
+		m_cStyleList.add(new Style_BulletLike("ã€Step 1ã€‘", "^Step [0-9]+\t.*",
 				"^(?!Step [0-9]\t).*")); // Step 1.
 
-		// ‚Ç‚¿‚ç‚©‚Æ‚¢‚¤‚Æ‰Óğ‘‚«‚Ì—Ş—•i
-		m_cStyleList.add(new Style_BulletLike("y€z", "^y€z.*", ".*")); // y€z
-		m_cStyleList.add(new Style_BulletLike("y€2z", "^y€2z.*", ".*")); // y€2z
-		m_cStyleList.add(new Style_BulletLike("y€‰ºz", "^y€‰ºz.*", ".*")); // y€‰ºz
-		m_cStyleList.add(new Style_BulletLike("yßz", "^yßz.*", ".*")); // yßz
-		m_cStyleList.add(new Style_BulletLike("yß2z", "^yß2z.*", ".*")); // yß2z
-		m_cStyleList.add(new Style_BulletLike("yÍz", "^yÍz.*", ".*")); // yÍz
-		m_cStyleList.add(new Style_BulletLike("y•Òz", "^y•Òz.*", ".*")); // y•Òz
-		m_cStyleList.add(new Style_BulletLike("y—áFz", "^—áF.*", ".*")); // y—áFz
-		m_cStyleList.add(new Style_BulletLike("y‰æ–Êz", "^y‰æ–Ê.*z.*", ".*")); // y‰æ–Êz
-		m_cStyleList.add(new Style_BulletLike("yQÆz", "^¥P.[œ0-9]+u.*v", ".*")); // yQÆz
-		m_cStyleList.add(new Style_BulletLike("yˆÈãz", "^|ˆÈ@ã|", ".*"));
-		m_cStyleList.add(new Style_BulletLike("y•Ê†ƒ^ƒCƒgƒ‹z", "^¡¡¡¡¡•Ê†.*", ".*"));
-		m_cStyleList.add(new Style_BulletLike("yŠëŒ¯z", "^šŠëŒ¯š\t.*", ".*"));
-		m_cStyleList.add(new Style_BulletLike("yŒxz", "^šŒxš\t.*", ".*"));
-		m_cStyleList.add(new Style_BulletLike("y’ˆÓz", "^š’ˆÓš\t.*", ".*"));
+		// ã©ã¡ã‚‰ã‹ã¨ã„ã†ã¨ç®‡æ¡æ›¸ãã®é¡ä¼¼å“
+		m_cStyleList.add(new Style_BulletLike("ã€é …ã€‘", "^ã€é …ã€‘.*", ".*")); // ã€é …ã€‘
+		m_cStyleList.add(new Style_BulletLike("ã€é …2ã€‘", "^ã€é …2ã€‘.*", ".*")); // ã€é …2ã€‘
+		m_cStyleList.add(new Style_BulletLike("ã€é …ä¸‹ã€‘", "^ã€é …ä¸‹ã€‘.*", ".*")); // ã€é …ä¸‹ã€‘
+		m_cStyleList.add(new Style_BulletLike("ã€ç¯€ã€‘", "^ã€ç¯€ã€‘.*", ".*")); // ã€ç¯€ã€‘
+		m_cStyleList.add(new Style_BulletLike("ã€ç¯€2ã€‘", "^ã€ç¯€2ã€‘.*", ".*")); // ã€ç¯€2ã€‘
+		m_cStyleList.add(new Style_BulletLike("ã€ç« ã€‘", "^ã€ç« ã€‘.*", ".*")); // ã€ç« ã€‘
+		m_cStyleList.add(new Style_BulletLike("ã€ç·¨ã€‘", "^ã€ç·¨ã€‘.*", ".*")); // ã€ç·¨ã€‘
+		m_cStyleList.add(new Style_BulletLike("ã€ä¾‹ï¼šã€‘", "^ä¾‹ï¼š.*", ".*")); // ã€ä¾‹ï¼šã€‘
+		m_cStyleList.add(new Style_BulletLike("ã€ç”»é¢ã€‘", "^ã€ç”»é¢.*ã€‘.*", ".*")); // ã€ç”»é¢ã€‘
+		m_cStyleList.add(new Style_BulletLike("ã€å‚ç…§ã€‘", "^â–¼P.[â—0-9]+ã€Œ.*ã€", ".*")); // ã€å‚ç…§ã€‘
+		m_cStyleList.add(new Style_BulletLike("ã€ä»¥ä¸Šã€‘", "^ï¼ä»¥ã€€ä¸Šï¼", ".*"));
+		m_cStyleList.add(new Style_BulletLike("ã€åˆ¥ç´™ã‚¿ã‚¤ãƒˆãƒ«ã€‘", "^â– â– â– â– â– åˆ¥ç´™.*", ".*"));
+		m_cStyleList.add(new Style_BulletLike("ã€å±é™ºã€‘", "^â˜…å±é™ºâ˜…\t.*", ".*"));
+		m_cStyleList.add(new Style_BulletLike("ã€è­¦å‘Šã€‘", "^â˜…è­¦å‘Šâ˜…\t.*", ".*"));
+		m_cStyleList.add(new Style_BulletLike("ã€æ³¨æ„ã€‘", "^â˜…æ³¨æ„â˜…\t.*", ".*"));
 
-		// ‚¨’m‚ç‚¹‚Ì—Ş—•i
-		m_cStyleList.add(new Style_NoteLike("yƒƒ‚z", "^¥ƒƒ‚.*", "£.*")); // memo
-		m_cStyleList.add(new Style_NoteLike("y‰æ–ÊˆÍ‚İz", "^¥‰æ–ÊˆÍ‚İ.*", "£.*")); // ‰æ–ÊˆÍ‚İ
-		m_cStyleList.add(new Style_NoteLike("y•t˜^z", "^¥•t˜^.*", "£.*")); // •t˜^
-		m_cStyleList.add(new Style_NoteLike("y—˜—p‹–‘øz", "^¥—˜—p‹–‘ø.*", "£.*")); // —˜—p‹–‘ø
-		m_cStyleList.add(new Style_NoteLike("yEngz", "^¥Eng.*", "£.*")); // Eng
-		m_cStyleList.add(new Style_NoteLike("y•Ò–ÚŸz", "^¥•Ò–ÚŸ.*", "£.*")); // •Ò–ÚŸ
-		m_cStyleList.add(new Style_NoteLike("y–ÚŸz", "^¥–ÚŸ.*", "£.*")); // •Ò–ÚŸ
-		m_cStyleList.add(new Style_NoteLike("yõˆøz", "^¥õˆø.*", "£.*")); // õˆø
-		m_cStyleList.add(new Style_NoteLike("yˆÀ‘Sã‚Ì‚²’ˆÓz", "^¥ˆÀ‘Sã‚Ì‚²’ˆÓ.*", "£.*")); // ˆÀ‘Sã‚Ì‚²’ˆÓ
+		// ãŠçŸ¥ã‚‰ã›ã®é¡ä¼¼å“
+		m_cStyleList.add(new Style_NoteLike("ã€ãƒ¡ãƒ¢ã€‘", "^â–¼ãƒ¡ãƒ¢.*", "â–².*")); // memo
+		m_cStyleList.add(new Style_NoteLike("ã€ç”»é¢å›²ã¿ã€‘", "^â–¼ç”»é¢å›²ã¿.*", "â–².*")); // ç”»é¢å›²ã¿
+		m_cStyleList.add(new Style_NoteLike("ã€ä»˜éŒ²ã€‘", "^â–¼ä»˜éŒ².*", "â–².*")); // ä»˜éŒ²
+		m_cStyleList.add(new Style_NoteLike("ã€åˆ©ç”¨è¨±è«¾ã€‘", "^â–¼åˆ©ç”¨è¨±è«¾.*", "â–².*")); // åˆ©ç”¨è¨±è«¾
+		m_cStyleList.add(new Style_NoteLike("ã€Engã€‘", "^â–¼Eng.*", "â–².*")); // Eng
+		m_cStyleList.add(new Style_NoteLike("ã€ç·¨ç›®æ¬¡ã€‘", "^â–¼ç·¨ç›®æ¬¡.*", "â–².*")); // ç·¨ç›®æ¬¡
+		m_cStyleList.add(new Style_NoteLike("ã€ç›®æ¬¡ã€‘", "^â–¼ç›®æ¬¡.*", "â–².*")); // ç·¨ç›®æ¬¡
+		m_cStyleList.add(new Style_NoteLike("ã€ç´¢å¼•ã€‘", "^â–¼ç´¢å¼•.*", "â–².*")); // ç´¢å¼•
+		m_cStyleList.add(new Style_NoteLike("ã€å®‰å…¨ä¸Šã®ã”æ³¨æ„ã€‘", "^â–¼å®‰å…¨ä¸Šã®ã”æ³¨æ„.*", "â–².*")); // å®‰å…¨ä¸Šã®ã”æ³¨æ„
 
-		// •\‘gŠÖ˜A
-		m_cStyleList.add(new Style_Table()); // •\‘g‚İ
-		m_cStyleList.add(new Style_TableCell()); // ƒZƒ‹
-		m_cStyleList.add(new Style_TableCellHeader()); // ƒZƒ‹Fƒwƒbƒ_[
-		m_cStyleList.add(new Style_TableRow()); // s
+		// è¡¨çµ„é–¢é€£
+		m_cStyleList.add(new Style_Table()); // è¡¨çµ„ã¿
+		m_cStyleList.add(new Style_TableCell()); // ã‚»ãƒ«
+		m_cStyleList.add(new Style_TableCellHeader()); // ã‚»ãƒ«ï¼šãƒ˜ãƒƒãƒ€ãƒ¼
+		m_cStyleList.add(new Style_TableRow()); // è¡Œ
 	}
 
 	public static StyleManager getInstance() {
@@ -90,7 +90,7 @@ public class StyleManager {
 	}
 
 	/*
-	 * ƒXƒ^ƒCƒ‹‚Ìn‚Ü‚ès‚©‚Ç‚¤‚©‚ğŠm”F‚·‚éƒƒ\ƒbƒhB n‚Ü‚ès‚Å‚ ‚Á‚½ê‡‚ÍAStyle‚ğ•Ô‹p
+	 * ã‚¹ã‚¿ã‚¤ãƒ«ã®å§‹ã¾ã‚Šè¡Œã‹ã©ã†ã‹ã‚’ç¢ºèªã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ã€‚ å§‹ã¾ã‚Šè¡Œã§ã‚ã£ãŸå ´åˆã¯ã€Styleã‚’è¿”å´
 	 */
 	public Style getMatchStyle_Start(String line) {
 		Iterator<Style> it = m_cStyleList.iterator();
@@ -104,7 +104,7 @@ public class StyleManager {
 	}
 
 	/*
-	 * ƒXƒ^ƒCƒ‹‚ÌI‚í‚ès‚©‚Ç‚¤‚©‚ğŠm”F‚·‚éƒƒ\ƒbƒhB I‚í‚ès‚Å‚ ‚Á‚½ê‡‚ÍAStyle‚ğ•Ô‹p
+	 * ã‚¹ã‚¿ã‚¤ãƒ«ã®çµ‚ã‚ã‚Šè¡Œã‹ã©ã†ã‹ã‚’ç¢ºèªã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ã€‚ çµ‚ã‚ã‚Šè¡Œã§ã‚ã£ãŸå ´åˆã¯ã€Styleã‚’è¿”å´
 	 */
 	public Style getMatchStyle_Last(String line) {
 		Iterator<Style> it = m_cStyleList.iterator();
@@ -118,7 +118,7 @@ public class StyleManager {
 	}
 
 	/*
-	 * ƒXƒ^ƒCƒ‹–¼Ì‚©‚çStyle‚ğæ“¾‚·‚é
+	 * ã‚¹ã‚¿ã‚¤ãƒ«åç§°ã‹ã‚‰Styleã‚’å–å¾—ã™ã‚‹
 	 */
 	public Style getStyle(String styleName) {
 		Iterator<Style> it = m_cStyleList.iterator();

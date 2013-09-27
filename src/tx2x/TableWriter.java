@@ -4,17 +4,17 @@ import tx2x_core.CellInfo;
 import tx2x_core.TableManager;
 
 public class TableWriter {
-	/* •\‚ÌƒXƒ^ƒCƒ‹ */
+	/* è¡¨ã®ã‚¹ã‚¿ã‚¤ãƒ« */
 	private String m_sStyle;
 
-	/* •\‚Ì‚‚³E• */
+	/* è¡¨ã®é«˜ã•ãƒ»å¹… */
 	private int m_nHeight;
 	private int m_nWidth;
 
-	/* ƒwƒbƒ_[s‚Ìs” */
+	/* ãƒ˜ãƒƒãƒ€ãƒ¼è¡Œã®è¡Œæ•° */
 	private int m_nHeader;
 
-	/* ’–Ú‚µ‚Ä‚¢‚éƒZƒ‹À•W */
+	/* æ³¨ç›®ã—ã¦ã„ã‚‹ã‚»ãƒ«åº§æ¨™ */
 	private int m_nX;
 	private int m_nY;
 	private CellInfo[][] m_nCellSize;
@@ -31,8 +31,8 @@ public class TableWriter {
 		String longStyle = lsManager.getLongStyle();
 		m_nX = 0;
 		m_nY = 0;
-		// è‡”š’¼Œã‚Ì•\‚Ìê‡‚ÍAlsManager.m_sStepCaption‚Éè‡”š‚ª“ü‚Á‚Ä‚­‚é
-		String nextStyle; // •\‚ÌŒã‚ÌƒXƒ^ƒCƒ‹‚ğæ“¾‚·‚é
+		// æ‰‹é †æ•°å­—ç›´å¾Œã®è¡¨ã®å ´åˆã¯ã€lsManager.m_sStepCaptionã«æ‰‹é †æ•°å­—ãŒå…¥ã£ã¦ãã‚‹
+		String nextStyle; // è¡¨ã®å¾Œã®ã‚¹ã‚¿ã‚¤ãƒ«ã‚’å–å¾—ã™ã‚‹
 		for (int iNextStyle = 1;; iNextStyle++) {
 			String cu = lsManager.getLongStyleFromArrayList(nLsIndex
 					+ iNextStyle);
@@ -42,25 +42,25 @@ public class TableWriter {
 			}
 		}
 		String tBeforeSpace, tAfterSpace;
-		if ((longStyle.equals("yè‡zyè‡zy‰Óğ‘‚«Ezy‰Óğ‘‚«Ezy•\z") == false)
+		if ((longStyle.equals("ã€æ‰‹é †ã€‘ã€æ‰‹é †ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€è¡¨ã€‘") == false)
 				&& (lsManager.m_sStepCaption.equals("") == false)
 				&& (lsManager.m_sStepCaption.equals(" ") == false)) {
 			/**
-			 * è‡“à‚Ì•\‚Ìƒwƒbƒ_ˆ—
+			 * æ‰‹é †å†…ã®è¡¨ã®ãƒ˜ãƒƒãƒ€å‡¦ç†
 			 */
 
-			// •\‚Ì‘OƒAƒL
+			// è¡¨ã®å‰ã‚¢ã‚­
 			if (lsManager.getLongStyleFromArrayList(nLsIndex - 2).equals(
-					"yè‡•ªŠòzyè‡•ªŠòz")) {
+					"ã€æ‰‹é †åˆ†å²ã€‘ã€æ‰‹é †åˆ†å²ã€‘")) {
 				tBeforeSpace = "2.834645669291339";
 			} else {
 				tBeforeSpace = "5.669291338582678";
 			}
 
-			// •\‚ÌŒã‚ëƒAƒL
-			if (nextStyle.equals("yè‡zyè‡zy¦zy¦z")
-					|| nextStyle.equals("yè‡zyè‡zy¦0zy¦0z")
-					|| nextStyle.equals("yè‡•ªŠòzyè‡•ªŠòz") || nextStyle.equals("")) {
+			// è¡¨ã®å¾Œã‚ã‚¢ã‚­
+			if (nextStyle.equals("ã€æ‰‹é †ã€‘ã€æ‰‹é †ã€‘ã€â€»ã€‘ã€â€»ã€‘")
+					|| nextStyle.equals("ã€æ‰‹é †ã€‘ã€æ‰‹é †ã€‘ã€â€»0ã€‘ã€â€»0ã€‘")
+					|| nextStyle.equals("ã€æ‰‹é †åˆ†å²ã€‘ã€æ‰‹é †åˆ†å²ã€‘") || nextStyle.equals("")) {
 				tAfterSpace = "2.834645669291339";
 			} else {
 				tAfterSpace = "0";
@@ -93,22 +93,22 @@ public class TableWriter {
 			return header;
 		}
 		/**
-		 * è‡“à‚Ì•\‚Å‚Í‚È‚¢ê‡‚Ìƒwƒbƒ_ˆ—
+		 * æ‰‹é †å†…ã®è¡¨ã§ã¯ãªã„å ´åˆã®ãƒ˜ãƒƒãƒ€å‡¦ç†
 		 */
-		if (nextStyle.equals("ymemozymemoz")) {
+		if (nextStyle.equals("ã€memoã€‘ã€memoã€‘")) {
 			tAfterSpace = "0";
 		} else {
 			tAfterSpace = "2.834645669291339";
 		}
 
-		/* TableStart ‚Ìn‚Ü‚è */
+		/* TableStart ã®å§‹ã¾ã‚Š */
 		String header = "<TableStyle:" + m_sStyle + "><TableStart:" + m_nHeight
 				+ "," + m_nWidth + ":" + (m_nHeader)
 				+ ":0<tCellDefaultCellType:Text>";
 		header += ">";
-		/* TableStart ‚ÌI‚í‚è */
+		/* TableStart ã®çµ‚ã‚ã‚Š */
 
-		if (longStyle.equals("y•\z")) {
+		if (longStyle.equals("ã€è¡¨ã€‘")) {
 			switch (m_nWidth) {
 			default:
 				for (int i = 0; i < m_nWidth; i++) {
@@ -117,8 +117,8 @@ public class TableWriter {
 				}
 			}
 		} else {
-			System.out.println("ƒZƒ‹•‚ª–¢’è‹`‚Ì•\‚ª‚ ‚è‚Ü‚·B\n@longStyle:" + longStyle
-					+ "\n@m_nWidth:" + m_nWidth);
+			System.out.println("ã‚»ãƒ«å¹…ãŒæœªå®šç¾©ã®è¡¨ãŒã‚ã‚Šã¾ã™ã€‚\nã€€longStyle:" + longStyle
+					+ "\nã€€m_nWidth:" + m_nWidth);
 		}
 		return header;
 	}
@@ -129,16 +129,16 @@ public class TableWriter {
 		String header = "<CellStyle:\\[None\\]><StylePriority:0><CellStart:";
 
 		if (m_nWidth < m_nX) {
-			System.out.println("“à•”ƒGƒ‰[F‰¡•‚ğ’´‚¦‚½w’è‚É‚È‚Á‚Ä‚¢‚Ü‚·B");
+			System.out.println("å†…éƒ¨ã‚¨ãƒ©ãƒ¼ï¼šæ¨ªå¹…ã‚’è¶…ãˆãŸæŒ‡å®šã«ãªã£ã¦ã„ã¾ã™ã€‚");
 			System.out.println("m_nHeight:" + m_nHeight + ", m_nWidth:"
 					+ m_nWidth);
 			System.out.println("m_nY:" + m_nY + ", m_nX:" + m_nX);
-			System.out.println("indesign.txt‚Åuš,šv‚ğŒŸõ‚µ‚Ä‚­‚¾‚³‚¢B");
-			header += "š,š";
+			System.out.println("indesign.txtã§ã€Œâ˜…,â˜…ã€ã‚’æ¤œç´¢ã—ã¦ãã ã•ã„ã€‚");
+			header += "â˜…,â˜…";
 		} else if (m_nCellSize[m_nY - 1][m_nX - 1] != null) {
 			header += m_nCellSize[m_nY - 1][m_nX - 1].getHeight() + ","
 					+ m_nCellSize[m_nY - 1][m_nX - 1].getWidth();
-			/* Îü‚Ìˆ— */
+			/* æ–œç·šã®å‡¦ç† */
 			if (m_nCellSize[m_nY - 1][m_nX - 1].isDiagonalLine()) {
 				header += "<tCellDiagnolAdornment:1>";
 				if (m_nCellSize[m_nY - 1][m_nX - 1].isLeftTopLine()) {
@@ -156,22 +156,22 @@ public class TableWriter {
 		} else {
 			header += "1,1";
 		}
-		// —]”’‚Ìˆ—
-		// ‚È‚µ
+		// ä½™ç™½ã®å‡¦ç†
+		// ãªã—
 
-		// ƒAƒ~‚Ìˆ—
-		// ‚È‚µ
+		// ã‚¢ãƒŸã®å‡¦ç†
+		// ãªã—
 
-		// Œrü
-		// ‚È‚µ
+		// ç½«ç·š
+		// ãªã—
 
-		// 1s–ÚƒIƒtƒZƒbƒgi1:ƒAƒZƒ“ƒgA2:ƒLƒƒƒbƒvƒnƒCƒgA3:s‘—‚èA4:XƒnƒCƒgA5:ŒÅ’èj@ƒfƒtƒHƒ‹ƒg‚Í3
-		// ‚È‚µ
+		// 1è¡Œç›®ã‚ªãƒ•ã‚»ãƒƒãƒˆï¼ˆ1:ã‚¢ã‚»ãƒ³ãƒˆã€2:ã‚­ãƒ£ãƒƒãƒ—ãƒã‚¤ãƒˆã€3:è¡Œé€ã‚Šã€4:Xãƒã‚¤ãƒˆã€5:å›ºå®šï¼‰ã€€ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã¯3
+		// ãªã—
 
 		// VerticalJustification
-		// ‚È‚µ
+		// ãªã—
 
-		if (lsManager.getLongStyle().equals("yè‡zyè‡zy•\zyszyƒZƒ‹z")) {
+		if (lsManager.getLongStyle().equals("ã€æ‰‹é †ã€‘ã€æ‰‹é †ã€‘ã€è¡¨ã€‘ã€è¡Œã€‘ã€ã‚»ãƒ«ã€‘")) {
 			if (m_nX == 1) {
 				header += "<tCellAttrLeftStrokeTint:100><tCellLeftStrokeOverprint:0>";
 			} else {
@@ -179,10 +179,10 @@ public class TableWriter {
 			}
 		}
 
-		// c‘g”Å
-		// ‚È‚µ
+		// ç¸¦çµ„ç‰ˆ
+		// ãªã—
 
-		if (lsManager.getLongStyle().equals("yè‡zyè‡zy•\zyszyƒZƒ‹z")) {
+		if (lsManager.getLongStyle().equals("ã€æ‰‹é †ã€‘ã€æ‰‹é †ã€‘ã€è¡¨ã€‘ã€è¡Œã€‘ã€ã‚»ãƒ«ã€‘")) {
 			if (m_nX == 1) {
 				header += "<tCellLeftStrokeGapTint:100><tCellLeftStrokeGapColor:Paper>";
 			} else {
@@ -190,7 +190,7 @@ public class TableWriter {
 			}
 		}
 
-		// header‚ğ•Â‚¶‚é
+		// headerã‚’é–‰ã˜ã‚‹
 		header += ">";
 		return header;
 	}
@@ -201,7 +201,7 @@ public class TableWriter {
 		m_nX = 0;
 		rowHeader += "<RowStart:<tRowAttrHeight:10><tRowAttrMinRowSize:10><tRowAutoGrow:1><tRowKeeps:1>>";
 		String longStyle = lsManager.getLongStyle();
-		if ((longStyle.equals("yè‡zyè‡zy‰Óğ‘‚«Ezy‰Óğ‘‚«Ezy•\zysz") == false)
+		if ((longStyle.equals("ã€æ‰‹é †ã€‘ã€æ‰‹é †ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€ç®‡æ¡æ›¸ããƒ»ã€‘ã€è¡¨ã€‘ã€è¡Œã€‘") == false)
 				&& (lsManager.m_sStepCaption.equals("") == false)
 				&& (lsManager.m_sStepCaption.equals(" ") == false)) {
 			rowHeader += "<CellStart:1,1<tCellAttrLeftInset:0><tCellAttrTopInset:0><tCellAttrRightInset:0><tCellAttrBottomInset:0><tCellFillColor:None><tCellAttrLeftStrokeWeight:0><tCellAttrRightStrokeWeight:0.5><tCellAttrTopStrokeWeight:0><tCellAttrBottomStrokeWeight:0><tCellLeftStrokeColor:Black><tCellTopStrokeColor:Black><tCellRightStrokeColor:Black><tCellBottomStrokeColor:Black><tcLeftStrokeType:Solid><tcRightStrokeType:Solid><tcTopStrokeType:Solid><tcBottomStrokeType:Solid><tTextCellFirstLineOffset:3><tTextCellVerticalJustification:0><tCellAttrLeftStrokeTint:100><tCellAttrRightStrokeTint:100><tCellAttrTopStrokeTint:100><tCellAttrBottomStrokeTint:100><tCellLeftStrokeOverprint:0><tCellRightStrokeOverprint:0><tCellTopStrokeOverprint:0><tCellBottomStrokeOverprint:0><tTextCellVerticalComposition:1><tCellLeftStrokeGapTint:100><tCellRightStrokeGapTint:100><tCellTopStrokeGapTint:100><tCellBottomStrokeGapTint:100><tCellLeftStrokeGapColor:Paper><tCellRightStrokeGapColor:Paper><tCellTopStrokeGapColor:Paper><tCellBottomStrokeGapColor:Paper>>";

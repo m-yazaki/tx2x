@@ -1,5 +1,5 @@
 /**
- * IDTaggedTextGenerator‚ÌƒƒCƒ“UI
+ * IDTaggedTextGeneratorã®ãƒ¡ã‚¤ãƒ³UI
  */
 package tx2x;
 
@@ -9,7 +9,7 @@ public class Tx2x {
 	private static String m_sWarn = "";
 
 	/**
-	 * ƒeƒLƒXƒgƒtƒ@ƒCƒ‹’†‚Ì‰üsƒR[ƒh
+	 * ãƒ†ã‚­ã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ä¸­ã®æ”¹è¡Œã‚³ãƒ¼ãƒ‰
 	 *
 	 * @param bMac
 	 * @return
@@ -23,7 +23,7 @@ public class Tx2x {
 	}
 
 	/**
-	 * ƒƒbƒZ[ƒW‚Ìê‡‚Ì‰üsƒR[ƒh
+	 * ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®å ´åˆã®æ”¹è¡Œã‚³ãƒ¼ãƒ‰
 	 */
 	public static String getCRLF() {
 		return CRLF;
@@ -34,7 +34,7 @@ public class Tx2x {
 	 */
 	public static void main(String[] args) {
 		/*
-		 * ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“ˆø”‚Ìˆ—
+		 * ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³å¼•æ•°ã®å‡¦ç†
 		 */
 		for (int i = 0; i < args.length; i++) {
 			if ("-debug".equals(args[i])) {
@@ -51,8 +51,8 @@ public class Tx2x {
 		cTx2xTextReader.convertToInDesign(Tx2xOptions.getInstance().getString(
 				"tx2x_filename"));
 
-		// ƒƒbƒZ[ƒWo—Í
-		String message = "-®Œ`I—¹-" + Tx2x.getCRLF();
+		// ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸å‡ºåŠ›
+		String message = "-æ•´å½¢çµ‚äº†-" + Tx2x.getCRLF();
 		String warn = Tx2x.getWarn();
 		if (warn.length() > 0) {
 			message += warn;
@@ -62,7 +62,7 @@ public class Tx2x {
 	}
 
 	/**
-	 * ƒ†[ƒU[‚ÉŒ©‚¹‚éƒƒbƒZ[ƒW‚ğŠÇ—‚·‚é
+	 * ãƒ¦ãƒ¼ã‚¶ãƒ¼ã«è¦‹ã›ã‚‹ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’ç®¡ç†ã™ã‚‹
 	 *
 	 * @param string
 	 */
@@ -75,7 +75,7 @@ public class Tx2x {
 		if (m_sWarn.length() < 2048)
 			return m_sWarn;
 		else
-			return m_sWarn + "iŒx‚ª‘½‚¢‚½‚ßÈ—ª‚µ‚Ü‚µ‚½j";
+			return m_sWarn + "ï¼ˆè­¦å‘ŠãŒå¤šã„ãŸã‚çœç•¥ã—ã¾ã—ãŸï¼‰";
 	}
 
 	public static void initialize() {

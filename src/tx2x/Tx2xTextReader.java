@@ -1,5 +1,5 @@
 /**
- * tx2xŒ`®‚ÌƒeƒLƒXƒg‚ğInDesign‚Ìƒ^ƒO•t‚«ƒeƒLƒXƒg‚É•ÏŠ·‚·‚é‹@”\‚ÌUI•”•ª
+ * tx2xå½¢å¼ã®ãƒ†ã‚­ã‚¹ãƒˆã‚’InDesignã®ã‚¿ã‚°ä»˜ããƒ†ã‚­ã‚¹ãƒˆã«å¤‰æ›ã™ã‚‹æ©Ÿèƒ½ã®UIéƒ¨åˆ†
  */
 package tx2x;
 
@@ -21,7 +21,7 @@ public class Tx2xTextReader {
 
 		Tx2x.initialize();
 
-		// inddƒtƒ@ƒCƒ‹‚ÌƒRƒs[
+		// inddãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚³ãƒ”ãƒ¼
 		File cFile = new File(sTx2xFilename);
 		if (cFile.exists()) {
 			try {
@@ -30,7 +30,7 @@ public class Tx2xTextReader {
 						Tx2xTextReader
 								.removeFileExtension(sTx2xFilename) + ".indd");
 			} catch (IOException e2) {
-				// TODO ©“®¶¬‚³‚ê‚½ catch ƒuƒƒbƒN
+				// TODO è‡ªå‹•ç”Ÿæˆã•ã‚ŒãŸ catch ãƒ–ãƒ­ãƒƒã‚¯
 				e2.printStackTrace();
 			}
 		}
@@ -38,44 +38,44 @@ public class Tx2xTextReader {
 		try {
 			if (Tx2xOptions.getInstance().getString("InDesign_OS")
 					.equals("Windows")) {
-				System.out.println("==========Windows—pƒeƒLƒXƒg‚ğo—Í‚µ‚Ü‚·==========");
+				System.out.println("==========Windowsç”¨ãƒ†ã‚­ã‚¹ãƒˆã‚’å‡ºåŠ›ã—ã¾ã™==========");
 				IntermediateTextTreeBuilder formatterForWindows = new IntermediateTextTreeBuilder(
 						false, bDebugMode);
 				formatterForWindows.parse_file(sTx2xFilename, sMaker);
 			} else if (Tx2xOptions.getInstance().getString("InDesign_OS")
 					.equals("Macintosh")) {
-				System.out.println("==========Macintosh—pƒeƒLƒXƒg‚ğo—Í‚µ‚Ü‚·==========");
+				System.out.println("==========Macintoshç”¨ãƒ†ã‚­ã‚¹ãƒˆã‚’å‡ºåŠ›ã—ã¾ã™==========");
 				IntermediateTextTreeBuilder formatterForMac = new IntermediateTextTreeBuilder(
 						true, bDebugMode);
 				formatterForMac.parse_file(sTx2xFilename, sMaker);
 			}
 		} catch (IOException e1) {
-			// TODO ©“®¶¬‚³‚ê‚½ catch ƒuƒƒbƒN
+			// TODO è‡ªå‹•ç”Ÿæˆã•ã‚ŒãŸ catch ãƒ–ãƒ­ãƒƒã‚¯
 			e1.printStackTrace();
 		}
 	}
 
 	/**
-	 * ƒtƒ@ƒCƒ‹ƒRƒs[ src:ƒRƒs[Œ³ dest:ƒRƒs[æ
+	 * ãƒ•ã‚¡ã‚¤ãƒ«ã‚³ãƒ”ãƒ¼ src:ã‚³ãƒ”ãƒ¼å…ƒ dest:ã‚³ãƒ”ãƒ¼å…ˆ
 	 *
 	 * @throws IOException
 	 */
 	public static void copyFile(String src, String dest) throws IOException {
 		if (src.equals(dest))
-			return; // ƒRƒs[Œ³‚ÆƒRƒs[æ‚ª“¯‚¶‚È‚ç‰½‚à‚µ‚È‚¢
+			return; // ã‚³ãƒ”ãƒ¼å…ƒã¨ã‚³ãƒ”ãƒ¼å…ˆãŒåŒã˜ãªã‚‰ä½•ã‚‚ã—ãªã„
 
-		// ƒRƒs[Œ³‚ğæ“¾
+		// ã‚³ãƒ”ãƒ¼å…ƒã‚’å–å¾—
 		File srcFile = new File(src);
 		FileInputStream srcStream;
 		try {
 			srcStream = new FileInputStream(srcFile);
 		} catch (FileNotFoundException e) {
-			Tx2x.appendWarn("[" + srcFile.getAbsolutePath() + "]‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB");
-			return; // ‰½‚à‚µ‚È‚¢‚Å‹A‚é
+			Tx2x.appendWarn("[" + srcFile.getAbsolutePath() + "]ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã€‚");
+			return; // ä½•ã‚‚ã—ãªã„ã§å¸°ã‚‹
 		}
 		FileChannel srcChannel = srcStream.getChannel();
 
-		// ƒRƒs[æ‚ğì¬
+		// ã‚³ãƒ”ãƒ¼å…ˆã‚’ä½œæˆ
 		File destFile = new File(dest).getAbsoluteFile();
 		if (!destFile.getParentFile().exists())
 			destFile.getParentFile().mkdirs();
@@ -83,11 +83,11 @@ public class Tx2xTextReader {
 		FileOutputStream destStream = new FileOutputStream(destFile);
 		FileChannel destChannel = destStream.getChannel();
 
-		// ƒRƒs[I
+		// ã‚³ãƒ”ãƒ¼ï¼
 		long limit = srcChannel.size();
 		srcChannel.transferTo(0, limit, destChannel);
 
-		// Œãˆ—
+		// å¾Œå‡¦ç†
 		destChannel.close();
 		destStream.close();
 		srcChannel.close();
@@ -97,7 +97,7 @@ public class Tx2xTextReader {
 		return;
 	}
 
-	// Šg’£q‚ğƒgƒ‹
+	// æ‹¡å¼µå­ã‚’ãƒˆãƒ«
 	public static String removeFileExtension(String filename) {
 		int lastDotPos = filename.lastIndexOf('.');
 
