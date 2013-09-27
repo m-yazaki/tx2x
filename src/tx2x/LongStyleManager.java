@@ -823,7 +823,7 @@ public class LongStyleManager {
 				m_sPrevLongStyle = longStyle + "Å£";
 				return "<CellEnd:><RowEnd:><TableEnd:>";
 			} else {
-				iText.setText("");
+				iText.setText(null);
 				m_sPrevLongStyle = longStyle + "Å•";
 
 				// FIXME: â¸çsÇµÇ»Ç¢ÇÊÇ§Ç…ì`Ç¶ÇΩÇ¢

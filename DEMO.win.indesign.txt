@@ -44,8 +44,7 @@
 <ParaStyle:リスト>5.	「DEMO.win.indesign.txt」を選択し、「グリッドフォーマットの適用」のチェックを外す
 <ParaStyle:リスト>6.	「開く」をクリックする
 <ParaStyle:リスト補足>タグ付きテキストが読み込まれ、テキストボックスに配置されます。
-<ParaStyle:本文><TableStyle:メモ><TableStart:1,1:0:0<tCellDefaultCellType:Text>><ColStart:<tColAttrWidth:238.52362204733453>><RowStart:<tRowAttrHeight:167.89844595841532><tRowAttrMinRowSize:167.89844595841532>><CellStyle:メモ><StylePriority:1><CellStart:1,1>
-<ParaStyle:バレット><2022>	タグ付きテキストを配置した際、「問題のタグ」が表示されたときは次の内容を確認してください。
+<ParaStyle:本文><TableStyle:メモ><TableStart:1,1:0:0<tCellDefaultCellType:Text>><ColStart:<tColAttrWidth:238.52362204733453>><RowStart:<tRowAttrHeight:167.89844595841532><tRowAttrMinRowSize:167.89844595841532>><CellStyle:メモ><StylePriority:1><CellStart:1,1><ParaStyle:バレット><2022>	タグ付きテキストを配置した際、「問題のタグ」が表示されたときは次の内容を確認してください。
 <ParaStyle:バレット補足バレット>1.	新しいスタイルを使用していませんか
 <ParaStyle:バレット補足バレット>	IDTaggedTextGeneratorを新しいスタイルに対応するように変更する必要があります。スタイル追加のご依頼をお願いいたします。
 <ParaStyle:バレット補足バレット>2.	テキストの書きかたは間違っていませんか

@@ -307,7 +307,11 @@ public class IntermediateTextTreeToInDesign {
 		try {
 			String style = lsManager.getInDesignStyle(iText, m_nLsIndex + 1);
 			if (style.equals("") == false) {
-				fwInDesign.write(style + iText.getText(), true, m_bMac);
+				if (iText.getText() != null) {
+					fwInDesign.write(style + iText.getText(), true, m_bMac);
+				} else {
+					fwInDesign.write(style, false, m_bMac);
+				}
 				if (m_bDebugMode)
 					System.out.println("[" + style + "]" + iText.getText());
 			}
