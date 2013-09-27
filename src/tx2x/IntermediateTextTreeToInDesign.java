@@ -309,7 +309,7 @@ public class IntermediateTextTreeToInDesign {
 			if (style.equals("") == false) {
 				fwInDesign.write(style + iText.getText(), true, m_bMac);
 				if (m_bDebugMode)
-					System.out.println(iText.getText());
+					System.out.println("[" + style + "]" + iText.getText());
 			}
 		} catch (IOException e) {
 			// TODO é©ìÆê∂ê¨Ç≥ÇÍÇΩ catch ÉuÉçÉbÉN
