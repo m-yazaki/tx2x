@@ -1,0 +1,58 @@
+<SJIS-WIN>
+<Version:7><FeatureSet:InDesign-Japanese><ColorTable:=>
+<ParaStyle:大見出し>【章】私たちはテクニカルライターです
+<ParaStyle:本文>今までになかった機能を持った新製品が発売されるとき、そこには、今までになかった機能を説明する取扱説明書があります。私たちは、そんな取扱説明書の原稿を作ることを仕事にしているテクニカルライターです。
+<ParaStyle:本文>
+<ParaStyle:小見出し>作業のご依頼をお待ちしています
+<ParaStyle:本文>このサイトでは、私たちの考えかたや知識レベルを知っていただき、作業のご依頼をお受けすることを目的として運営しています。
+<ParaStyle:本文>私たちの知識や技術については、公開できるものを「情報提供」で一般に公開しています。皆さまの作業が少しでも楽になるとうれしいです。
+<ParaStyle:本文>
+<ParaStyle:小見出し>最近の主な実績（順不同）
+<ParaStyle:本文>私たちの、最近の主な実績を紹介します。
+<ParaStyle:表\:表><TableStyle:標準><TableStart:5,3:1:0<tCellDefaultCellType:Text>><ColStart:<tColAttrWidth:79.38713910761133>><ColStart:<tColAttrWidth:79.38713910761133>><ColStart:<tColAttrWidth:79.38713910761133>><RowStart:<tRowAttrHeight:10><tRowAttrMinRowSize:10><tRowAutoGrow:1><tRowKeeps:1>><CellStyle:\[None\]><StylePriority:0><CellStart:1,1><ParaStyle:表\:表ヘッダー>製品概要（作業年）<CellEnd:><CellStyle:\[None\]><StylePriority:0><CellStart:1,1><ParaStyle:表\:表ヘッダー>取扱説明書・教材<CellEnd:><CellStyle:\[None\]><StylePriority:0><CellStart:1,1><ParaStyle:表\:表ヘッダー>主な納品データ方式<CellEnd:><RowEnd:><RowStart:<tRowAttrHeight:10><tRowAttrMinRowSize:10><tRowAutoGrow:1><tRowKeeps:1>><CellStyle:\[None\]><StylePriority:0><CellStart:1,1><ParaStyle:表\:表本文>携帯電話（2004～2009）<CellEnd:><CellStyle:\[None\]><StylePriority:0><CellStart:1,1><ParaStyle:表\:表本文>一般ユーザー向け取扱説明書<CellEnd:><CellStyle:\[None\]><StylePriority:0><CellStart:1,1><ParaStyle:表\:表バレット><2022>	InDesignタグ付きテキスト
+<ParaStyle:表\:表バレット><2022>	Microsoft Word（テキストデータとして）<CellEnd:><RowEnd:><RowStart:<tRowAttrHeight:10><tRowAttrMinRowSize:10><tRowAutoGrow:1><tRowKeeps:1>><CellStyle:\[None\]><StylePriority:0><CellStart:1,1><ParaStyle:表\:表本文>Javaベースのアプリケーションフレームワーク（2008～2009）<CellEnd:><CellStyle:\[None\]><StylePriority:0><CellStart:1,1><ParaStyle:表\:表本文>開発者向けガイド<CellEnd:><CellStyle:\[None\]><StylePriority:0><CellStart:1,1><ParaStyle:表\:表本文>Microsoft Word（Word DTP）<CellEnd:><RowEnd:><RowStart:<tRowAttrHeight:10><tRowAttrMinRowSize:10><tRowAutoGrow:1><tRowKeeps:1>><CellStyle:\[None\]><StylePriority:0><CellStart:1,1><ParaStyle:表\:表本文>開発ノウハウの説明教材（2009）<CellEnd:><CellStyle:\[None\]><StylePriority:0><CellStart:1,1><ParaStyle:表\:表本文>開発初心者向け教材<CellEnd:><CellStyle:\[None\]><StylePriority:0><CellStart:1,1><ParaStyle:表\:表本文>Microsoft PowerPoint<CellEnd:><RowEnd:><RowStart:<tRowAttrHeight:10><tRowAttrMinRowSize:10><tRowAutoGrow:1><tRowKeeps:1>><CellStyle:\[None\]><StylePriority:0><CellStart:1,1><ParaStyle:表\:表本文>Windowsアプリケーションの使いかたガイド（2009）<CellEnd:><CellStyle:\[None\]><StylePriority:0><CellStart:1,1><ParaStyle:表\:表本文>一般ユーザー向けガイド<CellEnd:><CellStyle:\[None\]><StylePriority:0><CellStart:1,1><ParaStyle:表\:表本文>Microsoft Word<CellEnd:><RowEnd:><TableEnd:>
+<ParaStyle:本文>
+<ParaStyle:大見出し>【章】タグ付きテキストを利用したワークフロー
+<ParaStyle:本文>私たちが提案しているワークフローをご説明いたします。
+<ParaStyle:ステップ><CharStyle:ナンバーステップ>Step 1<CharStyle:>	テキストエディタで原稿を作成する
+<ParaStyle:ステップ><CharStyle:ナンバーステップ>Step 2<CharStyle:>	IDTaggedTextGeneratorを利用してタグ付きテキストに変換する
+<ParaStyle:ステップ><CharStyle:ナンバーステップ>Step 3<CharStyle:>	タグ付きテキストをInDesignに配置する
+<ParaStyle:ステップ><CharStyle:ナンバーステップ>Step 4<CharStyle:>	InDesignでDTP作業を行う
+<ParaStyle:本文>
+<ParaStyle:小見出し>Step 1 テキストエディタで原稿を作成する
+<ParaStyle:本文>簡単なルールに従ってテキストデータを作成します。
+<ParaStyle:本文>ここではテキストデータのファイル名を「DEMO.txt」とします。
+<ParaStyle:本文>
+<ParaStyle:小見出し>Step 2 IDTaggedTextGeneratorを利用してタグ付きテキストに変換する
+<ParaStyle:リスト>1.	IDTaggedTextGenerator.jarをダブルクリックする
+<ParaStyle:リスト補足>【画面】
+<ParaStyle:リスト>2.	「テキスト」に「DEMO.txt」をドラッグ＆ドロップする
+<ParaStyle:リスト補足>【画面】
+<ParaStyle:リスト>3.	「Format」をクリックする
+<ParaStyle:リスト補足>タグ付きテキスト「DEMO.win.indesign.txt」（Windows用）が作成されます。
+<ParaStyle:リスト補足>InDesignファイル「DEMO.indesign.indd」がコピーされます。
+<ParaStyle:リスト補足>【画面】
+<ParaStyle:本文>
+<ParaStyle:小見出し>Step 3 タグ付きテキストをInDesignに配置する
+<ParaStyle:リスト>1.	「DEMO.indd」をInDesign CS5で開く
+<ParaStyle:リスト>2.	「横組み文字ツール」を選択し、テキストを挿入するテキストボックスをクリックする
+<ParaStyle:リスト>3.	「編集」メニュー→「すべてを選択」の順にクリックする
+<ParaStyle:リスト補足>すべてのテキストが選択されます。
+<ParaStyle:リスト補足バレット><2022>	Ctrlキーを押しながらAキーを押してもすべてのテキストを選択できます。
+<ParaStyle:リスト>4.	「ファイル」メニュー→「配置」の順にクリックする
+<ParaStyle:リスト補足>配置画面が表示されます。
+<ParaStyle:リスト>5.	「DEMO.win.indesign.txt」を選択し、「グリッドフォーマットの適用」のチェックを外す
+<ParaStyle:リスト>6.	「開く」をクリックする
+<ParaStyle:リスト補足>タグ付きテキストが読み込まれ、テキストボックスに配置されます。
+<ParaStyle:本文><TableStyle:メモ><TableStart:1,1:0:0<tCellDefaultCellType:Text>><ColStart:<tColAttrWidth:238.52362204733453>><RowStart:<tRowAttrHeight:167.89844595841532><tRowAttrMinRowSize:167.89844595841532>><CellStyle:メモ><StylePriority:1><CellStart:1,1>
+<ParaStyle:バレット><2022>	タグ付きテキストを配置した際、「問題のタグ」が表示されたときは次の内容を確認してください。
+<ParaStyle:バレット補足バレット>1.	新しいスタイルを使用していませんか
+<ParaStyle:バレット補足バレット>	IDTaggedTextGeneratorを新しいスタイルに対応するように変更する必要があります。スタイル追加のご依頼をお願いいたします。
+<ParaStyle:バレット補足バレット>2.	テキストの書きかたは間違っていませんか
+<ParaStyle:バレット補足バレット>	タブの数を間違えると新しいスタイルと認識される場合があります。
+<ParaStyle:バレット><2022>	タグ付きテキストを配置した際、意図したスタイルにならないときは次の内容を確認してください。
+<ParaStyle:バレット補足バレット><2022>	テキストの書きかたは間違っていませんか
+<ParaStyle:バレット補足バレット>	タブの数を間違えたり、数字のあとにタブを入れ忘れたりすると、既存の別のスタイルと認識される場合があります。<CellEnd:><RowEnd:><TableEnd:>
+<ParaStyle:本文>
+<ParaStyle:小見出し>Step 4 InDesignでDTP作業を行う
+<ParaStyle:本文>画面やアイコンを挿入したり、改ページ位置を調整したりします。
