@@ -38,7 +38,12 @@ public class Tx2xTextReader {
 		try {
 			if (Tx2xOptions.getInstance().getString("InDesign_OS")
 					.equals("Windows")) {
-				System.out.println("==========Windows用テキストを出力します==========");
+				if (!bDebugMode){
+					System.out.println("==========Windows用テキストを出力します==========");
+				}
+				else {
+					System.out.println("==========Windows用テキストを出力します（DEBUG）==========");
+				}
 				IntermediateTextTreeBuilder formatterForWindows = new IntermediateTextTreeBuilder(
 						false, bDebugMode);
 				formatterForWindows.parse_file(sTx2xFilename, sMaker);

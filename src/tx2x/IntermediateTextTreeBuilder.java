@@ -124,6 +124,9 @@ public class IntermediateTextTreeBuilder {
 			/*
 			 * 1行読み取って、rbControlTextの決定
 			 */
+			if (m_bDebugMode) {
+				System.out.println(allText.get(i));
+			}
 			Style styleControlText = cStyleManager.getMatchStyle_Start(allText
 					.get(i));
 
