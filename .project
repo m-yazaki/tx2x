@@ -3,6 +3,7 @@
 	<name>Tx2x</name>
 	<comment></comment>
 	<projects>
+		<project>Tx2xCore</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
