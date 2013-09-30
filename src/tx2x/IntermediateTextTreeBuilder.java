@@ -2,9 +2,10 @@ package tx2x;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -38,7 +39,8 @@ public class IntermediateTextTreeBuilder {
 		try {
 			// 入力ファイル
 			File inputFile = new File(sTextFilename);
-			BufferedReader bf = new BufferedReader(new FileReader(inputFile));
+			BufferedReader bf = new BufferedReader(new InputStreamReader(
+					new FileInputStream(inputFile), "UTF-8"));
 
 			String line;
 			while ((line = bf.readLine()) != null) {
