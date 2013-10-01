@@ -1,12 +1,18 @@
-apply {
-	plugin 'java'
-}
+apply plugin:'java'
 
 def defaultEncoding = 'UTF-8'
 [compileJava, compileTestJava]*.options*.encoding = defaultEncoding
 
+version = '1.0'
+jar {
+    manifest {
+        attributes 'Main-Class': 'tx2x.Tx2x', 'Implementation-Version': version
+    }
+}
+
 sourceSets {
   main {
-    java { srcDir 'src' }
+    java { srcDir '../tx2x/src' }
+    java { srcDir '../tx2xcore/src' }
   }
 }
