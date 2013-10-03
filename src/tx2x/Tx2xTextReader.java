@@ -46,6 +46,11 @@ public class Tx2xTextReader {
 					System.out
 							.println("==========Windows用テキストを出力します（DEBUG）==========");
 				}
+				IgnoreFile cIgnoreFile = IgnoreFile.getInstance();
+				if (file.isDirectory()) {
+					cIgnoreFile.setIgnoreFiles(new File(file.getAbsolutePath()
+							+ "\\tx2x.ignore"));
+				}
 				parse_filesystem(file, sMaker, bDebugMode);
 			} else if (sInDesignOS.equals("Macintosh")) {
 				System.out.println("==========Macintosh用テキストを出力します==========");
