@@ -25,10 +25,9 @@ public class Tx2xTextReader {
 		File cFile = new File(sTx2xFilename);
 		if (cFile.exists()) {
 			try {
-				Tx2xTextReader.copyFile(
-						"Tx2xTemplate.indesign.indd",
-						Tx2xTextReader
-								.removeFileExtension(sTx2xFilename) + ".indd");
+				Tx2xTextReader.copyFile("Tx2xTemplate.indesign.indd",
+						Tx2xTextReader.removeFileExtension(sTx2xFilename)
+								+ ".indd");
 			} catch (IOException e2) {
 				// TODO 自動生成された catch ブロック
 				e2.printStackTrace();
@@ -36,27 +35,50 @@ public class Tx2xTextReader {
 		}
 
 		try {
-			if (Tx2xOptions.getInstance().getString("InDesign_OS")
-					.equals("Windows")) {
-				if (!bDebugMode){
-					System.out.println("==========Windows用テキストを出力します==========");
+			File file = new File(sTx2xFilename);
+			String sInDesignOS = Tx2xOptions.getInstance().getString(
+					"InDesign_OS");
+			if (sInDesignOS.equals("Windows")) {
+				if (!bDebugMode) {
+					System.out
+							.println("==========Windows用テキストを出力します==========");
+				} else {
+					System.out
+							.println("==========Windows用テキストを出力します（DEBUG）==========");
 				}
-				else {
-					System.out.println("==========Windows用テキストを出力します（DEBUG）==========");
-				}
-				IntermediateTextTreeBuilder formatterForWindows = new IntermediateTextTreeBuilder(
-						false, bDebugMode);
-				formatterForWindows.parse_file(sTx2xFilename, sMaker);
-			} else if (Tx2xOptions.getInstance().getString("InDesign_OS")
-					.equals("Macintosh")) {
+				parse_filesystem(file, sMaker, bDebugMode);
+			} else if (sInDesignOS.equals("Macintosh")) {
 				System.out.println("==========Macintosh用テキストを出力します==========");
 				IntermediateTextTreeBuilder formatterForMac = new IntermediateTextTreeBuilder(
 						true, bDebugMode);
-				formatterForMac.parse_file(sTx2xFilename, sMaker);
+				formatterForMac.parse_file(file, sMaker);
 			}
 		} catch (IOException e1) {
 			// TODO 自動生成された catch ブロック
 			e1.printStackTrace();
+		}
+	}
+
+	/*
+	 * ファイルまたはディレクトリを受け取り、ファイルかディレクトリかを判別して、適切な処理を行う
+	 */
+	private void parse_filesystem(File file, String sMaker, boolean bDebugMode)
+			throws IOException {
+		// tx2x.ignoreの処理
+		IgnoreFile cIgnoreFile = IgnoreFile.getInstance();
+		if (cIgnoreFile.isIgnore(file))
+			return;
+		if (file.isFile()) {
+			// ファイルでした。
+			IntermediateTextTreeBuilder formatterForWindows = new IntermediateTextTreeBuilder(
+					false, bDebugMode);
+			formatterForWindows.parse_file(file, sMaker);
+		} else if (file.isDirectory()) {
+			// ディレクトリでした。
+			File[] cFiles = file.listFiles();
+			for (int i = 0; i < cFiles.length; i++) {
+				parse_filesystem(cFiles[i], sMaker, bDebugMode);
+			}
 		}
 	}
 

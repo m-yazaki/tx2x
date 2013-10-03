@@ -12,9 +12,13 @@ public class Tx2xOptions {
 
 	Tx2xOptions() {
 		cOptions = new HashMap<String, Object>();
-		cOptions.put("tx2x_filename", "tx2x.txt");
+		// 変換対象テキストファイル名
+		cOptions.put("tx2x_folder_file_name", "tx2x.txt");
+		// 対象メーカー指定
 		cOptions.put("maker", "");
+		// InDesignのOS指定
 		cOptions.put("InDesign_OS", "Windows");
+		// デバッグモード
 		cOptions.put("debug", false);
 	}
 

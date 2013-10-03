@@ -26,8 +26,9 @@ public class IntermediateTextTreeBuilder {
 		m_bDebugMode = bDebugMode;
 	}
 
-	public void parse_file(String sTextFilename, String sMaker)
-			throws IOException {
+	public void parse_file(File cInputFile, String sMaker) throws IOException {
+		System.out.println("変換対象：" + cInputFile.getAbsolutePath());
+		System.out.println("メーカー名：" + sMaker);
 		/*
 		 * 作業用ArrayListを準備
 		 */
@@ -38,9 +39,8 @@ public class IntermediateTextTreeBuilder {
 		 */
 		try {
 			// 入力ファイル
-			File inputFile = new File(sTextFilename);
 			BufferedReader bf = new BufferedReader(new InputStreamReader(
-					new FileInputStream(inputFile), "UTF-8"));
+					new FileInputStream(cInputFile), "UTF-8"));
 
 			String line;
 			while ((line = bf.readLine()) != null) {
@@ -51,7 +51,7 @@ public class IntermediateTextTreeBuilder {
 			bf.close();
 		} catch (FileNotFoundException e1) {
 			Tx2x.appendWarn("ファイルが見つかりません@IntermediateTextTreeBuilder："
-					+ sTextFilename);
+					+ cInputFile.getAbsolutePath());
 			return;
 		} catch (IOException e) {
 			// TODO 自動生成された catch ブロック
@@ -92,6 +92,7 @@ public class IntermediateTextTreeBuilder {
 		 *
 		 * InDesign用のタグ付きデータをファイルに出力します。
 		 */
+		String sTextFilename = cInputFile.getAbsolutePath();
 		String sOutputFilename;
 		if (m_bMac) {
 			sOutputFilename = sTextFilename.replaceFirst(".[Tt][Xx][Tt]$",
