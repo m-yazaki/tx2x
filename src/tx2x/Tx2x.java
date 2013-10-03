@@ -40,7 +40,8 @@ public class Tx2x {
 			if ("-debug".equals(args[i])) {
 				Tx2xOptions.getInstance().setOption("debug", true);
 			} else {
-				Tx2xOptions.getInstance().setOption("tx2x_filename", args[i]);
+				Tx2xOptions.getInstance().setOption("tx2x_folder_file_name",
+						args[i]);
 			}
 		}
 
@@ -49,7 +50,7 @@ public class Tx2x {
 		 */
 		Tx2xTextReader cTx2xTextReader = new Tx2xTextReader();
 		cTx2xTextReader.convertToInDesign(Tx2xOptions.getInstance().getString(
-				"tx2x_filename"));
+				"tx2x_folder_file_name"));
 
 		// メッセージ出力
 		String message = "-整形終了-" + Tx2x.getCRLF();
