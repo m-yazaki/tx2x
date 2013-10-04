@@ -506,9 +506,7 @@ public class LongStyleManager {
 			return "<ParaStyle:body00>";
 		}
 
-		if (longStyle.equals("【箇条書き・】【箇条書き・】")
-				|| longStyle.equals("【安全上のご注意】【箇条書き・】【箇条書き・】")
-				|| longStyle.equals("【付録】【箇条書き・】【箇条書き・】")) {
+		if (longStyle.equals("【箇条書き・】【箇条書き・】")) {
 			String text = iText.getText();
 			text = text.replaceFirst("・", "•");
 			// <b></b>
@@ -516,7 +514,7 @@ public class LongStyleManager {
 			text = text.replace("\\</b\\>", "<CharStyle:>");
 			iText.setText(text);
 			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:body01>";
+			return "<ParaStyle:バレット>";
 		}
 
 		if (longStyle.equals("【箇条書き・】【箇条書き・】【表】")) {
@@ -944,7 +942,8 @@ public class LongStyleManager {
 				ret += "<ParaStyle:body00>" + Tx2x.getTaggedTextCRLF(m_bMac);
 				ret += "<ParaStyle:body00>" + Tx2x.getTaggedTextCRLF(m_bMac);
 				ret += "<ParaStyle:body00>" + Tx2x.getTaggedTextCRLF(m_bMac);
-				ret += "<ParaStyle:-space\\_2mm>" + Tx2x.getTaggedTextCRLF(m_bMac);
+				ret += "<ParaStyle:-space\\_2mm>"
+						+ Tx2x.getTaggedTextCRLF(m_bMac);
 				ret += "<ParaStyle:table-cap01>" + m_sPrevStepCaption
 						+ "<CellEnd:><RowEnd:>";
 				m_sPrevStepCaption = "";
