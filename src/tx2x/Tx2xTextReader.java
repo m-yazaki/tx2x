@@ -10,6 +10,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 
+import com.jacob.activeX.ActiveXComponent;
+import com.jacob.com.Dispatch;
+import com.jacob.com.EnumVariant;
+import com.jacob.com.Variant;
+
 public class Tx2xTextReader {
 
 	public Tx2xTextReader() {
@@ -127,5 +132,61 @@ public class Tx2xTextReader {
 		} else {
 			return filename.substring(0, lastDotPos);
 		}
+	}
+
+	public void convertToWord(String string) {
+		// TODO 自動生成されたメソッド・スタブ
+		String sDir = "D:\\eclipse_work\\Tx2x\\";
+		String sInputDoc = sDir + "file_in.docx";
+		String sOutputDoc = sDir + "file_out.docx";
+		String sOldText = "[label:import:1]";
+		String sNewText = "I am some horribly long sentence, so long that [insert bullshit here]";
+		boolean tVisible = true;
+		boolean tSaveOnExit = false;
+		ActiveXComponent oWord = new ActiveXComponent("Word.Application");
+		oWord.setProperty("Visible", new Variant(tVisible));
+		Dispatch oDocuments = oWord.getProperty("Documents").toDispatch();
+		Dispatch oDocument = Dispatch.call(oDocuments, "Open", sInputDoc)
+				.toDispatch();
+		Dispatch oSelection = oWord.getProperty("Selection").toDispatch();
+
+		// sOldTextを検索
+		Dispatch oFind = Dispatch.call(oSelection, "Find").toDispatch();
+		Dispatch.put(oFind, "Text", sOldText);
+		Dispatch.call(oFind, "Execute");
+
+		// 選択している部分にsNewTextを流し込む
+		Dispatch.put(oSelection, "Text", sNewText);
+
+		Dispatch.call(oSelection, "MoveDown");
+		Dispatch.put(oSelection, "Text",
+				"\nSo we got the next line including BR.\n");
+		Dispatch oAlign = Dispatch.get(oSelection, "ParagraphFormat")
+				.toDispatch();
+
+		Dispatch.put(oAlign, "Alignment", "2");
+		Dispatch.put(oSelection, "Style", "見出し 1");
+
+		Dispatch.call(oSelection, "MoveDown");
+
+		/*
+		 * Set myTable = ActiveDocument.Tables.Add(Selection.Range, 2, 5,
+		 * wdWord9TableBehavior)
+		 *
+		 * '文字の設定 myTable.Cell(2, 1).Select Selection.TypeText Text:="２行目の、はじめ"
+		 */
+		Dispatch oTable = Dispatch.call(oDocument, "Tables").toDispatch();
+		Variant oRange = Dispatch.call(oSelection, "Range");
+		Dispatch oT = Dispatch.call(oTable, "Add", oRange, "2", "5")
+				.toDispatch();
+		Dispatch cell = Dispatch.call(oT, "Cell", "2", "1").getDispatch();
+		Dispatch.call(cell, "Select");
+		Dispatch.put(oSelection, "Text", "２行目の、はじめ");
+
+		// 保存
+		// Dispatch oWordBasic = Dispatch.call(oWord,
+		// "WordBasic").getDispatch();
+		// Dispatch.call(oWordBasic, "FileSaveAs", sOutputDoc);
+		// Dispatch.call(oDocument, "Close", new Variant(tSaveOnExit));
 	}
 }

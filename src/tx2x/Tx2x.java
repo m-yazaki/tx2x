@@ -3,6 +3,8 @@
  */
 package tx2x;
 
+import java.io.File;
+
 public class Tx2x {
 	private static String m_sWarn = "";
 
@@ -35,20 +37,35 @@ public class Tx2x {
 		 * コマンドライン引数の処理
 		 */
 		for (int i = 0; i < args.length; i++) {
-			if ("-debug".equals(args[i])) {
+			String sLowerCaseOption = args[i].toLowerCase();
+			if ("-debug".equals(sLowerCaseOption)) {
 				Tx2xOptions.getInstance().setOption("debug", true);
+			} else if ("-word".equals(sLowerCaseOption)) {
+				Tx2xOptions.getInstance().setOption("mode", "Word");
 			} else {
-				Tx2xOptions.getInstance().setOption("tx2x_folder_file_name",
-						args[i]);
+				File temp = new File(args[i]);
+				if (temp.exists()) {
+					Tx2xOptions.getInstance().setOption(
+							"tx2x_folder_file_name", args[i]);
+				}
 			}
 		}
 
-		/*
-		 *
-		 */
-		Tx2xTextReader cTx2xTextReader = new Tx2xTextReader();
-		cTx2xTextReader.convertToInDesign(Tx2xOptions.getInstance().getString(
-				"tx2x_folder_file_name"));
+		if (Tx2xOptions.getInstance().getString("mode").equals("Word")) {
+			/*
+			 * InDesignタグ付きテキスト
+			 */
+			Tx2xTextReader cTx2xTextReader = new Tx2xTextReader();
+			cTx2xTextReader.convertToWord(Tx2xOptions.getInstance().getString(
+					"tx2x_folder_file_name"));
+		} else {
+			/*
+			 * InDesignタグ付きテキスト
+			 */
+			Tx2xTextReader cTx2xTextReader = new Tx2xTextReader();
+			cTx2xTextReader.convertToInDesign(Tx2xOptions.getInstance()
+					.getString("tx2x_folder_file_name"));
+		}
 
 		// メッセージ出力
 		String message = "-整形終了-" + Tx2x.getMessageCRLF();
