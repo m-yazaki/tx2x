@@ -2,7 +2,7 @@
  * LongStyle（【お知らせ】【箇条書き】【箇条書き】【本文】【本文】）を元に、InDesignタグ付きテキストを生成する
  * ついでに特殊文字の置換も行っています。
  */
-package tx2x;
+package tx2x.indesign;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -13,6 +13,8 @@ import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import tx2x.Tx2x;
+import tx2x.Tx2xOptions;
 import tx2x_core.IntermediateText;
 import tx2x_core.Style;
 

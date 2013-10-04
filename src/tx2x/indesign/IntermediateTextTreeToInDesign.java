@@ -1,13 +1,16 @@
 /**
  * IntermediateTextを、InDesignのタグ付きテキストに変換する
  */
-package tx2x;
+package tx2x.indesign;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import tx2x.IDTTG_FileWriter;
+import tx2x.StyleManager;
+import tx2x.Tx2x;
 import tx2x_core.ControlText;
 import tx2x_core.IntermediateText;
 import tx2x_core.Style;
@@ -31,7 +34,7 @@ public class IntermediateTextTreeToInDesign {
 		m_bDebugMode = bDebugMode;
 	}
 
-	void output(ControlText resultRootText) throws IOException {
+	public void output(ControlText resultRootText) throws IOException {
 		IDTTG_FileWriter fwInDesign;
 		File aInDesign = new File(m_sTagFilename);
 		try {

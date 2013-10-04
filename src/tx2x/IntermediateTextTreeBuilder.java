@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import tx2x.indesign.IntermediateTextTreeToInDesign;
 import tx2x_core.ControlText;
 import tx2x_core.IntermediateText;
 import tx2x_core.Style;
