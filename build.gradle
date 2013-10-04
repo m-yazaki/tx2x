@@ -3,7 +3,7 @@ apply plugin:'java'
 def defaultEncoding = 'UTF-8'
 [compileJava, compileTestJava]*.options*.encoding = defaultEncoding
 
-version = '1.11'
+version = '1.12'
 jar {
     manifest {
         attributes 'Main-Class': 'tx2x.Tx2x', 'Implementation-Version': version
