@@ -803,13 +803,13 @@ public class LongStyleManager {
 			// iText.setText(iText.getText()
 			// + IDTaggedTextGenerator4KDDI.getCRLF(m_bMac)
 			// + "<ParaStyle:space01>");
-			return "<ParaStyle:body00>" + Tx2x.getCRLF(m_bMac)
-					+ "<ParaStyle:body00>" + Tx2x.getCRLF(m_bMac)
-					+ "<ParaStyle:body00>" + Tx2x.getCRLF(m_bMac)
-					+ "<ParaStyle:body00>" + Tx2x.getCRLF(m_bMac)
-					+ "<ParaStyle:body00>" + Tx2x.getCRLF(m_bMac)
-					+ "<ParaStyle:body00>" + Tx2x.getCRLF(m_bMac)
-					+ "<ParaStyle:body00>" + Tx2x.getCRLF(m_bMac)
+			return "<ParaStyle:body00>" + Tx2x.getTaggedTextCRLF(m_bMac)
+					+ "<ParaStyle:body00>" + Tx2x.getTaggedTextCRLF(m_bMac)
+					+ "<ParaStyle:body00>" + Tx2x.getTaggedTextCRLF(m_bMac)
+					+ "<ParaStyle:body00>" + Tx2x.getTaggedTextCRLF(m_bMac)
+					+ "<ParaStyle:body00>" + Tx2x.getTaggedTextCRLF(m_bMac)
+					+ "<ParaStyle:body00>" + Tx2x.getTaggedTextCRLF(m_bMac)
+					+ "<ParaStyle:body00>" + Tx2x.getTaggedTextCRLF(m_bMac)
 					+ "<ParaStyle:body00>";
 		}
 
@@ -936,15 +936,15 @@ public class LongStyleManager {
 						+ "><tCellAttrRightInset:0><tCellAttrBottomInset:0><tCellAttrLeftStrokeWeight:0><tCellAttrRightStrokeWeight:0><tCellAttrTopStrokeWeight:0><tCellAttrBottomStrokeWeight:0><tCellLeftStrokeColor:Black><tCellTopStrokeColor:Black><tCellRightStrokeColor:Black><tCellBottomStrokeColor:Black><tcLeftStrokeType:Solid><tcRightStrokeType:Solid><tcTopStrokeType:Solid><tcBottomStrokeType:Solid><tCellAttrLeftStrokeTint:100><tCellAttrRightStrokeTint:100><tCellAttrTopStrokeTint:100><tCellAttrBottomStrokeTint:100><tCellLeftStrokeOverprint:0><tCellRightStrokeOverprint:0><tCellTopStrokeOverprint:0><tCellBottomStrokeOverprint:0><tCellLeftStrokeGapTint:100><tCellRightStrokeGapTint:100><tCellTopStrokeGapTint:100><tCellBottomStrokeGapTint:100><tCellLeftStrokeGapColor:Paper><tCellRightStrokeGapColor:Paper><tCellTopStrokeGapColor:Paper><tCellBottomStrokeGapColor:Paper>><CellEnd:><CellStart:1,1<tCellAttrLeftInset:0><tCellAttrTopInset:"
 						+ tCellAttrTopInset
 						+ "><tCellAttrRightInset:0><tCellAttrBottomInset:0><tCellAttrLeftStrokeWeight:0><tCellAttrRightStrokeWeight:0><tCellAttrTopStrokeWeight:0><tCellAttrBottomStrokeWeight:0><tCellLeftStrokeColor:Black><tCellTopStrokeColor:Black><tCellRightStrokeColor:Black><tCellBottomStrokeColor:Black><tcLeftStrokeType:Solid><tcRightStrokeType:Solid><tcTopStrokeType:Solid><tcBottomStrokeType:Solid><tCellAttrLeftStrokeTint:100><tCellAttrRightStrokeTint:100><tCellAttrTopStrokeTint:100><tCellAttrBottomStrokeTint:100><tCellLeftStrokeOverprint:0><tCellRightStrokeOverprint:0><tCellTopStrokeOverprint:0><tCellBottomStrokeOverprint:0><tCellLeftStrokeGapTint:100><tCellRightStrokeGapTint:100><tCellTopStrokeGapTint:100><tCellBottomStrokeGapTint:100><tCellLeftStrokeGapColor:Paper><tCellRightStrokeGapColor:Paper><tCellTopStrokeGapColor:Paper><tCellBottomStrokeGapColor:Paper>><ParaStyle:body00>"
-						+ Tx2x.getCRLF(m_bMac);
-				ret += "<ParaStyle:body00>" + Tx2x.getCRLF(m_bMac);
-				ret += "<ParaStyle:body00>" + Tx2x.getCRLF(m_bMac);
-				ret += "<ParaStyle:body00>" + Tx2x.getCRLF(m_bMac);
-				ret += "<ParaStyle:body00>" + Tx2x.getCRLF(m_bMac);
-				ret += "<ParaStyle:body00>" + Tx2x.getCRLF(m_bMac);
-				ret += "<ParaStyle:body00>" + Tx2x.getCRLF(m_bMac);
-				ret += "<ParaStyle:body00>" + Tx2x.getCRLF(m_bMac);
-				ret += "<ParaStyle:-space\\_2mm>" + Tx2x.getCRLF(m_bMac);
+						+ Tx2x.getTaggedTextCRLF(m_bMac);
+				ret += "<ParaStyle:body00>" + Tx2x.getTaggedTextCRLF(m_bMac);
+				ret += "<ParaStyle:body00>" + Tx2x.getTaggedTextCRLF(m_bMac);
+				ret += "<ParaStyle:body00>" + Tx2x.getTaggedTextCRLF(m_bMac);
+				ret += "<ParaStyle:body00>" + Tx2x.getTaggedTextCRLF(m_bMac);
+				ret += "<ParaStyle:body00>" + Tx2x.getTaggedTextCRLF(m_bMac);
+				ret += "<ParaStyle:body00>" + Tx2x.getTaggedTextCRLF(m_bMac);
+				ret += "<ParaStyle:body00>" + Tx2x.getTaggedTextCRLF(m_bMac);
+				ret += "<ParaStyle:-space\\_2mm>" + Tx2x.getTaggedTextCRLF(m_bMac);
 				ret += "<ParaStyle:table-cap01>" + m_sPrevStepCaption
 						+ "<CellEnd:><RowEnd:>";
 				m_sPrevStepCaption = "";
@@ -952,7 +952,7 @@ public class LongStyleManager {
 				if (m_nStepTableType != m_nPrevStepTableType) {
 					// System.out
 					// .println("列数:" + m_nStepTableWidth + "の表組みにしました。");
-					ret += "<TableEnd:>" + Tx2x.getCRLF(m_bMac);
+					ret += "<TableEnd:>" + Tx2x.getTaggedTextCRLF(m_bMac);
 					m_nStepTableType = 0;
 				}
 			}
@@ -1524,7 +1524,7 @@ public class LongStyleManager {
 				pageNum += nPrefix;
 				if (/* m_nPrevPageNum != -1 && */m_nPrevPageNum != pageNum) {
 					ret += "<ParaStyle:body00><cNextXChars:EvenPage>"
-							+ Tx2x.getCRLF(m_bMac);
+							+ Tx2x.getTaggedTextCRLF(m_bMac);
 				}
 				m_nPrevPageNum = pageNum;
 			} catch (NumberFormatException e) {

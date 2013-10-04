@@ -117,8 +117,9 @@ public class TableWriter {
 				}
 			}
 		} else {
-			System.out.println("セル幅が未定義の表があります。\n　longStyle:" + longStyle
-					+ "\n　m_nWidth:" + m_nWidth);
+			System.out.println("セル幅が未定義の表があります。" + Tx2x.getMessageCRLF()
+					+ "　longStyle:" + longStyle + Tx2x.getMessageCRLF()
+					+ "　m_nWidth:" + m_nWidth);
 		}
 		return header;
 	}

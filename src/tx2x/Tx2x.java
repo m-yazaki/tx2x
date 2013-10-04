@@ -4,8 +4,6 @@
 package tx2x;
 
 public class Tx2x {
-	private static final String CR = "\r";
-	private static final String CRLF = "\r\n";
 	private static String m_sWarn = "";
 
 	/**
@@ -14,19 +12,19 @@ public class Tx2x {
 	 * @param bMac
 	 * @return
 	 */
-	public static String getCRLF(boolean bMac) {
+	public static String getTaggedTextCRLF(boolean bMac) {
 		if (bMac) {
-			return CR;
+			return "\r";
 		} else {
-			return CRLF;
+			return "\r\n";
 		}
 	}
 
 	/**
 	 * メッセージの場合の改行コード
 	 */
-	public static String getCRLF() {
-		return CRLF;
+	public static String getMessageCRLF() {
+		return System.getProperty("line.separator");
 	}
 
 	/**
@@ -53,7 +51,7 @@ public class Tx2x {
 				"tx2x_folder_file_name"));
 
 		// メッセージ出力
-		String message = "-整形終了-" + Tx2x.getCRLF();
+		String message = "-整形終了-" + Tx2x.getMessageCRLF();
 		String warn = Tx2x.getWarn();
 		if (warn.length() > 0) {
 			message += warn;
@@ -69,7 +67,7 @@ public class Tx2x {
 	 */
 	public static void appendWarn(String string) {
 		if (m_sWarn.length() < 2048)
-			m_sWarn += string + CRLF;
+			m_sWarn += string + getMessageCRLF();
 	}
 
 	public static String getWarn() {

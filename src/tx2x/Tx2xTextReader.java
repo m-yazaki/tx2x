@@ -49,7 +49,7 @@ public class Tx2xTextReader {
 				IgnoreFile cIgnoreFile = IgnoreFile.getInstance();
 				if (file.isDirectory()) {
 					cIgnoreFile.setIgnoreFiles(new File(file.getAbsolutePath()
-							+ "\\tx2x.ignore"));
+							+ File.separator + "tx2x.ignore"));
 				}
 				parse_filesystem(file, sMaker, bDebugMode);
 			} else if (sInDesignOS.equals("Macintosh")) {

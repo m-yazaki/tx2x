@@ -46,9 +46,14 @@ public class IgnoreFile {
 	}
 
 	public boolean isIgnore(File file) {
-		// file.getAbsolutePath()：D:\test-text
+		// file.getAbsolutePath()：D:\test-text、/home/user/test-text
 		String sAbsolutePath = file.getAbsolutePath();
-		String[] sPart = sAbsolutePath.split("[/\\\\]");
+		String[] sPart;
+		if (File.separator.equals("\\")) {
+			sPart = sAbsolutePath.split("\\" + File.separator);
+		} else {
+			sPart = sAbsolutePath.split(File.separator);
+		}
 		for (int i = 0; i < sIgnoreFilelist.size(); i++) {
 			for (int j = 0; j < sPart.length; j++) {
 				if (sPart[j].matches(sIgnoreFilelist.get(i))) {

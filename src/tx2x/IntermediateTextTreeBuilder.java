@@ -18,6 +18,7 @@ import tx2x_core.Style;
  * 第二次フォーマット（Tx2xテキストを整形する）
  */
 public class IntermediateTextTreeBuilder {
+	private static final char TAB_CHAR = '\t';
 	boolean m_bMac = true;
 	private boolean m_bDebugMode;
 
@@ -157,15 +158,19 @@ public class IntermediateTextTreeBuilder {
 			} catch (IOException e) {
 				// TODO 自動生成された catch ブロック
 				// e.printStackTrace();
-				String error = "@compileText ===== 以下の文章から始まるブロックでエラー発生 =====\n";
+				String error = "@compileText ===== 以下の文章から始まるブロックでエラー発生 ====="
+						+ Tx2x.getMessageCRLF();
 				for (int j = 0; j < 3 && j < allText.size(); j++) {
-					error += "|" + allText.get(j) + "\n";
+					error += "|" + allText.get(j) + Tx2x.getMessageCRLF();
 				}
-				error += "エラー発生行(" + (i + 1) + "行目): " + allText.get(i) + "\n";
+				error += "エラー発生行(" + (i + 1) + "行目): " + allText.get(i)
+						+ Tx2x.getMessageCRLF();
 				Tx2x.appendWarn("エラー発生行(" + (i + 1) + "行目)");
 
-				throw new IOException(error + "　"
-						+ e.getMessage().replaceAll("\n", "\n　"));
+				throw new IOException(error
+						+ "　"
+						+ e.getMessage().replaceAll(Tx2x.getMessageCRLF(),
+								Tx2x.getMessageCRLF() + "　"));
 			}
 		}
 	}
@@ -412,13 +417,13 @@ public class IntermediateTextTreeBuilder {
 			}
 
 			/* タブブロックの確認 */
-			if (currentLine.length() > 0 && currentLine.charAt(0) == '\t') {
+			if (currentLine.length() > 0 && currentLine.charAt(0) == TAB_CHAR) {
 				// タブ文字で始まる行はすべてtabPartTextに入れる
 				ArrayList<String> tabPartText = new ArrayList<String>();
 				for (; currentPos < smallPartText.size(); currentPos++) {
 					currentLine = smallPartText.get(currentPos);
 					if (currentLine.length() > 0
-							&& currentLine.charAt(0) == '\t')
+							&& currentLine.charAt(0) == TAB_CHAR)
 						tabPartText.add(currentLine.substring(1));
 					else
 						break;
@@ -471,8 +476,8 @@ public class IntermediateTextTreeBuilder {
 			if (styleControlText.bNoteLikeStyle()
 					|| styleControlText.bTableLikeStyle()) {
 				Tx2x.appendWarn("ブロックが終了する前にテキストがなくなりました。");
-				throw new IOException("ブロックが終了する前にテキストがなくなりました。\n"
-						+ smallPartText);
+				throw new IOException("ブロックが終了する前にテキストがなくなりました。"
+						+ Tx2x.getMessageCRLF() + smallPartText);
 			}
 		}
 		return smallPartText.size();

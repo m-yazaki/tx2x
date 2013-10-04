@@ -22,7 +22,7 @@ public class IDTTG_FileWriter {
 
 	public void close(boolean bMac) throws IOException {
 		if (m_bCRLFBuffer)
-			m_fwInDesign.write(Tx2x.getCRLF(bMac).toCharArray());
+			m_fwInDesign.write(Tx2x.getTaggedTextCRLF(bMac).toCharArray());
 
 		m_fwInDesign.close();
 	}
@@ -48,7 +48,7 @@ public class IDTTG_FileWriter {
 
 		/* 改行を追加 */
 		if (m_bCRLFBuffer)
-			m_fwInDesign.write(Tx2x.getCRLF(bMac).toCharArray());
+			m_fwInDesign.write(Tx2x.getTaggedTextCRLF(bMac).toCharArray());
 
 		/* セルのコントロールコードを削除 */
 		string = string.replaceAll("【黒[0-9]+%】", "");
@@ -65,7 +65,9 @@ public class IDTTG_FileWriter {
 		string = string.replaceAll("【ここまでインデント】", "");
 
 		if (bMac) {
-			/* DTP用（旧Mac用）のテキストにする場合の特別処理 */
+			/*
+			 * DTP用（旧Mac用）のタグ付きテキストでの特別処理 ・\マークを\\の形式に（エスケープ）する必要がある
+			 */
 			if (!Tx2xOptions.getInstance().getBoolean("InDesignCS5")) {
 				while (true) {
 					int n = string.indexOf("\\");
@@ -73,10 +75,7 @@ public class IDTTG_FileWriter {
 						m_fwInDesign.write(string.toCharArray());
 						break;
 					}
-					// System.out.println("-----");
-					// System.out.println("string: " + string);
-					// System.out.println("n: " + n);
-					// \まで書き込む（通常文字列）
+					// 通常文字列として「\」まで書き込む
 					m_fwInDesign.write(string.substring(0, n).toCharArray());
 					string = string.substring(n);
 
