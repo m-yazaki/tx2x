@@ -21,19 +21,6 @@ public class Tx2xTextReader {
 
 		Tx2x.initialize();
 
-		// inddファイルのコピー
-		File cFile = new File(sTx2xFilename);
-		if (cFile.exists()) {
-			try {
-				Tx2xTextReader.copyFile("Tx2xTemplate.indesign.indd",
-						Tx2xTextReader.removeFileExtension(sTx2xFilename)
-								+ ".indd");
-			} catch (IOException e2) {
-				// TODO 自動生成された catch ブロック
-				e2.printStackTrace();
-			}
-		}
-
 		try {
 			File file = new File(sTx2xFilename);
 			String sInDesignOS = Tx2xOptions.getInstance().getString(

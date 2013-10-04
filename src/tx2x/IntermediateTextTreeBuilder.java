@@ -30,6 +30,23 @@ public class IntermediateTextTreeBuilder {
 	public void parse_file(File cInputFile, String sMaker) throws IOException {
 		System.out.println("変換対象：" + cInputFile.getAbsolutePath());
 		System.out.println("メーカー名：" + sMaker);
+		// inddファイルのコピー
+		if (cInputFile.exists()) {
+			try {
+				Tx2xTextReader
+						.copyFile(
+								"Tx2xTemplate.indesign.indd",
+								Tx2xTextReader.removeFileExtension(cInputFile
+										.getName()) + ".indd");
+				System.out.println("InDesignファイル："
+						+ Tx2xTextReader.removeFileExtension(cInputFile
+								.getName()) + ".indd");
+			} catch (IOException e2) {
+				// TODO 自動生成された catch ブロック
+				e2.printStackTrace();
+			}
+		}
+
 		/*
 		 * 作業用ArrayListを準備
 		 */
