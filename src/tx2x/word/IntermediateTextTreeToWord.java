@@ -8,54 +8,54 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import tx2x.IDTTG_FileWriter;
 import tx2x.StyleManager;
-import tx2x.Tx2x;
 import tx2x_core.ControlText;
 import tx2x_core.IntermediateText;
 import tx2x_core.Style;
 import tx2x_core.TableManager;
 
-public class IntermediateTextTreeToWord {
-	String m_sTagFilename = null;
-	LinkedList<TableWriter> m_TableWriterList = null;
-	private boolean m_bMac;
-	int m_nLsIndex = 0;
-	private String m_sMaker;
-	private boolean m_bDebugMode;
+import com.jacob.activeX.ActiveXComponent;
+import com.jacob.com.ComFailException;
+import com.jacob.com.Dispatch;
+import com.jacob.com.Variant;
 
-	public IntermediateTextTreeToWord(String tagFilename, String sMaker,
-			boolean bMac, boolean bDebugMode) {
+public class IntermediateTextTreeToWord {
+	LinkedList<TableWriter> m_TableWriterList = null;
+	int m_nLsIndex = 0;
+	private boolean m_bDebugMode;
+	String m_sTemplateDoc = "Tx2xWordTemplate.dotx";
+	private Dispatch m_oTable;
+	private TableManager m_currentTable;
+
+	public IntermediateTextTreeToWord(boolean bDebugMode) {
 		super();
-		m_sTagFilename = tagFilename;
 		m_TableWriterList = new LinkedList<TableWriter>();
-		m_bMac = bMac;
-		m_sMaker = sMaker;
 		m_bDebugMode = bDebugMode;
 	}
 
-	public void output(ControlText resultRootText) throws IOException {
-		IDTTG_FileWriter fwInDesign;
-		File aInDesign = new File(m_sTagFilename);
-		try {
-			fwInDesign = new IDTTG_FileWriter(aInDesign);
-		} catch (IOException e) {
-			// TODO 自動生成された catch ブロック
-			e.printStackTrace();
-			return;
-		}
+	public void output(File cWordFile, ControlText resultRootText)
+			throws IOException {
+
+		boolean tVisible = true;
+		ActiveXComponent oWord = new ActiveXComponent("Word.Application");
+		oWord.setProperty("Visible", new Variant(tVisible));
+		Dispatch oDocuments = oWord.getProperty("Documents").toDispatch();
+		Dispatch oDocument = Dispatch.call(oDocuments, "Add",
+				cWordFile.getParent() + "\\" + m_sTemplateDoc).toDispatch();
+		Dispatch oSelection = oWord.getProperty("Selection").toDispatch();
 
 		// 書き込み
-		LongStyleManager lsManager = new LongStyleManager(m_sMaker, m_bMac);
+		LongStyleManager lsManager = new LongStyleManager(oSelection);
 		preScan(resultRootText, lsManager); // プレスキャン。lsManagerにスタイル情報（longStyle）のArrayListを準備する
-		outputHeader(fwInDesign);
-		outputResult(fwInDesign, resultRootText, lsManager);
+		outputResult(oDocument, oSelection, resultRootText, lsManager);
 
+		// 保存
+		Dispatch oWordBasic = Dispatch.call(oWord, "WordBasic").getDispatch();
 		try {
-			fwInDesign.close(m_bMac);
-		} catch (IOException e1) {
-			// TODO 自動生成された catch ブロック
-			e1.printStackTrace();
+			Dispatch.call(oWordBasic, "FileSaveAs", cWordFile.getAbsolutePath());
+		} catch (ComFailException e) {
+			System.out.println("---------- error ----------\n"
+					+ e.getLocalizedMessage() + "---------------------------");
 		}
 	}
 
@@ -79,36 +79,11 @@ public class IntermediateTextTreeToWord {
 					if (currentStyle.getStyleName().compareTo("【表】") == 0) {
 						if (m_bDebugMode)
 							System.out.println("【表】");
-						// widthを取得
-						String sTableInfo = cText.getChildList().get(0)
-								.getText();
-						String sWidth = sTableInfo.replaceFirst(
-								"▼表[\\(（]([0-9]+).*", "$1");
-						// String sStyle = "";
-						// if (sTableInfo.indexOf("style:") != -1) {
-						// sStyle = sTableInfo.replaceFirst(
-						// ".*style:([^),]+.*)", "$1");
-						// }
-						if (Integer.parseInt(sWidth) == 0) {
-							Tx2x.appendWarn("sWidth==0");
-						}
-
-						// // heightを取得
-						// ArrayList<IntermediateText> child = cText
-						// .getChildList();
-						// int nHeight;
-						// if (child == null) {
-						// nHeight = 0;
-						// } else {
-						// nHeight = child.size() - 2;
-						// }
-
 						/* 注目しているcTextは表の始まりなので、Width,Heightを取得して処理を始める */
 						TableManager currentTable = new TableManager(cText,
 								m_bDebugMode);
 						TableWriter tWriter = new TableWriter(currentTable);
 						m_TableWriterList.add(tWriter);
-
 					} else if (currentStyle.getStyleName().compareTo("【行】") == 0) {
 						// TableWriter tWriter = m_TableWriterList.getLast();
 						if (m_bDebugMode)
@@ -163,20 +138,7 @@ public class IntermediateTextTreeToWord {
 		}
 	}
 
-	private void outputHeader(IDTTG_FileWriter fwInDesign) throws IOException {
-		if (m_bMac == true) {
-			// fwInDesign.write("<SJIS-MAC>", true, m_bMac);
-			fwInDesign.write("<UNICODE-MAC>", true, m_bMac);
-		} else {
-			// fwInDesign.write("<SJIS-WIN>", true, m_bMac);
-			fwInDesign.write("<UNICODE-WIN>", true, m_bMac);
-		}
-		fwInDesign.write(
-				"<Version:7><FeatureSet:InDesign-Japanese><ColorTable:=>",
-				true, m_bMac);
-	}
-
-	private void outputResult(IDTTG_FileWriter fwInDesign,
+	private void outputResult(Dispatch oDocument, Dispatch oSelection,
 			ControlText resultText, LongStyleManager lsManager)
 			throws IOException {
 		Iterator<IntermediateText> it = resultText.getChildList().iterator();
@@ -195,51 +157,30 @@ public class IntermediateTextTreeToWord {
 				// 表・行・セルの開始
 				if (currentStyle != null && currentStyle.bTableLikeStyle()) {
 					if (currentStyle.getStyleName().compareTo("【表】") == 0) {
-						// widthを取得
-						String sTableInfo = cText.getChildList().get(0)
-								.getText();
-						String sWidth = sTableInfo.replaceFirst(
-								"▼表[\\(（]([0-9]+).*", "$1");
-						// String sStyle = "";
-						// if (sTableInfo.indexOf("style:") != -1) {
-						// sStyle = sTableInfo.replaceFirst(
-						// ".*style:([^),]+).*", "$1");
-						// }
-						if (Integer.parseInt(sWidth) == 0) {
-							Tx2x.appendWarn("sWidth==0");
-						}
-
-						// // heightを取得
-						// ArrayList<IntermediateText> child = cText
-						// .getChildList();
-						// int nHeight;
-						// if (child == null) {
-						// nHeight = 0;
-						// } else {
-						// nHeight = child.size() - 2;
-						// }
-
-						/* 注目しているcTextは表の始まりなので、Width,Heightを取得して処理を始める */
-						TableManager currentTable = new TableManager(cText,
-								m_bDebugMode);
-						TableWriter tWriter = new TableWriter(currentTable);
+						m_currentTable = new TableManager(cText, m_bDebugMode);
+						TableWriter tWriter = new TableWriter(m_currentTable);
 						m_TableWriterList.add(tWriter);
 
-						// coStartを出力
-						// lsManager.getInDesignStyle(cText)は、表を挿入する行のスタイルを返してくれる
-						fwInDesign.write(
-								lsManager.getInDesignStyle(cText,
-										m_nLsIndex + 1)
-										+ tWriter.getHeader(lsManager,
-												m_nLsIndex), false, m_bMac);
+						/*
+						 * Set myTable =
+						 * ActiveDocument.Tables.Add(Selection.Range, 2, 5,
+						 * wdWord9TableBehavior)
+						 *
+						 * '文字の設定 myTable.Cell(2, 1).Select Selection.TypeText
+						 * Text:="２行目の、はじめ"
+						 */
+						Dispatch oTables = Dispatch.call(oDocument, "Tables")
+								.toDispatch();
+						Variant oRange = Dispatch.call(oSelection, "Range");
+						m_oTable = Dispatch.call(oTables, "Add", oRange,
+								m_currentTable.getHeight(),
+								m_currentTable.getWidth()).toDispatch();
 					} else if (currentStyle.getStyleName().compareTo("【行】") == 0) {
 						TableWriter tWriter = m_TableWriterList.getLast();
-						fwInDesign.write(tWriter.getRowHeader(lsManager),
-								false, m_bMac);
+						tWriter.selectNextRow(m_oTable);
 					} else if (currentStyle.getStyleName().compareTo("【セル】") == 0) {
 						TableWriter tWriter = m_TableWriterList.getLast();
-						fwInDesign.write(tWriter.getCellHeader(lsManager),
-								false, m_bMac);
+						tWriter.selectNextCell(m_oTable);
 
 						if (cText.getChildList().get(0).getText()
 								.matches(".*【ヘッダー】.*")) {
@@ -251,17 +192,16 @@ public class IntermediateTextTreeToWord {
 						}
 					}
 				}
-				outputResult(fwInDesign, cText, lsManager); // さらに奥深くへ（再帰）
+				outputResult(oDocument, oSelection, cText, lsManager); // さらに奥深くへ（再帰）
 				// 表・行・セルの終了
 				if (currentStyle != null && currentStyle.bTableLikeStyle()) {
 					if (currentStyle.getStyleName().compareTo("【表】") == 0) {
-						fwInDesign.write("<TableEnd:>", true, m_bMac);
+						Dispatch.call(oSelection, "MoveRight"); // 右へ移動
+						Dispatch.call(oSelection, "TypeParagraph"); // 改行
 						m_TableWriterList.removeLast(); // 表終了
 						lsManager.setPrevLongStyle("【表】▲");
 					} else if (currentStyle.getStyleName().compareTo("【行】") == 0) {
-						fwInDesign.write("<RowEnd:>", false, m_bMac);
 					} else if (currentStyle.getStyleName().compareTo("【セル】") == 0) {
-						fwInDesign.write("<CellEnd:>", false, m_bMac);
 					}
 				}
 				lsManager.removeLastStyle();
@@ -278,21 +218,21 @@ public class IntermediateTextTreeToWord {
 
 						// （共通）テキストを出力
 						lsManager.addStyle(currentStyle); // スタイルをpush
-						outputText(fwInDesign, lsManager, iText);
+						outputText(oSelection, lsManager, iText);
 						lsManager.removeLastStyle(); // スタイルをpop
 					}
 				} else {
 					// スタイルがないのでテキストを出力するのみ
 					if (iText.getText() != null) {
-						outputText(fwInDesign, lsManager, iText);
+						outputText(oSelection, lsManager, iText);
 					}
 				}
 			}
 		}
 	}
 
-	private void outputText(IDTTG_FileWriter fwInDesign,
-			LongStyleManager lsManager, IntermediateText iText) {
+	private void outputText(Dispatch oSelection, LongStyleManager lsManager,
+			IntermediateText iText) {
 		if (iText.hasChild()) {
 			// System.out.println("outputText:" + iText.getText());
 			return; // ControlTextはカエレ！
@@ -308,18 +248,10 @@ public class IntermediateTextTreeToWord {
 			System.out.println("longStyle NG:" + realtimeStyle + "/"
 					+ bufferingStyle);
 		}
-		// sLongStyleを正しいスタイルに変換
+		// iTextとsLongStyleから必要な処理を行う
 		try {
-			String style = lsManager.getInDesignStyle(iText, m_nLsIndex + 1);
-			if (style.equals("") == false) {
-				if (iText.getText() != null) {
-					fwInDesign.write(style + iText.getText(), true, m_bMac);
-				} else {
-					fwInDesign.write(style, false, m_bMac);
-				}
-				if (m_bDebugMode)
-					System.out.println("[" + style + "]" + iText.getText());
-			}
+			String style = lsManager.getTargetStyle(iText, m_nLsIndex + 1);
+			lsManager.writeTargetData(oSelection, style, iText, m_nLsIndex + 1);
 		} catch (IOException e) {
 			// TODO 自動生成された catch ブロック
 			e.printStackTrace();

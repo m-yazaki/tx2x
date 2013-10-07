@@ -3,14 +3,12 @@ package tx2x;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import tx2x.indesign.IntermediateTextTreeToInDesign;
 import tx2x_core.ControlText;
 import tx2x_core.IntermediateText;
 import tx2x_core.Style;
@@ -20,34 +18,14 @@ import tx2x_core.Style;
  */
 public class IntermediateTextTreeBuilder {
 	private static final char TAB_CHAR = '\t';
-	boolean m_bMac = true;
 	private boolean m_bDebugMode;
 
-	public IntermediateTextTreeBuilder(boolean bMac, boolean bDebugMode) {
-		m_bMac = bMac;
+	public IntermediateTextTreeBuilder(boolean bDebugMode) {
 		m_bDebugMode = bDebugMode;
 	}
 
-	public void parse_file(File cInputFile, String sMaker) throws IOException {
-		System.out.println("変換対象：" + cInputFile.getAbsolutePath());
-		System.out.println("メーカー名：" + sMaker);
-		// inddファイルのコピー
-		if (cInputFile.exists()) {
-			try {
-				Tx2xTextReader
-						.copyFile(
-								"Tx2xTemplate.indesign.indd",
-								Tx2xTextReader.removeFileExtension(cInputFile
-										.getName()) + ".indd");
-				System.out.println("InDesignファイル："
-						+ Tx2xTextReader.removeFileExtension(cInputFile
-								.getName()) + ".indd");
-			} catch (IOException e2) {
-				// TODO 自動生成された catch ブロック
-				e2.printStackTrace();
-			}
-		}
-
+	public ControlText parse_file(File cInputTx2xFile) throws IOException {
+		System.out.println("変換対象：" + cInputTx2xFile.getAbsolutePath());
 		/*
 		 * 作業用ArrayListを準備
 		 */
@@ -56,26 +34,17 @@ public class IntermediateTextTreeBuilder {
 		/*
 		 * Tx2x形式のテキストファイルをバッファ（ArrayList<String> allText）に読み込む
 		 */
-		try {
-			// 入力ファイル
-			BufferedReader bf = new BufferedReader(new InputStreamReader(
-					new FileInputStream(cInputFile), "UTF-8"));
+		// 入力ファイル
+		BufferedReader bf = new BufferedReader(new InputStreamReader(
+				new FileInputStream(cInputTx2xFile), "UTF-8"));
 
-			String line;
-			while ((line = bf.readLine()) != null) {
-				// ループ
-				allText.add(line);
-			}
-
-			bf.close();
-		} catch (FileNotFoundException e1) {
-			Tx2x.appendWarn("ファイルが見つかりません@IntermediateTextTreeBuilder："
-					+ cInputFile.getAbsolutePath());
-			return;
-		} catch (IOException e) {
-			// TODO 自動生成された catch ブロック
-			e.printStackTrace();
+		String line;
+		while ((line = bf.readLine()) != null) {
+			// ループ
+			allText.add(line);
 		}
+
+		bf.close();
 
 		/*
 		 * allTextを解釈してIntermediateTextツリーを生成
@@ -94,44 +63,7 @@ public class IntermediateTextTreeBuilder {
 			// TODO 自動生成された catch ブロック
 			throw new IOException(e1.getMessage());
 		}
-
-		/*
-		 * 結果出力（その1）
-		 *
-		 * コンソールへ出力します。簡易デバッグ用。
-		 */
-		/*
-		 * LinkedList<Style> ruleLinkedList = new LinkedList<Style>(); try {
-		 * outputResult(resultRootText, ruleLinkedList); //
-		 * outputDump(resultRootText, ruleLinkedList, 0); } catch (IOException
-		 * e) { // TODO 自動生成された catch ブロック e.printStackTrace(); }
-		 */
-		/*
-		 * 結果出力（その2）
-		 *
-		 * InDesign用のタグ付きデータをファイルに出力します。
-		 */
-		String sTextFilename = cInputFile.getAbsolutePath();
-		String sOutputFilename;
-		if (m_bMac) {
-			sOutputFilename = sTextFilename.replaceFirst(".[Tt][Xx][Tt]$",
-					".indesign.txt");
-		} else {
-			sOutputFilename = sTextFilename.replaceFirst(".[Tt][Xx][Tt]$",
-					".win.indesign.txt");
-		}
-		if (sTextFilename.equals(sOutputFilename)) {
-			System.out.println("上書きされるため中止しました。ファイル名を確認してください。");
-		} else {
-			IntermediateTextTreeToInDesign converter = new IntermediateTextTreeToInDesign(
-					sOutputFilename, sMaker, m_bMac, m_bDebugMode);
-			try {
-				converter.output(resultRootText);
-			} catch (IOException e) {
-				// TODO 自動生成された catch ブロック
-				e.printStackTrace();
-			}
-		}
+		return resultRootText;
 	}
 
 	/*
@@ -568,4 +500,5 @@ public class IntermediateTextTreeBuilder {
 			// System.out.println(outputText + ":" + iText.getText());
 		}
 	}
+
 }

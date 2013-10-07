@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import tx2x.IDTTG_FileWriter;
 import tx2x.StyleManager;
 import tx2x.Tx2x;
 import tx2x_core.ControlText;
@@ -17,28 +16,29 @@ import tx2x_core.Style;
 import tx2x_core.TableManager;
 
 public class IntermediateTextTreeToInDesign {
-	String m_sTagFilename = null;
 	LinkedList<TableWriter> m_TableWriterList = null;
 	private boolean m_bMac;
 	int m_nLsIndex = 0;
-	private String m_sMaker;
 	private boolean m_bDebugMode;
+	String m_sMaker;
 
-	public IntermediateTextTreeToInDesign(String tagFilename, String sMaker,
-			boolean bMac, boolean bDebugMode) {
-		super();
-		m_sTagFilename = tagFilename;
-		m_TableWriterList = new LinkedList<TableWriter>();
+	public IntermediateTextTreeToInDesign(boolean bMac, String sMaker,
+			boolean bDebugMode) {
+		this();
 		m_bMac = bMac;
 		m_sMaker = sMaker;
 		m_bDebugMode = bDebugMode;
 	}
 
-	public void output(ControlText resultRootText) throws IOException {
-		IDTTG_FileWriter fwInDesign;
-		File aInDesign = new File(m_sTagFilename);
+	public IntermediateTextTreeToInDesign() {
+		m_TableWriterList = new LinkedList<TableWriter>();
+	}
+
+	public void output(File cInDesign, ControlText resultRootText)
+			throws IOException {
+		InDesignTT_FileWriter fwInDesign;
 		try {
-			fwInDesign = new IDTTG_FileWriter(aInDesign);
+			fwInDesign = new InDesignTT_FileWriter(cInDesign);
 		} catch (IOException e) {
 			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
@@ -163,7 +163,8 @@ public class IntermediateTextTreeToInDesign {
 		}
 	}
 
-	private void outputHeader(IDTTG_FileWriter fwInDesign) throws IOException {
+	private void outputHeader(InDesignTT_FileWriter fwInDesign)
+			throws IOException {
 		if (m_bMac == true) {
 			// fwInDesign.write("<SJIS-MAC>", true, m_bMac);
 			fwInDesign.write("<UNICODE-MAC>", true, m_bMac);
@@ -176,7 +177,7 @@ public class IntermediateTextTreeToInDesign {
 				true, m_bMac);
 	}
 
-	private void outputResult(IDTTG_FileWriter fwInDesign,
+	private void outputResult(InDesignTT_FileWriter fwInDesign,
 			ControlText resultText, LongStyleManager lsManager)
 			throws IOException {
 		Iterator<IntermediateText> it = resultText.getChildList().iterator();
@@ -291,7 +292,7 @@ public class IntermediateTextTreeToInDesign {
 		}
 	}
 
-	private void outputText(IDTTG_FileWriter fwInDesign,
+	private void outputText(InDesignTT_FileWriter fwInDesign,
 			LongStyleManager lsManager, IntermediateText iText) {
 		if (iText.hasChild()) {
 			// System.out.println("outputText:" + iText.getText());

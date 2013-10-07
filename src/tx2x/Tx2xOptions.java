@@ -16,10 +16,12 @@ public class Tx2xOptions {
 		cOptions.put("tx2x_folder_file_name", "tx2x.txt");
 		// 対象メーカー指定
 		cOptions.put("maker", "");
-		// InDesignのOS指定
-		cOptions.put("InDesign_OS", "Windows");
 		// デバッグモード
 		cOptions.put("debug", false);
+		// 変換モード
+		cOptions.put("mode", "InDesign-Windows");
+		// InDesign CS5モード
+		cOptions.put("InDesignCS5", true);
 	}
 
 	public String getString(String string) {

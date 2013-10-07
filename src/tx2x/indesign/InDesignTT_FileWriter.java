@@ -2,18 +2,21 @@
  * InDesignタグ付きテキストを書き出すときに使うFileWriter
  * 微妙な調整を引き受けている
  */
-package tx2x;
+package tx2x.indesign;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 
-public class IDTTG_FileWriter {
+import tx2x.Tx2x;
+import tx2x.Tx2xOptions;
+
+public class InDesignTT_FileWriter {
 	OutputStreamWriter m_fwInDesign;
 	boolean m_bCRLFBuffer; // write()に渡されたbCRLFを保持する。次のwrite()呼びだし時に改行コード（CRLFなど）を書き込む
 
-	public IDTTG_FileWriter(File inDesign) throws IOException {
+	public InDesignTT_FileWriter(File inDesign) throws IOException {
 		// m_fwInDesign = new DataOutputStream(new FileOutputStream(inDesign));
 		m_fwInDesign = new OutputStreamWriter(new FileOutputStream(inDesign),
 				"UnicodeLittleUnmarked");
@@ -29,7 +32,7 @@ public class IDTTG_FileWriter {
 
 	/**
 	 * FileWriter.write()に、置換機能を追加する
-	 *
+	 * 
 	 * @param string
 	 *            書き込む文字列
 	 * @param bCRLF

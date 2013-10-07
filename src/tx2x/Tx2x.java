@@ -4,6 +4,10 @@
 package tx2x;
 
 import java.io.File;
+import java.io.IOException;
+
+import tx2x.indesign.ConvertToInDesign;
+import tx2x.word.ConvertToWord;
 
 public class Tx2x {
 	private static String m_sWarn = "";
@@ -42,6 +46,9 @@ public class Tx2x {
 				Tx2xOptions.getInstance().setOption("debug", true);
 			} else if ("-word".equals(sLowerCaseOption)) {
 				Tx2xOptions.getInstance().setOption("mode", "Word");
+			} else if ("-indesign-mac".equals(sLowerCaseOption)) {
+				Tx2xOptions.getInstance().setOption("mode",
+						"InDesign-Macintosh");
 			} else {
 				File temp = new File(args[i]);
 				if (temp.exists()) {
@@ -51,20 +58,27 @@ public class Tx2x {
 			}
 		}
 
+		initialize();
+
+		Converter cConverter;
 		if (Tx2xOptions.getInstance().getString("mode").equals("Word")) {
-			/*
-			 * InDesignタグ付きテキスト
-			 */
-			Tx2xTextReader cTx2xTextReader = new Tx2xTextReader();
-			cTx2xTextReader.convertToWord(Tx2xOptions.getInstance().getString(
-					"tx2x_folder_file_name"));
+			cConverter = new ConvertToWord();
 		} else {
-			/*
-			 * InDesignタグ付きテキスト
-			 */
-			Tx2xTextReader cTx2xTextReader = new Tx2xTextReader();
-			cTx2xTextReader.convertToInDesign(Tx2xOptions.getInstance()
-					.getString("tx2x_folder_file_name"));
+			cConverter = new ConvertToInDesign();
+		}
+		File cFile = new File(Tx2xOptions.getInstance().getString(
+				"tx2x_folder_file_name"));
+		if (cFile.exists()) {
+			IgnoreFile cIgnoreFile = IgnoreFile.getInstance();
+			if (cFile.isDirectory()) {
+				cIgnoreFile.setIgnoreFiles(new File(cFile.getAbsolutePath()
+						+ File.separator + "tx2x.ignore"));
+			}
+			try {
+				cConverter.parse_filesystem(cFile);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 
 		// メッセージ出力
@@ -74,7 +88,7 @@ public class Tx2x {
 			message += warn;
 		}
 		System.out.println(message);
-		Tx2x.initialize();
+		initialize();
 	}
 
 	/**

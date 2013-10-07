@@ -1,5 +1,7 @@
 package tx2x.word;
 
+import com.jacob.com.Dispatch;
+
 import tx2x.Tx2x;
 import tx2x_core.CellInfo;
 import tx2x_core.TableManager;
@@ -125,95 +127,42 @@ public class TableWriter {
 		return header;
 	}
 
-	public String getCellHeader(LongStyleManager lsManager)
+	public void selectNextCell(Dispatch oTable)
 			throws ArrayIndexOutOfBoundsException {
 		m_nX++;
-		String header = "<CellStyle:\\[None\\]><StylePriority:0><CellStart:";
-
-		if (m_nWidth < m_nX) {
-			System.out.println("内部エラー：横幅を超えた指定になっています。");
-			System.out.println("m_nHeight:" + m_nHeight + ", m_nWidth:"
-					+ m_nWidth);
-			System.out.println("m_nY:" + m_nY + ", m_nX:" + m_nX);
-			System.out.println("indesign.txtで「★,★」を検索してください。");
-			header += "★,★";
-		} else if (m_nCellSize[m_nY - 1][m_nX - 1] != null) {
-			header += m_nCellSize[m_nY - 1][m_nX - 1].getHeight() + ","
-					+ m_nCellSize[m_nY - 1][m_nX - 1].getWidth();
+		Dispatch cell = Dispatch.call(oTable, "Cell", m_nY, m_nX).getDispatch();
+		Dispatch.call(cell, "Select");
+		if (m_nCellSize[m_nY - 1][m_nX - 1] != null) {
 			/* 斜線の処理 */
 			if (m_nCellSize[m_nY - 1][m_nX - 1].isDiagonalLine()) {
-				header += "<tCellDiagnolAdornment:1>";
 				if (m_nCellSize[m_nY - 1][m_nX - 1].isLeftTopLine()) {
-					header += "<tCellLeftTopLine:1>";
+					// With Selection.Cells
+					// With .Borders(wdBorderDiagonalDown)
+					// .LineStyle = wdLineStyleSingle
+					// .LineWidth = wdLineWidth050pt
+					// .Color = wdColorAutomatic
+					// End With
+					// End With
+					Dispatch oCell = Dispatch.call(oTable, "Cell", m_nY, m_nX)
+							.toDispatch();
+					Dispatch oBorders = Dispatch
+							.call(oCell, "Borders", -7 /* wdBorderDiagonalDown */)
+							.toDispatch();
+					Dispatch.put(oBorders, "LineStyle", 1 /* wdLineStyleSingle */);
+					Dispatch.put(oBorders, "LineWidth", 4 /* wdLineWidth050pt */);
+					Dispatch.put(oBorders, "Color", -16777216 /* wdColorAutomatic */);
 				} else {
-					header += "<tCellLeftTopLine:0>";
 				}
 				if (m_nCellSize[m_nY - 1][m_nX - 1].isRightTopLine()) {
-					header += "<tCellRightTopLine:1>";
 				} else {
-					header += "<tCellRightTopLine:0>";
 				}
-				header += "<tCellDiagnolWeight:0.28346456692913385>";
-			}
-		} else {
-			header += "1,1";
-		}
-		// 余白の処理
-		// なし
-
-		// アミの処理
-		// なし
-
-		// 罫線
-		// なし
-
-		// 1行目オフセット（1:アセント、2:キャップハイト、3:行送り、4:Xハイト、5:固定）　デフォルトは3
-		// なし
-
-		// VerticalJustification
-		// なし
-
-		if (lsManager.getLongStyle().equals("【手順】【手順】【表】【行】【セル】")) {
-			if (m_nX == 1) {
-				header += "<tCellAttrLeftStrokeTint:100><tCellLeftStrokeOverprint:0>";
-			} else {
-				header += "";
 			}
 		}
-
-		// 縦組版
-		// なし
-
-		if (lsManager.getLongStyle().equals("【手順】【手順】【表】【行】【セル】")) {
-			if (m_nX == 1) {
-				header += "<tCellLeftStrokeGapTint:100><tCellLeftStrokeGapColor:Paper>";
-			} else {
-				header += "";
-			}
-		}
-
-		// headerを閉じる
-		header += ">";
-		return header;
 	}
 
-	public String getRowHeader(LongStyleManager lsManager) {
-		String rowHeader = "";
+	public void selectNextRow(Dispatch oTable) {
 		m_nY++;
 		m_nX = 0;
-		rowHeader += "<RowStart:<tRowAttrHeight:10><tRowAttrMinRowSize:10><tRowAutoGrow:1><tRowKeeps:1>>";
-		String longStyle = lsManager.getLongStyle();
-		if ((longStyle.equals("【手順】【手順】【箇条書き・】【箇条書き・】【表】【行】") == false)
-				&& (lsManager.m_sStepCaption.equals("") == false)
-				&& (lsManager.m_sStepCaption.equals(" ") == false)) {
-			rowHeader += "<CellStart:1,1<tCellAttrLeftInset:0><tCellAttrTopInset:0><tCellAttrRightInset:0><tCellAttrBottomInset:0><tCellFillColor:None><tCellAttrLeftStrokeWeight:0><tCellAttrRightStrokeWeight:0.5><tCellAttrTopStrokeWeight:0><tCellAttrBottomStrokeWeight:0><tCellLeftStrokeColor:Black><tCellTopStrokeColor:Black><tCellRightStrokeColor:Black><tCellBottomStrokeColor:Black><tcLeftStrokeType:Solid><tcRightStrokeType:Solid><tcTopStrokeType:Solid><tcBottomStrokeType:Solid><tTextCellFirstLineOffset:3><tTextCellVerticalJustification:0><tCellAttrLeftStrokeTint:100><tCellAttrRightStrokeTint:100><tCellAttrTopStrokeTint:100><tCellAttrBottomStrokeTint:100><tCellLeftStrokeOverprint:0><tCellRightStrokeOverprint:0><tCellTopStrokeOverprint:0><tCellBottomStrokeOverprint:0><tTextCellVerticalComposition:1><tCellLeftStrokeGapTint:100><tCellRightStrokeGapTint:100><tCellTopStrokeGapTint:100><tCellBottomStrokeGapTint:100><tCellLeftStrokeGapColor:Paper><tCellRightStrokeGapColor:Paper><tCellTopStrokeGapColor:Paper><tCellBottomStrokeGapColor:Paper>>";
-			if (m_nY == 1) {
-				rowHeader += "<ParaStyle:step-title01>"
-						+ lsManager.m_sStepCaption;
-			}
-			rowHeader += "<CellEnd:>";
-		}
-		return rowHeader;
 	}
 
 }
