@@ -80,7 +80,7 @@ public class LongStyleManager {
 
 		// iTextの本文を処理。【初期操作】以外の全段落共通
 		{
-			String text = iText.getEscapeText();
+			String text = getEscapeText(iText.getText());
 			text = text.replaceAll("\\\\<CharStyle:([^>]*)\\\\>",
 					"<CharStyle:$1>");
 			// text = text.replaceAll("\\\\<CharStyle:\\\\>", "<CharStyle:>");
@@ -1571,6 +1571,14 @@ public class LongStyleManager {
 		m_sPrevLongStyle = longStyle;
 		return dummyStyle(longStyle);// + longStyle;
 		// throw new IOException("Unknown Style:" + longStyle);
+	}
+
+	private String getEscapeText(String text) {
+		String ret = text;
+		ret = ret.replaceAll("\\\\", "\\\\\\\\");
+		ret = ret.replaceAll(">", "\\\\>");
+		ret = ret.replaceAll("<", "\\\\<");
+		return ret;
 	}
 
 	private String dummyStyle(String longStyle) {

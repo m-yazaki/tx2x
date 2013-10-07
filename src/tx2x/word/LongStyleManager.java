@@ -60,7 +60,7 @@ public class LongStyleManager {
 
 		// iTextの本文を処理。【初期操作】以外の全段落共通
 		{
-			String text = iText.getEscapeText();
+			String text = iText.getText();
 			iText.setText(text);
 		}
 
