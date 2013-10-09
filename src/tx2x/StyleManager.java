@@ -57,18 +57,24 @@ public class StyleManager {
 		m_cStyleList.add(new Style_BulletLike("【節】", "^【節】.*", ".*")); // 【節】
 		m_cStyleList.add(new Style_BulletLike("【節2】", "^【節2】.*", ".*")); // 【節2】
 		m_cStyleList.add(new Style_BulletLike("【章】", "^【章】.*", ".*")); // 【章】
+		m_cStyleList.add(new Style_BulletLike("【章サブ】",
+				"^Hack #[0-9]+(-[0-9]+)?$", ".*")); // 【章サブ】
 		m_cStyleList.add(new Style_BulletLike("【編】", "^【編】.*", ".*")); // 【編】
 		m_cStyleList.add(new Style_BulletLike("【例：】", "^例：.*", ".*")); // 【例：】
 		m_cStyleList.add(new Style_BulletLike("【画面】", "^【画面.*】.*", ".*")); // 【画面】
 		m_cStyleList.add(new Style_BulletLike("【参照】", "^▼P.[●0-9]+「.*」", ".*")); // 【参照】
 		m_cStyleList.add(new Style_BulletLike("【以上】", "^－以　上－", ".*"));
 		m_cStyleList.add(new Style_BulletLike("【別紙タイトル】", "^■■■■■別紙.*", ".*"));
-		m_cStyleList.add(new Style_BulletLike("【危険】", "^★危険★\t.*", ".*"));
-		m_cStyleList.add(new Style_BulletLike("【警告】", "^★警告★\t.*", ".*"));
-		m_cStyleList.add(new Style_BulletLike("【注意】", "^★注意★\t.*", ".*"));
+		m_cStyleList.add(new Style_BulletLike("【PL危険】", "^★危険★\t.*", ".*"));
+		m_cStyleList.add(new Style_BulletLike("【PL警告】", "^★警告★\t.*", ".*"));
+		m_cStyleList.add(new Style_BulletLike("【PL注意】", "^★注意★\t.*", ".*"));
+		m_cStyleList.add(new Style_BulletLike("【HACK】", "^【HACK #[0-9]+】.*",
+				".*"));
 
 		// お知らせの類似品
 		m_cStyleList.add(new Style_NoteLike("【メモ】", "^▼メモ.*", "▲.*")); // memo
+		m_cStyleList.add(new Style_NoteLike("【ヒント】", "^▼ヒント.*", "▲.*")); // ヒント
+		m_cStyleList.add(new Style_NoteLike("【注意】", "^▼注意.*", "▲.*")); // ヒント
 		m_cStyleList.add(new Style_NoteLike("【画面囲み】", "^▼画面囲み.*", "▲.*")); // 画面囲み
 		m_cStyleList.add(new Style_NoteLike("【付録】", "^▼付録.*", "▲.*")); // 付録
 		m_cStyleList.add(new Style_NoteLike("【利用許諾】", "^▼利用許諾.*", "▲.*")); // 利用許諾
@@ -77,6 +83,7 @@ public class StyleManager {
 		m_cStyleList.add(new Style_NoteLike("【目次】", "^▼目次.*", "▲.*")); // 編目次
 		m_cStyleList.add(new Style_NoteLike("【索引】", "^▼索引.*", "▲.*")); // 索引
 		m_cStyleList.add(new Style_NoteLike("【安全上のご注意】", "^▼安全上のご注意.*", "▲.*")); // 安全上のご注意
+		m_cStyleList.add(new Style_NoteLike("【コード】", "^▼コード.*", "▲.*")); // コード
 
 		// 表組関連
 		m_cStyleList.add(new Style_Table()); // 表組み

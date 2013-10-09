@@ -71,6 +71,8 @@ public class Tx2x {
 		if (cFile.exists()) {
 			IgnoreFile cIgnoreFile = IgnoreFile.getInstance();
 			if (cFile.isDirectory()) {
+				Tx2xOptions.getInstance().setOption("tx2x_folder_name",
+						cFile.getAbsolutePath());
 				cIgnoreFile.setIgnoreFiles(new File(cFile.getAbsolutePath()
 						+ File.separator + "tx2x.ignore"));
 			}

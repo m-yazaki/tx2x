@@ -24,7 +24,6 @@ public class IntermediateTextTreeToWord {
 	int m_nLsIndex = 0;
 	private boolean m_bDebugMode;
 	String m_sTemplateDoc = "Tx2xWordTemplate.dotx";
-	private Dispatch m_oTable;
 	private TableManager m_currentTable;
 
 	public IntermediateTextTreeToWord(boolean bDebugMode) {
@@ -160,27 +159,13 @@ public class IntermediateTextTreeToWord {
 						m_currentTable = new TableManager(cText, m_bDebugMode);
 						TableWriter tWriter = new TableWriter(m_currentTable);
 						m_TableWriterList.add(tWriter);
-
-						/*
-						 * Set myTable =
-						 * ActiveDocument.Tables.Add(Selection.Range, 2, 5,
-						 * wdWord9TableBehavior)
-						 *
-						 * '文字の設定 myTable.Cell(2, 1).Select Selection.TypeText
-						 * Text:="２行目の、はじめ"
-						 */
-						Dispatch oTables = Dispatch.call(oDocument, "Tables")
-								.toDispatch();
-						Variant oRange = Dispatch.call(oSelection, "Range");
-						m_oTable = Dispatch.call(oTables, "Add", oRange,
-								m_currentTable.getHeight(),
-								m_currentTable.getWidth()).toDispatch();
+						tWriter.write(oDocument, oSelection);
 					} else if (currentStyle.getStyleName().compareTo("【行】") == 0) {
 						TableWriter tWriter = m_TableWriterList.getLast();
-						tWriter.selectNextRow(m_oTable);
+						tWriter.selectNextRow();
 					} else if (currentStyle.getStyleName().compareTo("【セル】") == 0) {
 						TableWriter tWriter = m_TableWriterList.getLast();
-						tWriter.selectNextCell(m_oTable);
+						tWriter.selectNextCell();
 
 						if (cText.getChildList().get(0).getText()
 								.matches(".*【ヘッダー】.*")) {
@@ -196,10 +181,10 @@ public class IntermediateTextTreeToWord {
 				// 表・行・セルの終了
 				if (currentStyle != null && currentStyle.bTableLikeStyle()) {
 					if (currentStyle.getStyleName().compareTo("【表】") == 0) {
-						Dispatch.call(oSelection, "MoveRight"); // 右へ移動
-						Dispatch.call(oSelection, "TypeParagraph"); // 改行
+						Dispatch.call(oSelection, "MoveDown"); // 下へ移動
 						m_TableWriterList.removeLast(); // 表終了
 						lsManager.setPrevLongStyle("【表】▲");
+
 					} else if (currentStyle.getStyleName().compareTo("【行】") == 0) {
 					} else if (currentStyle.getStyleName().compareTo("【セル】") == 0) {
 					}

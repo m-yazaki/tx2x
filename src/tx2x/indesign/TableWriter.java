@@ -24,7 +24,7 @@ public class TableWriter {
 		m_sStyle = tManager.getStyle();
 		m_nHeight = tManager.getHeight();
 		m_nWidth = tManager.getWidth();
-		m_nHeader = tManager.getHeader();
+		m_nHeader = tManager.getHeaderLines();
 		m_nCellSize = tManager.getCellSize();
 	}
 
