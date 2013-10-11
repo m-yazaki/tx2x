@@ -10,10 +10,10 @@ import java.util.LinkedList;
 
 import tx2x.StyleManager;
 import tx2x.Tx2xOptions;
-import tx2x_core.ControlText;
-import tx2x_core.IntermediateText;
-import tx2x_core.Style;
-import tx2x_core.TableManager;
+import tx2x.core.ControlText;
+import tx2x.core.IntermediateText;
+import tx2x.core.Style;
+import tx2x.core.TableManager;
 
 import com.jacob.activeX.ActiveXComponent;
 import com.jacob.com.ComFailException;

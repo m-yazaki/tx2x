@@ -1,8 +1,8 @@
 package tx2x.indesign;
 
 import tx2x.Tx2x;
-import tx2x_core.CellInfo;
-import tx2x_core.TableManager;
+import tx2x.core.CellInfo;
+import tx2x.core.TableManager;
 
 public class TableWriter {
 	/* 表のスタイル */

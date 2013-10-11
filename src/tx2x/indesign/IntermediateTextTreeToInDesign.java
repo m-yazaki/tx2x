@@ -10,10 +10,10 @@ import java.util.LinkedList;
 
 import tx2x.StyleManager;
 import tx2x.Tx2x;
-import tx2x_core.ControlText;
-import tx2x_core.IntermediateText;
-import tx2x_core.Style;
-import tx2x_core.TableManager;
+import tx2x.core.ControlText;
+import tx2x.core.IntermediateText;
+import tx2x.core.Style;
+import tx2x.core.TableManager;
 
 public class IntermediateTextTreeToInDesign {
 	LinkedList<TableWriter> m_TableWriterList = null;
@@ -60,7 +60,6 @@ public class IntermediateTextTreeToInDesign {
 	}
 
 	private void preScan(ControlText resultText, LongStyleManager lsManager) {
-		// TODO 自動生成されたメソッド・スタブ
 		Iterator<IntermediateText> it = resultText.getChildList().iterator();
 		while (it.hasNext()) {
 			IntermediateText iText = it.next();

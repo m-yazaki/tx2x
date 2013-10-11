@@ -14,8 +14,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import tx2x.Tx2xOptions;
-import tx2x_core.IntermediateText;
-import tx2x_core.Style;
+import tx2x.core.IntermediateText;
+import tx2x.core.Style;
 
 import com.jacob.com.ComFailException;
 import com.jacob.com.Dispatch;

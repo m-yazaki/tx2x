@@ -3,13 +3,13 @@ package tx2x;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import tx2x_core.Style;
-import tx2x_core.Style_BulletLike;
-import tx2x_core.Style_NoteLike;
-import tx2x_core.Style_Table;
-import tx2x_core.Style_TableCell;
-import tx2x_core.Style_TableCellHeader;
-import tx2x_core.Style_TableRow;
+import tx2x.core.Style;
+import tx2x.core.Style_BulletLike;
+import tx2x.core.Style_NoteLike;
+import tx2x.core.Style_Table;
+import tx2x.core.Style_TableCell;
+import tx2x.core.Style_TableCellHeader;
+import tx2x.core.Style_TableRow;
 
 public class StyleManager {
 	private static StyleManager instance = new StyleManager();

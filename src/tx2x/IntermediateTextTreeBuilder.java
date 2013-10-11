@@ -9,9 +9,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import tx2x_core.ControlText;
-import tx2x_core.IntermediateText;
-import tx2x_core.Style;
+import tx2x.core.ControlText;
+import tx2x.core.IntermediateText;
+import tx2x.core.Style;
 
 /*
  * 第二次フォーマット（Tx2xテキストを整形する）

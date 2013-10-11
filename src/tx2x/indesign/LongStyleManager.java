@@ -15,8 +15,8 @@ import java.util.regex.Pattern;
 
 import tx2x.Tx2x;
 import tx2x.Tx2xOptions;
-import tx2x_core.IntermediateText;
-import tx2x_core.Style;
+import tx2x.core.IntermediateText;
+import tx2x.core.Style;
 
 public class LongStyleManager {
 	private static final String KOKOMADE_INDENT_CHAR = String.valueOf((char) 7); // ここまでインデント文字

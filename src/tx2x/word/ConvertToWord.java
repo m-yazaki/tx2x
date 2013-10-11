@@ -6,7 +6,7 @@ import java.io.IOException;
 import tx2x.Converter;
 import tx2x.IntermediateTextTreeBuilder;
 import tx2x.Tx2xOptions;
-import tx2x_core.ControlText;
+import tx2x.core.ControlText;
 
 public class ConvertToWord extends Converter {
 	private boolean m_bDebugMode;

@@ -1,7 +1,7 @@
 package tx2x.word;
 
-import tx2x_core.CellInfo;
-import tx2x_core.TableManager;
+import tx2x.core.CellInfo;
+import tx2x.core.TableManager;
 
 import com.jacob.com.Dispatch;
 import com.jacob.com.Variant;
