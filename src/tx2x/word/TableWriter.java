@@ -26,23 +26,20 @@ public class TableWriter {
 
 	public void selectNextCell() throws ArrayIndexOutOfBoundsException {
 		m_nX++;
-		Dispatch cell = Dispatch.call(m_oTable, "Cell", m_nY, m_nX)
+		Dispatch oCell = Dispatch.call(m_oTable, "Cell", m_nY, m_nX)
 				.getDispatch();
-		Dispatch.call(cell, "Select");
+		Dispatch.call(oCell, "Select");
 		CellInfo[][] nCellSize = m_tManager.getCellSize();
 		if (nCellSize[m_nY - 1][m_nX - 1] != null) {
+			/* ヘッダーかどうか */
+			if (nCellSize[m_nY - 1][m_nX - 1].isHeader()) {
+				// 背景：RGB(236, 240, 241)
+				Dispatch oShading = Dispatch.get(oCell, "Shading").toDispatch();
+				Dispatch.put(oShading, "BackgroundPatternColor", 5258796);
+			}
 			/* 斜線の処理 */
 			if (nCellSize[m_nY - 1][m_nX - 1].isDiagonalLine()) {
 				if (nCellSize[m_nY - 1][m_nX - 1].isLeftTopLine()) {
-					// With Selection.Cells
-					// With .Borders(wdBorderDiagonalDown)
-					// .LineStyle = wdLineStyleSingle
-					// .LineWidth = wdLineWidth050pt
-					// .Color = wdColorAutomatic
-					// End With
-					// End With
-					Dispatch oCell = Dispatch
-							.call(m_oTable, "Cell", m_nY, m_nX).toDispatch();
 					Dispatch oBorders = Dispatch
 							.call(oCell, "Borders", -7 /* wdBorderDiagonalDown */)
 							.toDispatch();
@@ -52,7 +49,9 @@ public class TableWriter {
 				} else {
 				}
 				if (nCellSize[m_nY - 1][m_nX - 1].isRightTopLine()) {
+
 				} else {
+
 				}
 			}
 		}
@@ -63,17 +62,31 @@ public class TableWriter {
 		m_nX = 0;
 	}
 
-	public void write(Dispatch oDocument, Dispatch oSelection) {
-		/*
-		 * Set myTable = ActiveDocument.Tables.Add(Selection.Range, 2, 5,
-		 * wdWord9TableBehavior)
-		 *
-		 * '文字の設定 myTable.Cell(2, 1).Select Selection.TypeText Text:="２行目の、はじめ"
-		 */
+	public void write(Dispatch oSelection) {
+		Dispatch oDocument = Dispatch.call(oSelection, "Document").toDispatch();
 		Dispatch oTables = Dispatch.call(oDocument, "Tables").toDispatch();
 		Variant oRange = Dispatch.call(oSelection, "Range");
 		m_oTable = Dispatch.call(oTables, "Add", oRange,
 				m_tManager.getHeight(), m_tManager.getWidth()).toDispatch();
+
+		// 標準的な外枠
+		Dispatch.call(m_oTable, "Select");
+		Dispatch oBorder = Dispatch
+				.call(oSelection, "Borders", -1 /* wdBorderTop */).toDispatch();
+		Dispatch.put(oBorder, "LineStyle", 1 /* Options.DefaultBorderLineStyle */);
+		Dispatch.put(oBorder, "LineWidth", 4 /* Options.DefaultBorderLineWidth */);
+		Dispatch.put(oBorder, "Color", -16777216 /* Options.DefaultBorderColor */);
+		oBorder = Dispatch.call(oSelection, "Borders", -3 /* wdBorderBottom */)
+				.toDispatch();
+		Dispatch.put(oBorder, "LineStyle", 1 /* Options.DefaultBorderLineStyle */);
+		Dispatch.put(oBorder, "LineWidth", 4 /* Options.DefaultBorderLineWidth */);
+		Dispatch.put(oBorder, "Color", -16777216 /* Options.DefaultBorderColor */);
+		oBorder = Dispatch.call(oSelection, "Borders", -6 /* wdBorderVertical */)
+				.toDispatch();
+		Dispatch.put(oBorder, "LineStyle", 1 /* Options.DefaultBorderLineStyle */);
+		Dispatch.put(oBorder, "LineWidth", 4 /* Options.DefaultBorderLineWidth */);
+		Dispatch.put(oBorder, "Color", -16777216 /* Options.DefaultBorderColor */);
+
 	}
 
 }

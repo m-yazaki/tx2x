@@ -19,6 +19,7 @@ public class ConvertToWord extends Converter {
 	@Override
 	public void convert(File cTargetFile) {
 		System.out.println("==========Wordデータを出力します==========");
+		// System.out.println(System.currentTimeMillis());
 
 		ControlText resultRootText;
 		try {
@@ -46,5 +47,6 @@ public class ConvertToWord extends Converter {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		// System.out.println(System.currentTimeMillis());
 	}
 }

@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import tx2x.StyleManager;
+import tx2x.Tx2xOptions;
 import tx2x_core.ControlText;
 import tx2x_core.IntermediateText;
 import tx2x_core.Style;
@@ -35,27 +36,29 @@ public class IntermediateTextTreeToWord {
 	public void output(File cWordFile, ControlText resultRootText)
 			throws IOException {
 
-		boolean tVisible = true;
+		boolean tVisible = Tx2xOptions.getInstance().getBoolean("Visible");
 		ActiveXComponent oWord = new ActiveXComponent("Word.Application");
 		oWord.setProperty("Visible", new Variant(tVisible));
 		Dispatch oDocuments = oWord.getProperty("Documents").toDispatch();
-		Dispatch oDocument = Dispatch.call(oDocuments, "Add",
+		Dispatch.call(oDocuments, "Add",
 				cWordFile.getParent() + "\\" + m_sTemplateDoc).toDispatch();
 		Dispatch oSelection = oWord.getProperty("Selection").toDispatch();
 
 		// 書き込み
 		LongStyleManager lsManager = new LongStyleManager(oSelection);
 		preScan(resultRootText, lsManager); // プレスキャン。lsManagerにスタイル情報（longStyle）のArrayListを準備する
-		outputResult(oDocument, oSelection, resultRootText, lsManager);
+		outputResult(oSelection, resultRootText, lsManager);
 
 		// 保存
-		Dispatch oWordBasic = Dispatch.call(oWord, "WordBasic").getDispatch();
 		try {
-			Dispatch.call(oWordBasic, "FileSaveAs", cWordFile.getAbsolutePath());
+			Dispatch oDocument = Dispatch.call(oSelection, "Document")
+					.toDispatch();
+			Dispatch.call(oDocument, "SaveAs2", cWordFile.getAbsolutePath(), 12 /* wdFormatXMLDocument */);
 		} catch (ComFailException e) {
 			System.out.println("---------- error ----------\n"
 					+ e.getLocalizedMessage() + "---------------------------");
 		}
+		oWord.setProperty("Visible", new Variant(true));
 	}
 
 	private void preScan(ControlText resultText, LongStyleManager lsManager) {
@@ -137,9 +140,8 @@ public class IntermediateTextTreeToWord {
 		}
 	}
 
-	private void outputResult(Dispatch oDocument, Dispatch oSelection,
-			ControlText resultText, LongStyleManager lsManager)
-			throws IOException {
+	private void outputResult(Dispatch oSelection, ControlText resultText,
+			LongStyleManager lsManager) throws IOException {
 		Iterator<IntermediateText> it = resultText.getChildList().iterator();
 		while (it.hasNext()) {
 			IntermediateText iText = it.next();
@@ -159,7 +161,7 @@ public class IntermediateTextTreeToWord {
 						m_currentTable = new TableManager(cText, m_bDebugMode);
 						TableWriter tWriter = new TableWriter(m_currentTable);
 						m_TableWriterList.add(tWriter);
-						tWriter.write(oDocument, oSelection);
+						tWriter.write(oSelection);
 					} else if (currentStyle.getStyleName().compareTo("【行】") == 0) {
 						TableWriter tWriter = m_TableWriterList.getLast();
 						tWriter.selectNextRow();
@@ -177,7 +179,7 @@ public class IntermediateTextTreeToWord {
 						}
 					}
 				}
-				outputResult(oDocument, oSelection, cText, lsManager); // さらに奥深くへ（再帰）
+				outputResult(oSelection, cText, lsManager); // さらに奥深くへ（再帰）
 				// 表・行・セルの終了
 				if (currentStyle != null && currentStyle.bTableLikeStyle()) {
 					if (currentStyle.getStyleName().compareTo("【表】") == 0) {
@@ -241,6 +243,7 @@ public class IntermediateTextTreeToWord {
 			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
 		}
+		lsManager.setPrevLongStyle();
 		m_nLsIndex++;
 	}
 }

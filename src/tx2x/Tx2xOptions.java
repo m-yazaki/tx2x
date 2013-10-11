@@ -22,6 +22,8 @@ public class Tx2xOptions {
 		cOptions.put("mode", "InDesign-Windows");
 		// InDesign CS5モード
 		cOptions.put("InDesignCS5", true);
+		// Word等を表示するかどうか
+		cOptions.put("Visible", true);
 	}
 
 	public String getString(String string) {

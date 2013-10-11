@@ -46,6 +46,10 @@ public class Tx2x {
 				Tx2xOptions.getInstance().setOption("debug", true);
 			} else if ("-word".equals(sLowerCaseOption)) {
 				Tx2xOptions.getInstance().setOption("mode", "Word");
+			} else if ("-visible".equals(sLowerCaseOption)) {
+				Tx2xOptions.getInstance().setOption("Visible", true);
+			} else if ("-invisible".equals(sLowerCaseOption)) {
+				Tx2xOptions.getInstance().setOption("Visible", false);
 			} else if ("-indesign-mac".equals(sLowerCaseOption)) {
 				Tx2xOptions.getInstance().setOption("mode",
 						"InDesign-Macintosh");

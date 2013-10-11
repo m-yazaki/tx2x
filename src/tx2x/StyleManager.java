@@ -48,7 +48,9 @@ public class StyleManager {
 		m_cStyleList
 				.add(new Style_BulletLike("【1】", "^[0-9]+\t.*", "^[^0-9].*")); // 1.
 		m_cStyleList.add(new Style_BulletLike("【Step 1】", "^Step [0-9]+\t.*",
-				"^(?!Step [0-9]\t).*")); // Step 1.
+				"^(?!Step [0-9]+\t).*")); // Step 1.
+		m_cStyleList.add(new Style_BulletLike("【箇条書き（用語）】", "^::.*",
+				"^(?!::).*")); // 箇条書き「::」
 
 		// どちらかというと箇条書きの類似品
 		m_cStyleList.add(new Style_BulletLike("【項】", "^【項】.*", ".*")); // 【項】
@@ -70,6 +72,9 @@ public class StyleManager {
 		m_cStyleList.add(new Style_BulletLike("【PL注意】", "^★注意★\t.*", ".*"));
 		m_cStyleList.add(new Style_BulletLike("【HACK】", "^【HACK #[0-9]+】.*",
 				".*"));
+		m_cStyleList.add(new Style_BulletLike("【画面】", "^<img .*>$", ".*")); // 【画面】
+		m_cStyleList.add(new Style_BulletLike("【――】", "^----\t.*",
+				"^(?!----\t).*")); // 【――】
 
 		// お知らせの類似品
 		m_cStyleList.add(new Style_NoteLike("【メモ】", "^▼メモ.*", "▲.*")); // memo
