@@ -10,3 +10,7 @@ bin/Tx2x.jar.zip
 ~*.indd
 file_in.docx
 file_out.docx
+# Package Files #
+*.jar
+*.war
+*.ear
