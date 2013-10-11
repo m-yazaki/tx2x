@@ -1,0 +1,12 @@
+*.class
+DEMO.indd
+.gradle/
+bin/DEMO.txt
+bin/DEMO.win.indesign.txt
+bin/Tx2x.indd
+bin/Tx2x.jar
+bin/Tx2xTemplate.indesign.indd
+bin/Tx2x.jar.zip
+~*.indd
+file_in.docx
+file_out.docx
