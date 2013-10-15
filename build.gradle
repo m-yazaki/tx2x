@@ -3,16 +3,24 @@ apply plugin:'java'
 def defaultEncoding = 'UTF-8'
 [compileJava, compileTestJava]*.options*.encoding = defaultEncoding
 
-version = '1.12'
+version = '1.2'
 jar {
     manifest {
         attributes 'Main-Class': 'tx2x.Tx2x', 'Implementation-Version': version
     }
 }
 
+repositories {
+    mavenCentral()
+    flatDir(dirs: file('.'))
+}
+
+dependencies {
+    compile name: 'jacob'
+}
+
 sourceSets {
   main {
     java { srcDir '../tx2x/src' }
-    java { srcDir '../tx2xcore/src' }
   }
 }
