@@ -16,3 +16,4 @@ file_out.docx
 *.ear
 .project
 build/tmp/jar/MANIFEST.MF
+.classpath
