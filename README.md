@@ -7,7 +7,11 @@ GitHubからソースコードをダウンロードする
 -----
 リモートリポジトリーのURLを指定して、Cloneしてください。
 
-|リモートリポジトリーのURL|https://github.com/m-yazaki/tx2x.git|
+<table>
+  <tr>
+    <td>リモートリポジトリーのURL</td><td>https://github.com/m-yazaki/tx2x.git</td>
+  </tr>
+</table>
 
 もちろん、Fork、Pull Requestも大歓迎です。
 
