@@ -3,7 +3,9 @@ apply plugin:'java'
 def defaultEncoding = 'UTF-8'
 [compileJava, compileTestJava]*.options*.encoding = defaultEncoding
 
+archivesBaseName = "tx2x"
 version = '1.2'
+
 jar {
     manifest {
         attributes 'Main-Class': 'tx2x.Tx2x', 'Implementation-Version': version
@@ -21,6 +23,6 @@ dependencies {
 
 sourceSets {
   main {
-    java { srcDir '../tx2x/src' }
+    java { srcDir 'src' }
   }
 }
