@@ -14,3 +14,5 @@ file_out.docx
 *.jar
 *.war
 *.ear
+.project
+build/tmp/jar/MANIFEST.MF
