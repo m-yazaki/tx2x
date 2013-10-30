@@ -1,0 +1,7 @@
+\.git
+\.gitignore
+.*\.indesign\.(txt|indd)
+.*\.indd
+.*\.idlk
+.*\.(dotx|docx)
+.*\.png
