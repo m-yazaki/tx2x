@@ -17,3 +17,4 @@ file_out.docx
 .project
 build/tmp/jar/MANIFEST.MF
 .classpath
+doc/
