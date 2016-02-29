@@ -51,13 +51,11 @@ public class Tx2x {
 			} else if ("-invisible".equals(sLowerCaseOption)) {
 				Tx2xOptions.getInstance().setOption("Visible", false);
 			} else if ("-indesign-mac".equals(sLowerCaseOption)) {
-				Tx2xOptions.getInstance().setOption("mode",
-						"InDesign-Macintosh");
+				Tx2xOptions.getInstance().setOption("mode", "InDesign-Macintosh");
 			} else {
 				File temp = new File(args[i]);
 				if (temp.exists()) {
-					Tx2xOptions.getInstance().setOption(
-							"tx2x_folder_file_name", args[i]);
+					Tx2xOptions.getInstance().setOption("tx2x_folder_file_name", args[i]);
 				}
 			}
 		}
@@ -70,15 +68,12 @@ public class Tx2x {
 		} else {
 			cConverter = new ConvertToInDesign();
 		}
-		File cFile = new File(Tx2xOptions.getInstance().getString(
-				"tx2x_folder_file_name"));
+		File cFile = new File(Tx2xOptions.getInstance().getString("tx2x_folder_file_name"));
 		if (cFile.exists()) {
 			IgnoreFile cIgnoreFile = IgnoreFile.getInstance();
 			if (cFile.isDirectory()) {
-				Tx2xOptions.getInstance().setOption("tx2x_folder_name",
-						cFile.getAbsolutePath());
-				cIgnoreFile.setIgnoreFiles(new File(cFile.getAbsolutePath()
-						+ File.separator + "tx2x.ignore"));
+				Tx2xOptions.getInstance().setOption("tx2x_folder_name", cFile.getAbsolutePath());
+				cIgnoreFile.setIgnoreFiles(new File(cFile.getAbsolutePath() + File.separator + "tx2x.ignore"));
 			}
 			try {
 				cConverter.parse_filesystem(cFile);

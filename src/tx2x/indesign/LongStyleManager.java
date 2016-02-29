@@ -18,6 +18,8 @@ import tx2x.Tx2xOptions;
 import tx2x.core.IntermediateText;
 import tx2x.core.Style;
 
+import static tx2x.Constants.*; // 定数クラス
+
 public class LongStyleManager {
 	private static final String KOKOMADE_INDENT_CHAR = String.valueOf((char) 7); // ここまでインデント文字
 	LinkedList<Style> m_StyleLinkedList; // スタイル情報をpush/popする
@@ -71,8 +73,7 @@ public class LongStyleManager {
 		m_sMaker = sMaker;
 	}
 
-	public String getInDesignStyle(IntermediateText iText, int nLsIndex)
-			throws IOException {
+	public String getInDesignStyle(IntermediateText iText, int nLsIndex) throws IOException {
 		String longStyle = getLongStyle();
 		if (iText.getStyle() == null) {
 			longStyle += "【本文】";
@@ -81,8 +82,7 @@ public class LongStyleManager {
 		// iTextの本文を処理。【初期操作】以外の全段落共通
 		{
 			String text = getEscapeText(iText.getText());
-			text = text.replaceAll("\\\\<CharStyle:([^>]*)\\\\>",
-					"<CharStyle:$1>");
+			text = text.replaceAll("\\\\<CharStyle:([^>]*)\\\\>", "<CharStyle:$1>");
 			// text = text.replaceAll("\\\\<CharStyle:\\\\>", "<CharStyle:>");
 			if (m_bMac) {
 				String sKeyFontName = "";
@@ -90,166 +90,101 @@ public class LongStyleManager {
 					sKeyFontName = "KeyFont";
 
 					// 東芝スマートフォン
-					text = text.replace("【ホームタッチキー】", "<CharStyle:"
-							+ sKeyFontName + ">A<CharStyle:>");
-					text = text.replace("【電源ボタン】", "<CharStyle:" + sKeyFontName
-							+ ">C<CharStyle:>");
-					text = text.replace("【電源キー】", "<CharStyle:" + sKeyFontName
-							+ ">C<CharStyle:>");
-					text = text.replace("【カメラボタン】", "<CharStyle:"
-							+ sKeyFontName + ">D<CharStyle:>");
-					text = text.replace("【カメラキー】", "<CharStyle:" + sKeyFontName
-							+ ">D<CharStyle:>");
-					text = text.replace("【音量ボタン上】", "<CharStyle:"
-							+ sKeyFontName + ">E<CharStyle:>");
-					text = text.replace("【音量ボタン下】", "<CharStyle:"
-							+ sKeyFontName + ">F<CharStyle:>");
-					text = text.replace("【サイド上キー】", "<CharStyle:"
-							+ sKeyFontName + ">E<CharStyle:>");
-					text = text.replace("【サイド下キー】", "<CharStyle:"
-							+ sKeyFontName + ">F<CharStyle:>");
-					text = text.replace("【発信キー】", "<CharStyle:" + sKeyFontName
-							+ ">G<CharStyle:>");
-					text = text.replace("【電話キー】", "<CharStyle:" + sKeyFontName
-							+ ">G<CharStyle:>");
-					text = text.replace("【スタートキー】", "<CharStyle:"
-							+ sKeyFontName + ">H<CharStyle:>");
-					text = text.replace("【ホームキー】", "<CharStyle:" + sKeyFontName
-							+ ">A<CharStyle:>");
-					text = text.replace("【メニューキー】", "<CharStyle:"
-							+ sKeyFontName + ">M<CharStyle:>");
-					text = text.replace("【バックキー】", "<CharStyle:" + sKeyFontName
-							+ ">R<CharStyle:>");
+					text = text.replace("【ホームタッチキー】", "<CharStyle:" + sKeyFontName + ">A<CharStyle:>");
+					text = text.replace("【電源ボタン】", "<CharStyle:" + sKeyFontName + ">C<CharStyle:>");
+					text = text.replace("【電源キー】", "<CharStyle:" + sKeyFontName + ">C<CharStyle:>");
+					text = text.replace("【カメラボタン】", "<CharStyle:" + sKeyFontName + ">D<CharStyle:>");
+					text = text.replace("【カメラキー】", "<CharStyle:" + sKeyFontName + ">D<CharStyle:>");
+					text = text.replace("【音量ボタン上】", "<CharStyle:" + sKeyFontName + ">E<CharStyle:>");
+					text = text.replace("【音量ボタン下】", "<CharStyle:" + sKeyFontName + ">F<CharStyle:>");
+					text = text.replace("【サイド上キー】", "<CharStyle:" + sKeyFontName + ">E<CharStyle:>");
+					text = text.replace("【サイド下キー】", "<CharStyle:" + sKeyFontName + ">F<CharStyle:>");
+					text = text.replace("【発信キー】", "<CharStyle:" + sKeyFontName + ">G<CharStyle:>");
+					text = text.replace("【電話キー】", "<CharStyle:" + sKeyFontName + ">G<CharStyle:>");
+					text = text.replace("【スタートキー】", "<CharStyle:" + sKeyFontName + ">H<CharStyle:>");
+					text = text.replace("【ホームキー】", "<CharStyle:" + sKeyFontName + ">A<CharStyle:>");
+					text = text.replace("【メニューキー】", "<CharStyle:" + sKeyFontName + ">M<CharStyle:>");
+					text = text.replace("【バックキー】", "<CharStyle:" + sKeyFontName + ">R<CharStyle:>");
 					// if (text.matches(".*【ホームキー】.*")) {
 					// IDTaggedTextGenerator4KDDI
 					// .appendWarn("【ホームキー】は曖昧です。【ホームタッチキー】または【ホーム／メールキー】を使用してください。："
 					// + text);
 					// }
 					// E31T
-					text = text.replace("【ロックキー】", "<CharStyle:" + sKeyFontName
-							+ ">I<CharStyle:>");
-					text = text.replace("【クリア／メモキー】", "<CharStyle:"
-							+ sKeyFontName + ">B<CharStyle:>");
-					text = text.replace("【メールキー】", "<CharStyle:" + sKeyFontName
-							+ ">L<CharStyle:>");
-					text = text.replace("【文字キー】", "<CharStyle:" + sKeyFontName
-							+ ">R<CharStyle:>");
-					text = text.replace("【上下左右キー】", "<CharStyle:"
-							+ sKeyFontName + ">a<CharStyle:>");
-					text = text.replace("【上下キー】", "<CharStyle:" + sKeyFontName
-							+ ">j<CharStyle:>");
-					text = text.replace("【左右キー】", "<CharStyle:" + sKeyFontName
-							+ ">s<CharStyle:>");
-					text = text.replace("【上キー】", "<CharStyle:" + sKeyFontName
-							+ ">u<CharStyle:>");
-					text = text.replace("【下キー】", "<CharStyle:" + sKeyFontName
-							+ ">d<CharStyle:>");
-					text = text.replace("【左キー】", "<CharStyle:" + sKeyFontName
-							+ ">l<CharStyle:>");
-					text = text.replace("【右キー】", "<CharStyle:" + sKeyFontName
-							+ ">r<CharStyle:>");
-					text = text.replace("【センターキー】", "<CharStyle:"
-							+ sKeyFontName + ">c<CharStyle:>");
-					text = text.replace("【連絡先キー】", "<CharStyle:" + sKeyFontName
-							+ ">&<CharStyle:>");
-					text = text.replace("【アドレス帳キー】", "<CharStyle:"
-							+ sKeyFontName + ">&<CharStyle:>");
+					text = text.replace("【ロックキー】", "<CharStyle:" + sKeyFontName + ">I<CharStyle:>");
+					text = text.replace("【クリア／メモキー】", "<CharStyle:" + sKeyFontName + ">B<CharStyle:>");
+					text = text.replace("【メールキー】", "<CharStyle:" + sKeyFontName + ">L<CharStyle:>");
+					text = text.replace("【文字キー】", "<CharStyle:" + sKeyFontName + ">R<CharStyle:>");
+					text = text.replace("【上下左右キー】", "<CharStyle:" + sKeyFontName + ">a<CharStyle:>");
+					text = text.replace("【上下キー】", "<CharStyle:" + sKeyFontName + ">j<CharStyle:>");
+					text = text.replace("【左右キー】", "<CharStyle:" + sKeyFontName + ">s<CharStyle:>");
+					text = text.replace("【上キー】", "<CharStyle:" + sKeyFontName + ">u<CharStyle:>");
+					text = text.replace("【下キー】", "<CharStyle:" + sKeyFontName + ">d<CharStyle:>");
+					text = text.replace("【左キー】", "<CharStyle:" + sKeyFontName + ">l<CharStyle:>");
+					text = text.replace("【右キー】", "<CharStyle:" + sKeyFontName + ">r<CharStyle:>");
+					text = text.replace("【センターキー】", "<CharStyle:" + sKeyFontName + ">c<CharStyle:>");
+					text = text.replace("【連絡先キー】", "<CharStyle:" + sKeyFontName + ">&<CharStyle:>");
+					text = text.replace("【アドレス帳キー】", "<CharStyle:" + sKeyFontName + ">&<CharStyle:>");
 					{ // 【0キー】～【9キー】
 						Pattern pattern = Pattern.compile("【([0-9])キー】");
 						Matcher matcher = pattern.matcher(text);
 						while (matcher.find()) {
-							text = text.replaceFirst("【[0-9]キー】", "<CharStyle:"
-									+ sKeyFontName + ">" + matcher.group(1)
-									+ "<CharStyle:>");
+							text = text.replaceFirst("【[0-9]キー】",
+									"<CharStyle:" + sKeyFontName + ">" + matcher.group(1) + "<CharStyle:>");
 							matcher = pattern.matcher(text);
 						}
 					}
-					text = text.replace("【＃キー】", "<CharStyle:" + sKeyFontName
-							+ ">#<CharStyle:>");
-					text = text.replace("【＊キー】", "<CharStyle:" + sKeyFontName
-							+ ">*<CharStyle:>");
+					text = text.replace("【＃キー】", "<CharStyle:" + sKeyFontName + ">#<CharStyle:>");
+					text = text.replace("【＊キー】", "<CharStyle:" + sKeyFontName + ">*<CharStyle:>");
 
 				} else if (m_sMaker.equals("京セラ")) {
 					sKeyFontName = "KeyFont\\_BaseKey001";
 
-					text = text.replace("【＃キー】", "<CharStyle:" + sKeyFontName
-							+ ">#<CharStyle:>");
-					text = text.replace("【アプリキー】", "<CharStyle:" + sKeyFontName
-							+ ">%<CharStyle:>");
-					text = text.replace("【アドレス帳キー】", "<CharStyle:"
-							+ sKeyFontName + ">&<CharStyle:>");
-					text = text.replace("【マナーキー】", "<CharStyle:" + sKeyFontName
-							+ ">(<CharStyle:>");
-					text = text.replace("【カメラキー】", "<CharStyle:" + sKeyFontName
-							+ ">)<CharStyle:>");
-					text = text.replace("【＊キー】", "<CharStyle:" + sKeyFontName
-							+ ">*<CharStyle:>");
+					text = text.replace("【＃キー】", "<CharStyle:" + sKeyFontName + ">#<CharStyle:>");
+					text = text.replace("【アプリキー】", "<CharStyle:" + sKeyFontName + ">%<CharStyle:>");
+					text = text.replace("【アドレス帳キー】", "<CharStyle:" + sKeyFontName + ">&<CharStyle:>");
+					text = text.replace("【マナーキー】", "<CharStyle:" + sKeyFontName + ">(<CharStyle:>");
+					text = text.replace("【カメラキー】", "<CharStyle:" + sKeyFontName + ">)<CharStyle:>");
+					text = text.replace("【＊キー】", "<CharStyle:" + sKeyFontName + ">*<CharStyle:>");
 					{ // 【0キー】～【9キー】
 						Pattern pattern = Pattern.compile("【([0-9])キー】");
 						Matcher matcher = pattern.matcher(text);
 						while (matcher.find()) {
-							text = text.replaceFirst("【[0-9]キー】", "<CharStyle:"
-									+ sKeyFontName + ">" + matcher.group(1)
-									+ "<CharStyle:>");
+							text = text.replaceFirst("【[0-9]キー】",
+									"<CharStyle:" + sKeyFontName + ">" + matcher.group(1) + "<CharStyle:>");
 							matcher = pattern.matcher(text);
 						}
 					}
-					text = text.replace("【クリア／メモキー】", "<CharStyle:"
-							+ sKeyFontName + ">C<CharStyle:>");
-					text = text.replace("【終話キー】", "<CharStyle:" + sKeyFontName
-							+ ">F<CharStyle:>");
-					text = text.replace("【メールキー】", "<CharStyle:" + sKeyFontName
-							+ ">L<CharStyle:>");
-					text = text.replace("【発信キー】", "<CharStyle:" + sKeyFontName
-							+ ">N<CharStyle:>");
-					text = text.replace("【EZキー】", "<CharStyle:" + sKeyFontName
-							+ ">R<CharStyle:>");
-					text = text.replace("【上下左右キー】", "<CharStyle:"
-							+ sKeyFontName + ">a<CharStyle:>");
-					text = text.replace("【サイド決定キー】", "<CharStyle:"
-							+ sKeyFontName + ">b<CharStyle:>");
-					text = text.replace("【センターキー】", "<CharStyle:"
-							+ sKeyFontName + ">c<CharStyle:>");
-					text = text.replace("【下キー】", "<CharStyle:" + sKeyFontName
-							+ ">d<CharStyle:>");
-					text = text.replace("【TVキー】", "<CharStyle:" + sKeyFontName
-							+ ">e<CharStyle:>");
-					text = text.replace("【サイド右キー】", "<CharStyle:"
-							+ sKeyFontName + ">f<CharStyle:>");
-					text = text.replace("【サイド左キー】", "<CharStyle:"
-							+ sKeyFontName + ">g<CharStyle:>");
-					text = text.replace("【サイド左右キー】", "<CharStyle:"
-							+ sKeyFontName + ">gf<CharStyle:>");
-					text = text.replace("【上下キー】", "<CharStyle:" + sKeyFontName
-							+ ">j<CharStyle:>");
-					text = text.replace("【左キー】", "<CharStyle:" + sKeyFontName
-							+ ">l<CharStyle:>");
-					text = text.replace("【右キー】", "<CharStyle:" + sKeyFontName
-							+ ">r<CharStyle:>");
-					text = text.replace("【左右キー】", "<CharStyle:" + sKeyFontName
-							+ ">s<CharStyle:>");
-					text = text.replace("【上キー】", "<CharStyle:" + sKeyFontName
-							+ ">u<CharStyle:>");
+					text = text.replace("【クリア／メモキー】", "<CharStyle:" + sKeyFontName + ">C<CharStyle:>");
+					text = text.replace("【終話キー】", "<CharStyle:" + sKeyFontName + ">F<CharStyle:>");
+					text = text.replace("【メールキー】", "<CharStyle:" + sKeyFontName + ">L<CharStyle:>");
+					text = text.replace("【発信キー】", "<CharStyle:" + sKeyFontName + ">N<CharStyle:>");
+					text = text.replace("【EZキー】", "<CharStyle:" + sKeyFontName + ">R<CharStyle:>");
+					text = text.replace("【上下左右キー】", "<CharStyle:" + sKeyFontName + ">a<CharStyle:>");
+					text = text.replace("【サイド決定キー】", "<CharStyle:" + sKeyFontName + ">b<CharStyle:>");
+					text = text.replace("【センターキー】", "<CharStyle:" + sKeyFontName + ">c<CharStyle:>");
+					text = text.replace("【下キー】", "<CharStyle:" + sKeyFontName + ">d<CharStyle:>");
+					text = text.replace("【TVキー】", "<CharStyle:" + sKeyFontName + ">e<CharStyle:>");
+					text = text.replace("【サイド右キー】", "<CharStyle:" + sKeyFontName + ">f<CharStyle:>");
+					text = text.replace("【サイド左キー】", "<CharStyle:" + sKeyFontName + ">g<CharStyle:>");
+					text = text.replace("【サイド左右キー】", "<CharStyle:" + sKeyFontName + ">gf<CharStyle:>");
+					text = text.replace("【上下キー】", "<CharStyle:" + sKeyFontName + ">j<CharStyle:>");
+					text = text.replace("【左キー】", "<CharStyle:" + sKeyFontName + ">l<CharStyle:>");
+					text = text.replace("【右キー】", "<CharStyle:" + sKeyFontName + ">r<CharStyle:>");
+					text = text.replace("【左右キー】", "<CharStyle:" + sKeyFontName + ">s<CharStyle:>");
+					text = text.replace("【上キー】", "<CharStyle:" + sKeyFontName + ">u<CharStyle:>");
 					// 【マルチキー】と【クイックキー】は同じキーフォント（w）
-					text = text.replace("【マルチキー】", "<CharStyle:" + sKeyFontName
-							+ ">w<CharStyle:>");
-					text = text.replace("【クイックキー】", "<CharStyle:"
-							+ sKeyFontName + ">w<CharStyle:>");
+					text = text.replace("【マルチキー】", "<CharStyle:" + sKeyFontName + ">w<CharStyle:>");
+					text = text.replace("【クイックキー】", "<CharStyle:" + sKeyFontName + ">w<CharStyle:>");
 					// KD47以降
-					text = text.replace("【BOOKキー】", "<CharStyle:"
-							+ sKeyFontName + ">x<CharStyle:>");
+					text = text.replace("【BOOKキー】", "<CharStyle:" + sKeyFontName + ">x<CharStyle:>");
 					// KD48以降
-					text = text.replace("【縦横優先切替キー】", "<CharStyle:"
-							+ sKeyFontName + ">m<CharStyle:>");
-					text = text.replace("【クリアキー】", "<CharStyle:" + sKeyFontName
-							+ ">n<CharStyle:>");
-					text = text.replace("【サイド電源キー】", "<CharStyle:"
-							+ sKeyFontName + ">o<CharStyle:>");
-					text = text.replace("【ロックキー】", "<CharStyle:" + sKeyFontName
-							+ ">p<CharStyle:>");
+					text = text.replace("【縦横優先切替キー】", "<CharStyle:" + sKeyFontName + ">m<CharStyle:>");
+					text = text.replace("【クリアキー】", "<CharStyle:" + sKeyFontName + ">n<CharStyle:>");
+					text = text.replace("【サイド電源キー】", "<CharStyle:" + sKeyFontName + ">o<CharStyle:>");
+					text = text.replace("【ロックキー】", "<CharStyle:" + sKeyFontName + ">p<CharStyle:>");
 					if (text.matches(".*【電源キー】.*")) {
-						Tx2x.appendWarn("【電源キー】は曖昧です。【終話キー】または【サイド電源キー】を使用してください。："
-								+ text);
+						Tx2x.appendWarn("【電源キー】は曖昧です。【終話キー】または【サイド電源キー】を使用してください。：" + text);
 					}
 				}
 				// text = text.replaceAll("-", "<2013>"); // 大丈夫じゃなかった
@@ -289,16 +224,13 @@ public class LongStyleManager {
 				Pattern pattern = Pattern.compile("★(※[0-9]*)★");
 				Matcher matcher = pattern.matcher(text);
 				while (matcher.find()) {
-					text = text.replaceFirst("★※[0-9]*★",
-							"<CharStyle:small-up>" + matcher.group(1)
-									+ "<CharStyle:>");
+					text = text.replaceFirst("★※[0-9]*★", "<CharStyle:small-up>" + matcher.group(1) + "<CharStyle:>");
 					matcher = pattern.matcher(text);
 				}
 			}
 
 			// ★（R）★
-			text = text.replace("★（R）★",
-					"<CharStyle:small-up><00AE><CharStyle:>");
+			text = text.replace("★（R）★", "<CharStyle:small-up><00AE><CharStyle:>");
 			// ★（C）★
 			text = text.replace("★（C）★", "<cOTFContAlt:0><00A9><cOTFContAlt:>");
 			// ★TM★
@@ -316,9 +248,10 @@ public class LongStyleManager {
 				Matcher matcher = pattern.matcher(text);
 				if (matcher.find()) {
 					text = matcher
-							.replaceFirst("操作<2009><CharStyle:step\\\\_number02><cOTFContAlt:0><cOTFeatureList:nalt\\\\,7>"
-									+ zenkakuNumberToHankakuNumber(matcher
-											.group(1))
+							.replaceFirst(
+									"操作<2009><CharStyle:step\\\\_number02><cOTFContAlt:0><cOTFeatureList:nalt\\\\,7>"
+											+ zenkakuNumberToHankakuNumber(matcher.group(
+													1))
 									+ "<cOTFContAlt:><cOTFeatureList:><cOTFContAlt:0><2009><cOTFContAlt:><CharStyle:>");
 				}
 			}
@@ -341,8 +274,7 @@ public class LongStyleManager {
 			return "<ParaStyle:小見出し>";
 		}
 
-		if (longStyle.equals("【項】【項】") || longStyle.equals("【安全上のご注意】【項】【項】")
-				|| longStyle.equals("【付録】【項】【項】")) {
+		if (longStyle.equals("【項】【項】") || longStyle.equals("【安全上のご注意】【項】【項】") || longStyle.equals("【付録】【項】【項】")) {
 			String ret = "";
 			iText.setText(iText.getText().substring(3)); // 【節】を削除するつもり
 			// if (iText.getText().equals("フォトサイズを設定する"))
@@ -364,9 +296,7 @@ public class LongStyleManager {
 			return ret;
 		}
 
-		if (longStyle.equals("【項下】【項下】")
-				|| longStyle.equals("【安全上のご注意】【項下】【項下】")
-				|| longStyle.equals("【付録】【項下】【項下】")
+		if (longStyle.equals("【項下】【項下】") || longStyle.equals("【安全上のご注意】【項下】【項下】") || longStyle.equals("【付録】【項下】【項下】")
 				|| longStyle.equals("【付録】【利用許諾】【項下】【項下】")) {
 			String ret = "";
 			iText.setText(iText.getText().substring(4)); // 【項下】を削除するつもり
@@ -393,8 +323,7 @@ public class LongStyleManager {
 			return "<ParaStyle:body01>";
 		}
 
-		if (longStyle.equals("【利用許諾】【本文】")
-				|| longStyle.equals("【付録】【利用許諾】【本文】")) {
+		if (longStyle.equals("【利用許諾】【本文】") || longStyle.equals("【付録】【利用許諾】【本文】")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:body03>";
 		}
@@ -486,8 +415,7 @@ public class LongStyleManager {
 			return "<ParaStyle:HeadContents01>";
 		}
 
-		if (longStyle.equals("【編目次】【編目次】【本文】【本文】")
-				|| longStyle.equals("【安全上のご注意】【編目次】【編目次】【本文】【本文】")
+		if (longStyle.equals("【編目次】【編目次】【本文】【本文】") || longStyle.equals("【安全上のご注意】【編目次】【編目次】【本文】【本文】")
 				|| longStyle.equals("【付録】【編目次】【編目次】【本文】【本文】")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:HeadContents02>";
@@ -546,8 +474,7 @@ public class LongStyleManager {
 			}
 		}
 
-		if (longStyle.equals("【箇条書き・】【箇条書き・】【本文】【本文】")
-				|| longStyle.equals("【付録】【箇条書き・】【箇条書き・】【本文】【本文】")) {
+		if (longStyle.equals("【箇条書き・】【箇条書き・】【本文】【本文】") || longStyle.equals("【付録】【箇条書き・】【箇条書き・】【本文】【本文】")) {
 			String text = iText.getText();
 			// <b></b>
 			text = text.replace("\\<b\\>", "<CharStyle:body-M>");
@@ -557,8 +484,7 @@ public class LongStyleManager {
 			return "<ParaStyle:body01>\t";
 		}
 
-		if (longStyle.equals("【箇条書き・】【箇条書き・】【箇条書き・】【箇条書き・】")
-				|| longStyle.equals("【箇条書き・】【箇条書き・】【箇条書き－】【箇条書き－】")
+		if (longStyle.equals("【箇条書き・】【箇条書き・】【箇条書き・】【箇条書き・】") || longStyle.equals("【箇条書き・】【箇条書き・】【箇条書き－】【箇条書き－】")
 				|| longStyle.equals("【付録】【箇条書き・】【箇条書き・】【箇条書き－】【箇条書き－】")) {
 			String text = iText.getText();
 			text = text.replaceFirst("－", "-");
@@ -567,8 +493,7 @@ public class LongStyleManager {
 			return "<ParaStyle:body01\\_a>";
 		}
 
-		if (longStyle.equals("【箇条書き・】【箇条書き・】【※】【※】")
-				|| longStyle.equals("【付録】【箇条書き・】【箇条書き・】【※】【※】")) {
+		if (longStyle.equals("【箇条書き・】【箇条書き・】【※】【※】") || longStyle.equals("【付録】【箇条書き・】【箇条書き・】【※】【※】")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:cap03>";
 		}
@@ -579,8 +504,7 @@ public class LongStyleManager {
 			return "<ParaStyle:cap03>\t";
 		}
 
-		if (longStyle.equals("【*】【*】") || longStyle.equals("【付録】【*】【*】")
-				|| longStyle.equals("【付録】【Eng】【*】【*】")) {
+		if (longStyle.equals("【*】【*】") || longStyle.equals("【付録】【*】【*】") || longStyle.equals("【付録】【Eng】【*】【*】")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:cap01\\_a>";
 		}
@@ -596,28 +520,23 @@ public class LongStyleManager {
 			return "<ParaStyle:cap01>";
 		}
 
-		if (longStyle.equals("【※】【※】【本文】【本文】")
-				|| longStyle.equals("【付録】【※】【※】【本文】【本文】")
+		if (longStyle.equals("【※】【※】【本文】【本文】") || longStyle.equals("【付録】【※】【※】【本文】【本文】")
 				|| longStyle.equals("【付録】【※・】【※・】【本文】【本文】")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:cap01>\t";
 		}
 
-		if (longStyle.equals("【※】【※】【箇条書き・】【箇条書き・】")
-				|| longStyle.equals("【付録】【※】【※】【箇条書き・】【箇条書き・】")) {
+		if (longStyle.equals("【※】【※】【箇条書き・】【箇条書き・】") || longStyle.equals("【付録】【※】【※】【箇条書き・】【箇条書き・】")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:cap04>";
 		}
 
-		if (longStyle.equals("【※0】【※0】")
-				|| longStyle.equals("【安全上のご注意】【※0】【※0】")
-				|| longStyle.equals("【付録】【※0】【※0】")) {
+		if (longStyle.equals("【※0】【※0】") || longStyle.equals("【安全上のご注意】【※0】【※0】") || longStyle.equals("【付録】【※0】【※0】")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:cap01\\_a>";
 		}
 
-		if (longStyle.equals("【※0】【※0】【本文】【本文】")
-				|| longStyle.equals("【付録】【※0】【※0】【本文】【本文】")) {
+		if (longStyle.equals("【※0】【※0】【本文】【本文】") || longStyle.equals("【付録】【※0】【※0】【本文】【本文】")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:cap01\\_a>\t";
 		}
@@ -687,9 +606,7 @@ public class LongStyleManager {
 		}
 
 		if (longStyle.equals("【安全上のご注意】【表】【行】【セル】【箇条書き●】【箇条書き●】")) {
-			iText.setText(iText.getText().replaceFirst("●",
-					"<CharStyle:body_color01>●<CharStyle:>")
-					+ ""); // ●に色を付ける
+			iText.setText(iText.getText().replaceFirst("●", "<CharStyle:body_color01>●<CharStyle:>") + ""); // ●に色を付ける
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:table-body04\\_a>";
 		}
@@ -715,17 +632,14 @@ public class LongStyleManager {
 			return "<ParaStyle:cap04>";
 		}
 
-		if (longStyle
-				.equals("【安全上のご注意】【表】【行】【セル】【箇条書き●】【箇条書き●】【箇条書き・】【箇条書き・】【本文】【本文】")) {
+		if (longStyle.equals("【安全上のご注意】【表】【行】【セル】【箇条書き●】【箇条書き●】【箇条書き・】【箇条書き・】【本文】【本文】")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:table-body04\\_a-tab01>\t";
 		}
 
-		if (longStyle
-				.equals("【安全上のご注意】【表】【行】【セル】【箇条書き●】【箇条書き●】【箇条書き・】【箇条書き・】【箇条書き－】【箇条書き－】")) {
+		if (longStyle.equals("【安全上のご注意】【表】【行】【セル】【箇条書き●】【箇条書き●】【箇条書き・】【箇条書き・】【箇条書き－】【箇条書き－】")) {
 			m_sPrevLongStyle = longStyle;
-			iText.setText(iText.getText().replaceFirst("\t",
-					KOKOMADE_INDENT_CHAR));
+			iText.setText(iText.getText().replaceFirst("\t", KOKOMADE_INDENT_CHAR));
 			return "<ParaStyle:table-body04\\_a-tab01>\t";
 		}
 
@@ -803,14 +717,11 @@ public class LongStyleManager {
 			// iText.setText(iText.getText()
 			// + IDTaggedTextGenerator4KDDI.getCRLF(m_bMac)
 			// + "<ParaStyle:space01>");
-			return "<ParaStyle:body00>" + Tx2x.getTaggedTextCRLF(m_bMac)
-					+ "<ParaStyle:body00>" + Tx2x.getTaggedTextCRLF(m_bMac)
-					+ "<ParaStyle:body00>" + Tx2x.getTaggedTextCRLF(m_bMac)
-					+ "<ParaStyle:body00>" + Tx2x.getTaggedTextCRLF(m_bMac)
-					+ "<ParaStyle:body00>" + Tx2x.getTaggedTextCRLF(m_bMac)
-					+ "<ParaStyle:body00>" + Tx2x.getTaggedTextCRLF(m_bMac)
-					+ "<ParaStyle:body00>" + Tx2x.getTaggedTextCRLF(m_bMac)
-					+ "<ParaStyle:body00>";
+			return "<ParaStyle:body00>" + Tx2x.getTaggedTextCRLF(m_bMac) + "<ParaStyle:body00>"
+					+ Tx2x.getTaggedTextCRLF(m_bMac) + "<ParaStyle:body00>" + Tx2x.getTaggedTextCRLF(m_bMac)
+					+ "<ParaStyle:body00>" + Tx2x.getTaggedTextCRLF(m_bMac) + "<ParaStyle:body00>"
+					+ Tx2x.getTaggedTextCRLF(m_bMac) + "<ParaStyle:body00>" + Tx2x.getTaggedTextCRLF(m_bMac)
+					+ "<ParaStyle:body00>" + Tx2x.getTaggedTextCRLF(m_bMac) + "<ParaStyle:body00>";
 		}
 
 		if (longStyle.compareTo("【画面囲み】【本文】") == 0) {
@@ -847,9 +758,7 @@ public class LongStyleManager {
 			Pattern pattern = Pattern.compile("^([０-９]+)");
 			Matcher matcher = pattern.matcher(text);
 			if (matcher.find()) {
-				text = matcher
-						.replaceFirst(zenkakuNumberToHankakuNumber(matcher
-								.group(1)) + ".");
+				text = matcher.replaceFirst(zenkakuNumberToHankakuNumber(matcher.group(1)) + ".");
 			}
 			iText.setText(text);
 			return "<ParaStyle:バレット補足バレット>";
@@ -881,9 +790,7 @@ public class LongStyleManager {
 			Pattern pattern = Pattern.compile("^([０-９]+)");
 			Matcher matcher = pattern.matcher(text);
 			if (matcher.find()) {
-				text = matcher
-						.replaceFirst(zenkakuNumberToHankakuNumber(matcher
-								.group(1)) + ".");
+				text = matcher.replaceFirst(zenkakuNumberToHankakuNumber(matcher.group(1)) + ".");
 			}
 
 			iText.setText(text);
@@ -899,22 +806,17 @@ public class LongStyleManager {
 				// 画面あり
 				m_nStepTableType |= 0x1;
 				m_nStepTableWidth = 3;
-				m_sStepCaption = iText.getText().substring(
-						1 + iText.getText().indexOf("】《"));
-				iText.setText(iText.getText().substring(0,
-						iText.getText().indexOf("	【画面")));
+				m_sStepCaption = iText.getText().substring(1 + iText.getText().indexOf("】《"));
+				iText.setText(iText.getText().substring(0, iText.getText().indexOf("	【画面")));
 			}
-			if (iText.getText().equals("\t")
-					|| iText.getText()
-							.matches(
-									"<CharStyle:step\\\\_number01><cOTFContAlt:0><cOTFeatureList:nalt\\\\,7>[0-9]+<cOTFContAlt:><cOTFeatureList:><CharStyle:>\\t")) {
+			if (iText.getText().equals("\t") || iText.getText().matches(
+					"<CharStyle:step\\\\_number01><cOTFContAlt:0><cOTFeatureList:nalt\\\\,7>[0-9]+<cOTFContAlt:><cOTFeatureList:><CharStyle:>\\t")) {
 				// "[０-９]+\\t")) {
 
 				// 直後に表組みがある操作文
 				m_nStepTableType |= 0x2;
 				m_nStepTableWidth = 0;
-				m_sStepCaption = iText.getText().substring(0,
-						iText.getText().indexOf("\t"));
+				m_sStepCaption = iText.getText().substring(0, iText.getText().indexOf("\t"));
 				if (m_sStepCaption.equals("")) {
 					m_sStepCaption = " ";
 				}
@@ -927,12 +829,11 @@ public class LongStyleManager {
 
 			if (m_nPrevStepTableType == 0x1) {
 				// 画面あり手順の終了
-				String tCellAttrTopInset = "5.669291338582678";
+				double tCellAttrTopInset = 2 * MM;
 				if (m_sStepNumber.equals("１")) {
-					tCellAttrTopInset = "0";
+					tCellAttrTopInset = 0;
 				}
-				ret += "<CellEnd:><CellStart:1,1<tCellAttrLeftInset:0><tCellAttrTopInset:"
-						+ tCellAttrTopInset
+				ret += "<CellEnd:><CellStart:1,1<tCellAttrLeftInset:0><tCellAttrTopInset:" + tCellAttrTopInset
 						+ "><tCellAttrRightInset:0><tCellAttrBottomInset:0><tCellAttrLeftStrokeWeight:0><tCellAttrRightStrokeWeight:0><tCellAttrTopStrokeWeight:0><tCellAttrBottomStrokeWeight:0><tCellLeftStrokeColor:Black><tCellTopStrokeColor:Black><tCellRightStrokeColor:Black><tCellBottomStrokeColor:Black><tcLeftStrokeType:Solid><tcRightStrokeType:Solid><tcTopStrokeType:Solid><tcBottomStrokeType:Solid><tCellAttrLeftStrokeTint:100><tCellAttrRightStrokeTint:100><tCellAttrTopStrokeTint:100><tCellAttrBottomStrokeTint:100><tCellLeftStrokeOverprint:0><tCellRightStrokeOverprint:0><tCellTopStrokeOverprint:0><tCellBottomStrokeOverprint:0><tCellLeftStrokeGapTint:100><tCellRightStrokeGapTint:100><tCellTopStrokeGapTint:100><tCellBottomStrokeGapTint:100><tCellLeftStrokeGapColor:Paper><tCellRightStrokeGapColor:Paper><tCellTopStrokeGapColor:Paper><tCellBottomStrokeGapColor:Paper>><CellEnd:><CellStart:1,1<tCellAttrLeftInset:0><tCellAttrTopInset:"
 						+ tCellAttrTopInset
 						+ "><tCellAttrRightInset:0><tCellAttrBottomInset:0><tCellAttrLeftStrokeWeight:0><tCellAttrRightStrokeWeight:0><tCellAttrTopStrokeWeight:0><tCellAttrBottomStrokeWeight:0><tCellLeftStrokeColor:Black><tCellTopStrokeColor:Black><tCellRightStrokeColor:Black><tCellBottomStrokeColor:Black><tcLeftStrokeType:Solid><tcRightStrokeType:Solid><tcTopStrokeType:Solid><tcBottomStrokeType:Solid><tCellAttrLeftStrokeTint:100><tCellAttrRightStrokeTint:100><tCellAttrTopStrokeTint:100><tCellAttrBottomStrokeTint:100><tCellLeftStrokeOverprint:0><tCellRightStrokeOverprint:0><tCellTopStrokeOverprint:0><tCellBottomStrokeOverprint:0><tCellLeftStrokeGapTint:100><tCellRightStrokeGapTint:100><tCellTopStrokeGapTint:100><tCellBottomStrokeGapTint:100><tCellLeftStrokeGapColor:Paper><tCellRightStrokeGapColor:Paper><tCellTopStrokeGapColor:Paper><tCellBottomStrokeGapColor:Paper>><ParaStyle:body00>"
@@ -944,10 +845,8 @@ public class LongStyleManager {
 				ret += "<ParaStyle:body00>" + Tx2x.getTaggedTextCRLF(m_bMac);
 				ret += "<ParaStyle:body00>" + Tx2x.getTaggedTextCRLF(m_bMac);
 				ret += "<ParaStyle:body00>" + Tx2x.getTaggedTextCRLF(m_bMac);
-				ret += "<ParaStyle:-space\\_2mm>"
-						+ Tx2x.getTaggedTextCRLF(m_bMac);
-				ret += "<ParaStyle:table-cap01>" + m_sPrevStepCaption
-						+ "<CellEnd:><RowEnd:>";
+				ret += "<ParaStyle:-space\\_2mm>" + Tx2x.getTaggedTextCRLF(m_bMac);
+				ret += "<ParaStyle:table-cap01>" + m_sPrevStepCaption + "<CellEnd:><RowEnd:>";
 				m_sPrevStepCaption = "";
 
 				if (m_nStepTableType != m_nPrevStepTableType) {
@@ -967,24 +866,24 @@ public class LongStyleManager {
 				if (m_nStepTableType != m_nPrevStepTableType) {
 					// TableStart
 					// その前にtBeforeSpaceを決める
-					String tBeforeSpace;
+					double dBeforeSpace;
 					if (m_sPrevLongStyle.equals("【節】【節】")) {
-						tBeforeSpace = "1.4173228346456694";
+						dBeforeSpace = 0.5 * MM;
 					} else {
-						tBeforeSpace = "0";
+						dBeforeSpace = 0;
 					}
 
 					ret += "<ParaStyle:body00><TableStart:1,3:0:0<tCellDefaultCellType:Text><tBeforeSpace:"
-							+ tBeforeSpace
-							+ "><tAfterSpace:0>><ColStart:<tColAttrWidth:160.15748031496065>><ColStart:<tColAttrWidth:4.251968503937008>><ColStart:<tColAttrWidth:53.85826771653544>>";
+							+ dBeforeSpace + "><tAfterSpace:0>><ColStart:<tColAttrWidth:" + 56.5 * MM
+							+ ">><ColStart:<tColAttrWidth:" + 1.5 * MM + ">><ColStart:<tColAttrWidth:" + 19 * MM + ">>";
 				}
 				// RowStart
-				String tCellAttrTopInset = "5.669291338582678";
+				double dCellAttrTopInset = 2 * MM;
 				if (m_sStepNumber.equals("１")) {
-					tCellAttrTopInset = "0";
+					dCellAttrTopInset = 0;
 				}
-				ret += "<RowStart:<tRowAttrHeight:5.669291338582678><tRowAttrMinRowSize:5.669291338582678>><CellStart:1,1<tCellAttrLeftInset:0><tCellAttrTopInset:"
-						+ tCellAttrTopInset
+				ret += "<RowStart:<tRowAttrHeight:" + 2 * MM + "><tRowAttrMinRowSize:" + 2 * MM
+						+ ">><CellStart:1,1<tCellAttrLeftInset:0><tCellAttrTopInset:" + dCellAttrTopInset
 						+ "><tCellAttrRightInset:0><tCellAttrBottomInset:0><tCellAttrLeftStrokeWeight:0><tCellAttrRightStrokeWeight:0><tCellAttrTopStrokeWeight:0><tCellAttrBottomStrokeWeight:0><tCellLeftStrokeColor:Black><tCellTopStrokeColor:Black><tCellRightStrokeColor:Black><tCellBottomStrokeColor:Black><tcLeftStrokeType:Solid><tcRightStrokeType:Solid><tcTopStrokeType:Solid><tcBottomStrokeType:Solid><tCellAttrLeftStrokeTint:100><tCellAttrRightStrokeTint:100><tCellAttrTopStrokeTint:100><tCellAttrBottomStrokeTint:100><tCellLeftStrokeOverprint:0><tCellRightStrokeOverprint:0><tCellTopStrokeOverprint:0><tCellBottomStrokeOverprint:0><tCellLeftStrokeGapTint:100><tCellRightStrokeGapTint:100><tCellTopStrokeGapTint:100><tCellBottomStrokeGapTint:100><tCellLeftStrokeGapColor:Paper><tCellRightStrokeGapColor:Paper><tCellTopStrokeGapColor:Paper><tCellBottomStrokeGapColor:Paper>>";
 			} else if (m_nStepTableType == 0x2) {
 				iText.setText("");
@@ -1005,8 +904,7 @@ public class LongStyleManager {
 			return ret;
 		}
 
-		if (longStyle.equals("【手順】【手順】【本文】【本文】")
-				|| longStyle.equals("【手順】【手順】【画面】【画面】")) {
+		if (longStyle.equals("【手順】【手順】【本文】【本文】") || longStyle.equals("【手順】【手順】【画面】【画面】")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:リスト補足>";
 		}
@@ -1127,8 +1025,7 @@ public class LongStyleManager {
 			text = text.replace("\\<b\\>", "<CharStyle:body-M>");
 			text = text.replace("\\</b\\>", "<CharStyle:>");
 			if (text.matches(".*【中央揃え】.*")) {
-				iText.setText(text.replaceFirst("【中央揃え】", "")
-						+ "<pTextAlignment:>");
+				iText.setText(text.replaceFirst("【中央揃え】", "") + "<pTextAlignment:>");
 				return "<ParaStyle:table-body02><pTextAlignment:Center>";
 			} else {
 				iText.setText(text);
@@ -1222,8 +1119,7 @@ public class LongStyleManager {
 			return "<ParaStyle:step-body02\\_03\\_bullet>\t";
 		}
 
-		if (longStyle.compareTo("【表】【行】【セル】【手順】【手順】") == 0
-				|| longStyle.compareTo("【手順】【手順】【表】【行】【セル】【手順】【手順】") == 0) {
+		if (longStyle.compareTo("【表】【行】【セル】【手順】【手順】") == 0 || longStyle.compareTo("【手順】【手順】【表】【行】【セル】【手順】【手順】") == 0) {
 			String ret;
 			String text = iText.getText();
 			if (text.matches("^０\t.*")) {
@@ -1292,14 +1188,12 @@ public class LongStyleManager {
 			if (c1 != -1 && c2 != -1) {
 				// ① xxxxx：abcdefghijklmnopqrstuvwxyz
 				// "xxxxx"は太字になる
-				text = text.substring(0, c1 + 1) + "<CharStyle:body-M>"
-						+ text.substring(c1 + 1, c2) + "<CharStyle:>"
+				text = text.substring(0, c1 + 1) + "<CharStyle:body-M>" + text.substring(c1 + 1, c2) + "<CharStyle:>"
 						+ text.substring(c2);
 			} else if (text.matches("^.*[^。]$")) {
 				// ① xxxxx （途中に：が無く「。」で終わっていない場合）
 				// "xxxxx"は太字になる
-				text = text.substring(0, c1 + 1) + "<CharStyle:body-M>"
-						+ text.substring(c1 + 1) + "<CharStyle:>";
+				text = text.substring(0, c1 + 1) + "<CharStyle:body-M>" + text.substring(c1 + 1) + "<CharStyle:>";
 			}
 			iText.setText(text);
 			return "<ParaStyle:step-body01\\_b>";
@@ -1313,8 +1207,7 @@ public class LongStyleManager {
 			return "<ParaStyle:step-body01\\_b>";
 		}
 
-		if (longStyle.equals("【手順】【手順】【①】【①】【本文】【本文】")
-				|| longStyle.equals("【手順】【手順】【（M）①】【（M）①】【本文】【本文】")) {
+		if (longStyle.equals("【手順】【手順】【①】【①】【本文】【本文】") || longStyle.equals("【手順】【手順】【（M）①】【（M）①】【本文】【本文】")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:step-body01\\_b>\t";
 		}
@@ -1332,21 +1225,17 @@ public class LongStyleManager {
 			int c1 = text.indexOf("\t");
 			int c2 = text.indexOf("：");
 			if (c1 != -1 && c2 != -1) {
-				text = text.substring(0, c1 + 1) + "<CharStyle:body-M>"
-						+ text.substring(c1 + 1, c2) + "<CharStyle:>"
-						+ text.substring(c2, c2 + 1) + KOKOMADE_INDENT_CHAR
-						+ text.substring(c2 + 1);
+				text = text.substring(0, c1 + 1) + "<CharStyle:body-M>" + text.substring(c1 + 1, c2) + "<CharStyle:>"
+						+ text.substring(c2, c2 + 1) + KOKOMADE_INDENT_CHAR + text.substring(c2 + 1);
 			} else if (text.matches("^.*[^。]$")) {
-				text = text.substring(0, c1 + 1) + "<CharStyle:body-M>"
-						+ text.substring(c1 + 1) + "<CharStyle:>";
+				text = text.substring(0, c1 + 1) + "<CharStyle:body-M>" + text.substring(c1 + 1) + "<CharStyle:>";
 			}
 			iText.setText(text);
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:body02>";
 		}
 
-		if (longStyle.compareTo("【①】【①】【本文】【本文】") == 0
-				|| longStyle.equals("【（M）①】【（M）①】【本文】【本文】")
+		if (longStyle.compareTo("【①】【①】【本文】【本文】") == 0 || longStyle.equals("【（M）①】【（M）①】【本文】【本文】")
 				|| longStyle.equals("【（M）】【（M）】【本文】【本文】")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:body02>\t";
@@ -1391,8 +1280,7 @@ public class LongStyleManager {
 			String text = iText.getText();
 			int c1 = text.indexOf("\t");
 			if (c1 != -1) {
-				text = text.substring(0, c1 + 1).replaceAll("（M）", "")
-						+ "<CharStyle:body-M>" + text.substring(c1 + 1)
+				text = text.substring(0, c1 + 1).replaceAll("（M）", "") + "<CharStyle:body-M>" + text.substring(c1 + 1)
 						+ "<CharStyle:>";
 			}
 			iText.setText(text);
@@ -1414,8 +1302,7 @@ public class LongStyleManager {
 			return "<ParaStyle:body02-Bold01\\_01>";
 		}
 
-		if (longStyle.equals("【箇条書き●】【箇条書き●】【本文】【本文】")
-				|| longStyle.equals("【付録】【箇条書き●】【箇条書き●】【本文】【本文】")) {
+		if (longStyle.equals("【箇条書き●】【箇条書き●】【本文】【本文】") || longStyle.equals("【付録】【箇条書き●】【箇条書き●】【本文】【本文】")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:body02>\t";
 		}
@@ -1486,10 +1373,8 @@ public class LongStyleManager {
 			return "<ParaStyle:ステップ>";
 		}
 
-		if (longStyle.equals("【別紙タイトル】【別紙タイトル】")
-				|| longStyle.equals("【安全上のご注意】【別紙タイトル】【別紙タイトル】")
-				|| longStyle.equals("【付録】【別紙タイトル】【別紙タイトル】")
-				|| longStyle.equals("【利用許諾】【別紙タイトル】【別紙タイトル】")) {
+		if (longStyle.equals("【別紙タイトル】【別紙タイトル】") || longStyle.equals("【安全上のご注意】【別紙タイトル】【別紙タイトル】")
+				|| longStyle.equals("【付録】【別紙タイトル】【別紙タイトル】") || longStyle.equals("【利用許諾】【別紙タイトル】【別紙タイトル】")) {
 			m_sStepCaption = "";
 			// 別紙xxx-xを読み取って、改ページの位置を調整する
 			String text = iText.getText();
@@ -1524,8 +1409,7 @@ public class LongStyleManager {
 				pageNum *= 2;
 				pageNum += nPrefix;
 				if (/* m_nPrevPageNum != -1 && */m_nPrevPageNum != pageNum) {
-					ret += "<ParaStyle:body00><cNextXChars:EvenPage>"
-							+ Tx2x.getTaggedTextCRLF(m_bMac);
+					ret += "<ParaStyle:body00><cNextXChars:EvenPage>" + Tx2x.getTaggedTextCRLF(m_bMac);
 				}
 				m_nPrevPageNum = pageNum;
 			} catch (NumberFormatException e) {

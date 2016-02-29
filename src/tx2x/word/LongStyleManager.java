@@ -21,16 +21,9 @@ import com.jacob.com.ComFailException;
 import com.jacob.com.Dispatch;
 import com.jacob.com.Variant;
 
+import static tx2x.Constants.*; // 定数クラス
+
 public class LongStyleManager {
-	private static final double MillimetersToPoints_2 = 5.669291;
-	private static final double MillimetersToPoints_10 = 28.34646;
-	private static final double MillimetersToPoints_15 = 42.51968;
-	private static final double MillimetersToPoints_20 = 56.69291;
-	private static final double MillimetersToPoints_120 = 340.1575;
-	private static final double MillimetersToPoints_124_8 = 353.7638;
-	private static final double MillimetersToPoints_134_8 = 382.1103;
-	private static final double MillimetersToPoints_136_9 = 388.063;
-	private static final double MillimetersToPoints_148 = 419.5276;
 	LinkedList<Style> m_StyleLinkedList; // スタイル情報をpush/popする
 	String m_sCurrentLongStyle; // 現在の長いスタイル名
 	String m_sPrevLongStyle; // 直前の長いスタイル名
@@ -66,8 +59,7 @@ public class LongStyleManager {
 		m_cLongStyleArrayList = new ArrayList<String>();
 	}
 
-	public String getTargetStyle(IntermediateText iText, int nLsIndex)
-			throws IOException {
+	public String getTargetStyle(IntermediateText iText, int nLsIndex) throws IOException {
 		m_sCurrentLongStyle = getLongStyle();
 		if (iText.getStyle() == null) {
 			m_sCurrentLongStyle += "【本文】";
@@ -140,8 +132,7 @@ public class LongStyleManager {
 			return "コード";
 		}
 
-		if (m_sCurrentLongStyle
-				.equals("【箇条書き・】【箇条書き・】【コード】【コード】【本文】【本文】【本文】【本文】")) {
+		if (m_sCurrentLongStyle.equals("【箇条書き・】【箇条書き・】【コード】【コード】【本文】【本文】【本文】【本文】")) {
 			iText.setText("\t\t" + iText.getText());
 			return "コード";
 		}
@@ -254,14 +245,12 @@ public class LongStyleManager {
 			return "用語-本文";
 		}
 
-		if (m_sCurrentLongStyle
-				.equals("【箇条書き（用語）】【箇条書き（用語）】【箇条書き（用語）】【箇条書き（用語）】")) {
+		if (m_sCurrentLongStyle.equals("【箇条書き（用語）】【箇条書き（用語）】【箇条書き（用語）】【箇条書き（用語）】")) {
 			iText.setText(iText.getText().replaceFirst("^::", ""));
 			return "用語2";
 		}
 
-		if (m_sCurrentLongStyle
-				.equals("【箇条書き（用語）】【箇条書き（用語）】【箇条書き（用語）】【箇条書き（用語）】【本文】【本文】")) {
+		if (m_sCurrentLongStyle.equals("【箇条書き（用語）】【箇条書き（用語）】【箇条書き（用語）】【箇条書き（用語）】【本文】【本文】")) {
 			return "用語2-本文";
 		}
 
@@ -282,8 +271,7 @@ public class LongStyleManager {
 		df.applyLocalizedPattern("0000");
 		style = "標準";
 		iText.setText("■未定義スタイル:" + m_sCurrentLongStyle + iText.getText());
-		System.out
-				.println(m_sCurrentLongStyle + "は、" + style + "スタイルで出力されました。");
+		System.out.println(m_sCurrentLongStyle + "は、" + style + "スタイルで出力されました。");
 		m_cDummyStyleHashTable.put(m_sCurrentLongStyle, style);
 		return style;
 	}
@@ -349,8 +337,7 @@ public class LongStyleManager {
 	/*
 	 * Wordデータを作成するセクション
 	 */
-	public void writeTargetData(Dispatch oSelection, String sWordStyle,
-			IntermediateText iText, int nLsIndex) {
+	public void writeTargetData(Dispatch oSelection, String sWordStyle, IntermediateText iText, int nLsIndex) {
 		String longStyle = getLongStyle();
 		if (iText.getStyle() == null) {
 			longStyle += "【本文】";
@@ -360,26 +347,21 @@ public class LongStyleManager {
 		if (longStyle.equals("【コード】【コード】")) {
 			if (iText.getText().equals("▼コード")) {
 				// 表を作る
-				Dispatch oDocument = Dispatch.call(oSelection, "Document")
-						.toDispatch();
-				Dispatch oTables = Dispatch.call(oDocument, "Tables")
-						.toDispatch();
+				Dispatch oDocument = Dispatch.call(oSelection, "Document").toDispatch();
+				Dispatch oTables = Dispatch.call(oDocument, "Tables").toDispatch();
 				Variant oRange = Dispatch.call(oSelection, "Range");
-				Dispatch oTable = Dispatch.call(oTables, "Add", oRange, 1, 1)
-						.toDispatch();
+				Dispatch oTable = Dispatch.call(oTables, "Add", oRange, 1, 1).toDispatch();
 
 				// 幅を調節
-				Dispatch oCell = Dispatch.call(oTable, "Cell", 1, 1)
-						.getDispatch();
-				setCellWidth(oCell, MillimetersToPoints_134_8);
+				Dispatch oCell = Dispatch.call(oTable, "Cell", 1, 1).getDispatch();
+				setCellWidth(oCell, 134.8 * MM);
 
 				// 左端からのインデント
 				Dispatch oRows = Dispatch.get(oTable, "Rows").toDispatch();
-				Dispatch.put(oRows, "LeftIndent", MillimetersToPoints_15);
+				Dispatch.put(oRows, "LeftIndent", 15 * MM);
 
 				// 背景：RGB(236, 240, 241)
-				Dispatch oShading = Dispatch.get(oTable, "Shading")
-						.toDispatch();
+				Dispatch oShading = Dispatch.get(oTable, "Shading").toDispatch();
 				Dispatch.put(oShading, "BackgroundPatternColor", 15855852);
 
 				// 罫線
@@ -388,8 +370,7 @@ public class LongStyleManager {
 					/* -2:wdBorderLeft */
 					/* -3:wdBorderBottom */
 					/* -4:wdBorderRight */
-					Dispatch oBorder = Dispatch.call(oTable, "Borders", i)
-							.toDispatch();
+					Dispatch oBorder = Dispatch.call(oTable, "Borders", i).toDispatch();
 					Dispatch.put(oBorder, "LineStyle", 4 /* wdLineStyleDashLargeGap */);
 				}
 				return;
@@ -402,26 +383,21 @@ public class LongStyleManager {
 		} else if (longStyle.equals("【ヒント】【コード】【コード】")) {
 			if (iText.getText().equals("▼コード")) {
 				// 表を作る
-				Dispatch oDocument = Dispatch.call(oSelection, "Document")
-						.toDispatch();
-				Dispatch oTables = Dispatch.call(oDocument, "Tables")
-						.toDispatch();
+				Dispatch oDocument = Dispatch.call(oSelection, "Document").toDispatch();
+				Dispatch oTables = Dispatch.call(oDocument, "Tables").toDispatch();
 				Variant oRange = Dispatch.call(oSelection, "Range");
-				Dispatch oTable = Dispatch.call(oTables, "Add", oRange, 1, 1)
-						.toDispatch();
+				Dispatch oTable = Dispatch.call(oTables, "Add", oRange, 1, 1).toDispatch();
 
 				// 幅を調節
-				Dispatch oCell = Dispatch.call(oTable, "Cell", 1, 1)
-						.getDispatch();
-				setCellWidth(oCell, MillimetersToPoints_120);
+				Dispatch oCell = Dispatch.call(oTable, "Cell", 1, 1).getDispatch();
+				setCellWidth(oCell, 120 * MM);
 
 				// 左端からのインデント
 				Dispatch oRows = Dispatch.get(oTable, "Rows").toDispatch();
-				Dispatch.put(oRows, "LeftIndent", MillimetersToPoints_10);
+				Dispatch.put(oRows, "LeftIndent", 10 * MM);
 
 				// 背景：RGB(236, 240, 241)
-				Dispatch oShading = Dispatch.get(oTable, "Shading")
-						.toDispatch();
+				Dispatch oShading = Dispatch.get(oTable, "Shading").toDispatch();
 				Dispatch.put(oShading, "BackgroundPatternColor", 15855852);
 
 				// 罫線
@@ -430,8 +406,7 @@ public class LongStyleManager {
 					/* -2:wdBorderLeft */
 					/* -3:wdBorderBottom */
 					/* -4:wdBorderRight */
-					Dispatch oBorder = Dispatch.call(oTable, "Borders", i)
-							.toDispatch();
+					Dispatch oBorder = Dispatch.call(oTable, "Borders", i).toDispatch();
 					Dispatch.put(oBorder, "LineStyle", 4 /* wdLineStyleDashLargeGap */);
 				}
 				return;
@@ -444,26 +419,21 @@ public class LongStyleManager {
 		} else if (longStyle.equals("【注意】【コード】【コード】")) {
 			if (iText.getText().equals("▼コード")) {
 				// 表を作る
-				Dispatch oDocument = Dispatch.call(oSelection, "Document")
-						.toDispatch();
-				Dispatch oTables = Dispatch.call(oDocument, "Tables")
-						.toDispatch();
+				Dispatch oDocument = Dispatch.call(oSelection, "Document").toDispatch();
+				Dispatch oTables = Dispatch.call(oDocument, "Tables").toDispatch();
 				Variant oRange = Dispatch.call(oSelection, "Range");
-				Dispatch oTable = Dispatch.call(oTables, "Add", oRange, 1, 1)
-						.toDispatch();
+				Dispatch oTable = Dispatch.call(oTables, "Add", oRange, 1, 1).toDispatch();
 
 				// 幅を調節
-				Dispatch oCell = Dispatch.call(oTable, "Cell", 1, 1)
-						.getDispatch();
-				setCellWidth(oCell, MillimetersToPoints_120);
+				Dispatch oCell = Dispatch.call(oTable, "Cell", 1, 1).getDispatch();
+				setCellWidth(oCell, 120 * MM);
 
 				// 左端からのインデント
 				Dispatch oRows = Dispatch.get(oTable, "Rows").toDispatch();
-				Dispatch.put(oRows, "LeftIndent", MillimetersToPoints_10);
+				Dispatch.put(oRows, "LeftIndent", 10 * MM);
 
 				// 背景：RGB(236, 240, 241)
-				Dispatch oShading = Dispatch.get(oTable, "Shading")
-						.toDispatch();
+				Dispatch oShading = Dispatch.get(oTable, "Shading").toDispatch();
 				Dispatch.put(oShading, "BackgroundPatternColor", 14939133);
 
 				// 罫線
@@ -472,8 +442,7 @@ public class LongStyleManager {
 					/* -2:wdBorderLeft */
 					/* -3:wdBorderBottom */
 					/* -4:wdBorderRight */
-					Dispatch oBorder = Dispatch.call(oTable, "Borders", i)
-							.toDispatch();
+					Dispatch oBorder = Dispatch.call(oTable, "Borders", i).toDispatch();
 					Dispatch.put(oBorder, "LineStyle", 4 /* wdLineStyleDashLargeGap */);
 				}
 				return;
@@ -483,30 +452,24 @@ public class LongStyleManager {
 				Dispatch.call(oSelection, "MoveRight", 1 /* wdCharacter */, 2); // 右へ2つ移動
 				return;
 			}
-		} else if (longStyle.equals("【1.】【1.】【コード】【コード】")
-				|| longStyle.equals("【箇条書き・】【箇条書き・】【コード】【コード】")) {
+		} else if (longStyle.equals("【1.】【1.】【コード】【コード】") || longStyle.equals("【箇条書き・】【箇条書き・】【コード】【コード】")) {
 			if (iText.getText().equals("▼コード")) {
 				// 表を作る
-				Dispatch oDocument = Dispatch.call(oSelection, "Document")
-						.toDispatch();
-				Dispatch oTables = Dispatch.call(oDocument, "Tables")
-						.toDispatch();
+				Dispatch oDocument = Dispatch.call(oSelection, "Document").toDispatch();
+				Dispatch oTables = Dispatch.call(oDocument, "Tables").toDispatch();
 				Variant oRange = Dispatch.call(oSelection, "Range");
-				Dispatch oTable = Dispatch.call(oTables, "Add", oRange, 1, 1)
-						.toDispatch();
+				Dispatch oTable = Dispatch.call(oTables, "Add", oRange, 1, 1).toDispatch();
 
 				// 幅を調節
-				Dispatch oCell = Dispatch.call(oTable, "Cell", 1, 1)
-						.getDispatch();
-				setCellWidth(oCell, MillimetersToPoints_124_8);
+				Dispatch oCell = Dispatch.call(oTable, "Cell", 1, 1).getDispatch();
+				setCellWidth(oCell, 124.8 * MM);
 
 				// 左端からのインデント
 				Dispatch oRows = Dispatch.get(oTable, "Rows").toDispatch();
-				Dispatch.put(oRows, "LeftIndent", MillimetersToPoints_20);
+				Dispatch.put(oRows, "LeftIndent", 20 * MM);
 
 				// 背景：RGB(236, 240, 241)
-				Dispatch oShading = Dispatch.get(oTable, "Shading")
-						.toDispatch();
+				Dispatch oShading = Dispatch.get(oTable, "Shading").toDispatch();
 				Dispatch.put(oShading, "BackgroundPatternColor", 15855852);
 
 				// 罫線
@@ -515,8 +478,7 @@ public class LongStyleManager {
 					/* -2:wdBorderLeft */
 					/* -3:wdBorderBottom */
 					/* -4:wdBorderRight */
-					Dispatch oBorder = Dispatch.call(oTable, "Borders", i)
-							.toDispatch();
+					Dispatch oBorder = Dispatch.call(oTable, "Borders", i).toDispatch();
 					Dispatch.put(oBorder, "LineStyle", 4 /* wdLineStyleDashLargeGap */);
 				}
 				return;
@@ -527,29 +489,24 @@ public class LongStyleManager {
 				return;
 			}
 		} else if (longStyle.equals("【HACK】【HACK】")) {
-			Dispatch oDocument = Dispatch.call(oSelection, "Document")
-					.toDispatch();
+			Dispatch oDocument = Dispatch.call(oSelection, "Document").toDispatch();
 			Dispatch oTables = Dispatch.call(oDocument, "Tables").toDispatch();
 			Variant oRange = Dispatch.call(oSelection, "Range");
-			Dispatch oTable = Dispatch.call(oTables, "Add", oRange, 1, 2)
-					.toDispatch();
+			Dispatch oTable = Dispatch.call(oTables, "Add", oRange, 1, 2).toDispatch();
 
 			// HACKグレーアイコン
-			Dispatch oInlineShapes = Dispatch.get(oSelection, "InlineShapes")
+			Dispatch oInlineShapes = Dispatch.get(oSelection, "InlineShapes").toDispatch();
+			Dispatch oInlineShape = Dispatch
+					.call(oInlineShapes, "AddPicture",
+							Tx2xOptions.getInstance().getString("tx2x_folder_name") + "\\hack.png", "False", "True")
 					.toDispatch();
-			Dispatch oInlineShape = Dispatch.call(
-					oInlineShapes,
-					"AddPicture",
-					Tx2xOptions.getInstance().getString("tx2x_folder_name")
-							+ "\\hack.png", "False", "True").toDispatch();
-			Dispatch oShape = Dispatch.call(oInlineShape, "ConvertToShape")
-					.toDispatch();
+			Dispatch oShape = Dispatch.call(oInlineShape, "ConvertToShape").toDispatch();
 			Dispatch.call(oShape, "ZOrder", 5 /* msoSendBehindText */);
-			Dispatch.call(oShape, "IncrementTop", -MillimetersToPoints_2); // 2mm上へ移動
-			Dispatch.call(oShape, "IncrementLeft", -MillimetersToPoints_2); // 2mm左へ移動
+			Dispatch.call(oShape, "IncrementTop", -2 * MM); // 2mm上へ移動
+			Dispatch.call(oShape, "IncrementLeft", -2 * MM); // 2mm左へ移動
 
 			Dispatch oCell = Dispatch.call(oTable, "Cell", 1, 1).getDispatch();
-			setCellWidth(oCell, MillimetersToPoints_15);
+			setCellWidth(oCell, 15 * MM);
 
 			Dispatch.call(oSelection, "MoveStart", 12 /* wdCell */, 0); // 左へ移動
 			Dispatch.put(oSelection, "Text", "HACK");
@@ -564,7 +521,7 @@ public class LongStyleManager {
 
 			// HACKリード文のエリア
 			oCell = Dispatch.call(oTable, "Cell", 1, 2).getDispatch();
-			setCellWidth(oCell, MillimetersToPoints_136_9);
+			setCellWidth(oCell, 136.9 * MM);
 
 			Dispatch.call(oCell, "Select");
 			Dispatch.call(oSelection, "MoveLeft"); // 左へ移動（カーソルを立てる）
@@ -585,7 +542,7 @@ public class LongStyleManager {
 			return;
 		} else if (longStyle.equals("【1.】【1.】【ヒント】【ヒント】")) {
 			if (iText.getText().equals("▼ヒント")) {
-				writeHintParts(oSelection, MillimetersToPoints_15);
+				writeHintParts(oSelection, 15 * MM);
 			} else { // iText.getText().equals("▲")
 				// 不要な改行を削除し、表の次の行にカーソルを移動する
 				Dispatch.call(oSelection, "TypeBackspace");
@@ -594,7 +551,7 @@ public class LongStyleManager {
 			return;
 		} else if (longStyle.equals("【注意】【注意】")) {
 			if (iText.getText().equals("▼注意")) {
-				writeNoteParts(oSelection, 0, MillimetersToPoints_136_9);
+				writeNoteParts(oSelection, 0, 136.9 * MM);
 			} else { // iText.getText().equals("▲")
 				// 不要な改行を削除し、表の次の行にカーソルを移動する
 				Dispatch.call(oSelection, "TypeBackspace");
@@ -602,19 +559,17 @@ public class LongStyleManager {
 			}
 			return;
 		} else if (longStyle.equals("【画面】【画面】")) {
-			Dispatch oDocument = Dispatch.call(oSelection, "Document")
-					.toDispatch();
+			Dispatch oDocument = Dispatch.call(oSelection, "Document").toDispatch();
 			Dispatch oTables = Dispatch.call(oDocument, "Tables").toDispatch();
 			Variant oRange = Dispatch.call(oSelection, "Range");
-			Dispatch oTable = Dispatch.call(oTables, "Add", oRange, 1, 1)
-					.toDispatch();
+			Dispatch oTable = Dispatch.call(oTables, "Add", oRange, 1, 1).toDispatch();
 
 			Dispatch oCell = Dispatch.call(oTable, "Cell", 1, 1).getDispatch();
-			setCellWidth(oCell, MillimetersToPoints_148);
+			setCellWidth(oCell, 148 * MM);
 
 			// 左端からのインデント
 			Dispatch oRows = Dispatch.get(oTable, "Rows").toDispatch();
-			Dispatch.put(oRows, "LeftIndent", MillimetersToPoints_2);
+			Dispatch.put(oRows, "LeftIndent", 2 * MM);
 
 			// 罫線
 			for (int i = -4; i <= -1; i++) {
@@ -622,32 +577,28 @@ public class LongStyleManager {
 				/* -2:wdBorderLeft */
 				/* -3:wdBorderBottom */
 				/* -4:wdBorderRight */
-				Dispatch oBorder = Dispatch.call(oTable, "Borders", i)
-						.toDispatch();
+				Dispatch oBorder = Dispatch.call(oTable, "Borders", i).toDispatch();
 				Dispatch.put(oBorder, "LineStyle", 1 /* wdLineStyleSingle */);
 			}
 
 			// 余白
-			Dispatch.put(oTable, "TopPadding", MillimetersToPoints_2);
-			Dispatch.put(oTable, "BottomPadding", MillimetersToPoints_2);
-			Dispatch.put(oTable, "LeftPadding", MillimetersToPoints_2);
-			Dispatch.put(oTable, "RightPadding", MillimetersToPoints_2);
+			Dispatch.put(oTable, "TopPadding", 2 * MM);
+			Dispatch.put(oTable, "BottomPadding", 2 * MM);
+			Dispatch.put(oTable, "LeftPadding", 2 * MM);
+			Dispatch.put(oTable, "RightPadding", 2 * MM);
 
 			Dispatch.call(oCell, "Select");
-			Dispatch oInlineShapes = Dispatch.get(oSelection, "InlineShapes")
-					.toDispatch();
+			Dispatch oInlineShapes = Dispatch.get(oSelection, "InlineShapes").toDispatch();
 			Pattern p = Pattern.compile("^<img src=\"([^\"]+)");
 			Matcher matcher = p.matcher(iText.getText());
 			matcher.find();
 			try {
-				Dispatch.call(oInlineShapes, "AddPicture", Tx2xOptions
-						.getInstance().getString("tx2x_folder_name")
-						+ "\\"
-						+ matcher.group(1), "False", "True");
+				Dispatch.call(oInlineShapes, "AddPicture",
+						Tx2xOptions.getInstance().getString("tx2x_folder_name") + "\\" + matcher.group(1), "False",
+						"True");
 			} catch (ComFailException e) {
-				System.out.println("---------- error ----------\n"
-						+ e.getLocalizedMessage() + "ファイル名：" + matcher.group(1)
-						+ "\n---------------------------");
+				System.out.println("---------- error ----------\n" + e.getLocalizedMessage() + "ファイル名："
+						+ matcher.group(1) + "\n---------------------------");
 			}
 
 			try { // Wordの更新を待つ
@@ -656,8 +607,7 @@ public class LongStyleManager {
 				e.printStackTrace();
 			}
 
-			Dispatch oParagraphFormat = Dispatch.get(oSelection,
-					"ParagraphFormat").toDispatch();
+			Dispatch oParagraphFormat = Dispatch.get(oSelection, "ParagraphFormat").toDispatch();
 			Dispatch.put(oParagraphFormat, "Alignment", 1 /* wdAlignParagraphCenter */);
 			Dispatch.call(oSelection, "MoveDown"); // 下へ移動（カーソルを立てる）
 			return;
@@ -681,34 +631,29 @@ public class LongStyleManager {
 			return;
 		} else if (longStyle.equals("【箇条書き・】【箇条書き・】")) {
 			Dispatch.put(oSelection, "Style", sWordStyle);
-			Dispatch.put(oSelection, "Text",
-					iText.getText().replaceFirst("^・", "●"));
+			Dispatch.put(oSelection, "Text", iText.getText().replaceFirst("^・", "●"));
 			Dispatch.call(oSelection, "EndKey", 5 /* wdLine */); // 行末へ移動
 			Dispatch.call(oSelection, "TypeParagraph"); // 改行
 			return;
 		} else if (longStyle.equals("【1.】【1.】【箇条書き・】【箇条書き・】")) {
 			Dispatch.put(oSelection, "Style", sWordStyle);
-			Dispatch.put(oSelection, "Text",
-					iText.getText().replaceFirst("^・", "●"));
+			Dispatch.put(oSelection, "Text", iText.getText().replaceFirst("^・", "●"));
 			Dispatch.call(oSelection, "EndKey", 5 /* wdLine */); // 行末へ移動
 			Dispatch.call(oSelection, "TypeParagraph"); // 改行
 			return;
 		} else if (longStyle.equals("【ヒント】【箇条書き・】【箇条書き・】")) {
 			Dispatch.put(oSelection, "Style", sWordStyle);
-			Dispatch.put(oSelection, "Text",
-					iText.getText().replaceFirst("^・", "●"));
+			Dispatch.put(oSelection, "Text", iText.getText().replaceFirst("^・", "●"));
 			Dispatch.call(oSelection, "EndKey", 5 /* wdLine */); // 行末へ移動
 			Dispatch.call(oSelection, "TypeParagraph"); // 改行
 			return;
 		} else if (longStyle.equals("【――】【――】")) {
 			Dispatch.put(oSelection, "Style", sWordStyle);
-			Dispatch.put(oSelection, "Text",
-					iText.getText().replaceFirst("^-+\t", "―― "));
+			Dispatch.put(oSelection, "Text", iText.getText().replaceFirst("^-+\t", "―― "));
 			Dispatch.call(oSelection, "EndKey", 5 /* wdLine */); // 行末へ移動
 			Dispatch.call(oSelection, "TypeParagraph"); // 改行
 			return;
-		} else if (longStyle.equals("【節】【節】") || longStyle.equals("【項】【項】")
-				|| longStyle.equals("【章】【章】")) {
+		} else if (longStyle.equals("【節】【節】") || longStyle.equals("【項】【項】") || longStyle.equals("【章】【章】")) {
 			iText.setText(iText.getText().replaceFirst("【.】", ""));
 		}
 
@@ -725,8 +670,7 @@ public class LongStyleManager {
 
 		if (m_sPrevLongStyle.equals("【HACK】【HACK】")) {
 			Dispatch.call(oSelection, "MoveDown"); // 下へ移動
-		} else if (m_sCurrentLongStyle.equals("【表】【行】【セル：ヘッダー】【本文】")
-				|| m_sCurrentLongStyle.equals("【表】【行】【セル】【本文】")) {
+		} else if (m_sCurrentLongStyle.equals("【表】【行】【セル：ヘッダー】【本文】") || m_sCurrentLongStyle.equals("【表】【行】【セル】【本文】")) {
 			// Dispatch.call(oSelection, "MoveDown"); // 下へ移動
 		} else {
 			Dispatch.call(oSelection, "TypeParagraph"); // 改行
@@ -737,8 +681,7 @@ public class LongStyleManager {
 		Dispatch oDocument = Dispatch.call(oSelection, "Document").toDispatch();
 		Dispatch oTables = Dispatch.call(oDocument, "Tables").toDispatch();
 		Variant oRange = Dispatch.call(oSelection, "Range");
-		Dispatch oTable = Dispatch.call(oTables, "Add", oRange, 1, 2)
-				.toDispatch();
+		Dispatch oTable = Dispatch.call(oTables, "Add", oRange, 1, 2).toDispatch();
 
 		// 左端からのインデント
 		Dispatch oRows = Dispatch.get(oTable, "Rows").toDispatch();
@@ -746,30 +689,27 @@ public class LongStyleManager {
 
 		// ヒントアイコン
 		Dispatch oCell = Dispatch.call(oTable, "Cell", 1, 1).getDispatch();
-		setCellWidth(oCell, MillimetersToPoints_15);
+		setCellWidth(oCell, 15 * MM);
 
 		Dispatch.call(oCell, "Select");
 		Dispatch.put(oSelection, "Style", "本文");
-		Dispatch oInlineShapes = Dispatch.get(oSelection, "InlineShapes")
-				.toDispatch();
-		Dispatch.call(oInlineShapes, "AddPicture", Tx2xOptions.getInstance()
-				.getString("tx2x_folder_name") + "\\hint.png", "False", "True");
+		Dispatch oInlineShapes = Dispatch.get(oSelection, "InlineShapes").toDispatch();
+		Dispatch.call(oInlineShapes, "AddPicture",
+				Tx2xOptions.getInstance().getString("tx2x_folder_name") + "\\hint.png", "False", "True");
 
 		// ヒント本文
 		oCell = Dispatch.call(oTable, "Cell", 1, 2).getDispatch();
-		setCellWidth(oCell, MillimetersToPoints_136_9 - dLeftIndent);
+		setCellWidth(oCell, 136.9 * MM - dLeftIndent);
 
 		Dispatch.call(oCell, "Select");
 		Dispatch.call(oSelection, "MoveLeft"); // 左へ移動（カーソルを立てる）
 	}
 
-	private void writeNoteParts(Dispatch oSelection, double dLeftIndent,
-			double dBodyWidth) {
+	private void writeNoteParts(Dispatch oSelection, double dLeftIndent, double dBodyWidth) {
 		Dispatch oDocument = Dispatch.call(oSelection, "Document").toDispatch();
 		Dispatch oTables = Dispatch.call(oDocument, "Tables").toDispatch();
 		Variant oRange = Dispatch.call(oSelection, "Range");
-		Dispatch oTable = Dispatch.call(oTables, "Add", oRange, 1, 2)
-				.toDispatch();
+		Dispatch oTable = Dispatch.call(oTables, "Add", oRange, 1, 2).toDispatch();
 
 		// 左端からのインデント
 		Dispatch oRows = Dispatch.get(oTable, "Rows").toDispatch();
@@ -777,18 +717,17 @@ public class LongStyleManager {
 
 		// ヒントアイコン
 		Dispatch oCell = Dispatch.call(oTable, "Cell", 1, 1).getDispatch();
-		setCellWidth(oCell, MillimetersToPoints_15);
+		setCellWidth(oCell, 15 * MM);
 
 		Dispatch.call(oCell, "Select");
 		Dispatch.put(oSelection, "Style", "本文");
-		Dispatch oInlineShapes = Dispatch.get(oSelection, "InlineShapes")
-				.toDispatch();
-		Dispatch.call(oInlineShapes, "AddPicture", Tx2xOptions.getInstance()
-				.getString("tx2x_folder_name") + "\\note.png", "False", "True");
+		Dispatch oInlineShapes = Dispatch.get(oSelection, "InlineShapes").toDispatch();
+		Dispatch.call(oInlineShapes, "AddPicture",
+				Tx2xOptions.getInstance().getString("tx2x_folder_name") + "\\note.png", "False", "True");
 
 		// ヒント本文
 		oCell = Dispatch.call(oTable, "Cell", 1, 2).getDispatch();
-		setCellWidth(oCell, MillimetersToPoints_136_9 - dLeftIndent);
+		setCellWidth(oCell, 136.9 * MM - dLeftIndent);
 
 		Dispatch.call(oCell, "Select");
 		Dispatch.call(oSelection, "MoveLeft"); // 左へ移動（カーソルを立てる）
