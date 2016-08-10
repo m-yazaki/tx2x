@@ -3,12 +3,6 @@
  */
 package tx2x;
 
-import java.io.File;
-import java.io.IOException;
-
-import tx2x.indesign.ConvertToInDesign;
-import tx2x.word.ConvertToWord;
-
 public class Tx2x {
 	private static String m_sWarn = "";
 
@@ -37,61 +31,7 @@ public class Tx2x {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		/*
-		 * コマンドライン引数の処理
-		 */
-		for (int i = 0; i < args.length; i++) {
-			String sLowerCaseOption = args[i].toLowerCase();
-			if ("-debug".equals(sLowerCaseOption)) {
-				Tx2xOptions.getInstance().setOption("debug", true);
-			} else if ("-word".equals(sLowerCaseOption)) {
-				Tx2xOptions.getInstance().setOption("mode", "Word");
-			} else if ("-visible".equals(sLowerCaseOption)) {
-				Tx2xOptions.getInstance().setOption("Visible", true);
-			} else if ("-invisible".equals(sLowerCaseOption)) {
-				Tx2xOptions.getInstance().setOption("Visible", false);
-			} else if ("-indesign-mac".equals(sLowerCaseOption)) {
-				Tx2xOptions.getInstance().setOption("mode", "InDesign-Macintosh");
-			} else {
-				File temp = new File(args[i]);
-				if (temp.exists()) {
-					Tx2xOptions.getInstance().setOption("tx2x_folder_file_name", args[i]);
-				}
-			}
-		}
-
-		initialize();
-
-		Converter cConverter;
-		if (Tx2xOptions.getInstance().getString("mode").equals("Word")) {
-			cConverter = new ConvertToWord();
-		} else {
-			cConverter = new ConvertToInDesign();
-		}
-		File cFile = new File(Tx2xOptions.getInstance().getString("tx2x_folder_file_name"));
-		if (cFile.exists()) {
-			IgnoreFile cIgnoreFile = IgnoreFile.getInstance();
-			if (cFile.isDirectory()) {
-				Tx2xOptions.getInstance().setOption("tx2x_folder_name", cFile.getAbsolutePath());
-				cIgnoreFile.setIgnoreFiles(new File(cFile.getAbsolutePath() + File.separator + "tx2x.ignore"));
-			}
-			try {
-				cConverter.parse_filesystem(cFile);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		} else {
-			Tx2x.appendWarn("変換対象のファイルが見つかりません。：" + cFile.getAbsolutePath());
-		}
-
-		// メッセージ出力
-		String message = "-整形終了-" + Tx2x.getMessageCRLF();
-		String warn = Tx2x.getWarn();
-		if (warn.length() > 0) {
-			message += warn;
-		}
-		System.out.println(message);
-		initialize();
+		Tx2xGUI frame = new Tx2xGUI();
 	}
 
 	/**
