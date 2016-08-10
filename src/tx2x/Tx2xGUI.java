@@ -16,6 +16,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.TransferHandler;
@@ -105,7 +106,7 @@ public class Tx2xGUI implements ActionListener {
 		frame.add(panel_mode);
 		JLabel label_mode = new JLabel("MODE: ");
 		panel_mode.add(label_mode);
-		String[] combo_data = { "Word（表示）", "Word（非表示）", "InDesign（Mac）", "InDesign（Windows）", "HTML" };
+		String[] combo_data = { "Word（表示）", "Word（非表示）", "InDesign（Windows）", "HTML" };
 		combo_mode = new JComboBox<String>(combo_data);
 		panel_mode.add(combo_mode);
 
@@ -146,13 +147,16 @@ public class Tx2xGUI implements ActionListener {
 				Tx2xOptions.getInstance().setOption("mode", "HTML");
 			}
 			if (text_file.getText().equals("")) {
-				Tx2x.appendWarn("変換対象のファイルを指定してください。");
+				JOptionPane.showMessageDialog(frame, "変換対象のファイルを指定してください。");
 				return;
 			}
 
 			File temp = new File(text_file.getText());
 			if (temp.exists()) {
 				Tx2xOptions.getInstance().setOption("tx2x_folder_file_name", text_file.getText());
+			} else {
+				JOptionPane.showMessageDialog(frame, "変換対象のファイルが見つかりません。：" + temp.getAbsolutePath());
+				return;
 			}
 
 			Converter cConverter;
@@ -175,8 +179,6 @@ public class Tx2xGUI implements ActionListener {
 				} catch (IOException e2) {
 					e2.printStackTrace();
 				}
-			} else {
-				Tx2x.appendWarn("変換対象のファイルが見つかりません。：" + cFile.getAbsolutePath());
 			}
 
 			// メッセージ出力
