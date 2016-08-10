@@ -80,6 +80,8 @@ public class Tx2x {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+		} else {
+			Tx2x.appendWarn("変換対象のファイルが見つかりません。：" + cFile.getAbsolutePath());
 		}
 
 		// メッセージ出力
