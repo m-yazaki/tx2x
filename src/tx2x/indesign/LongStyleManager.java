@@ -247,11 +247,9 @@ public class LongStyleManager {
 				Pattern pattern = Pattern.compile("操作([０-９]+)");
 				Matcher matcher = pattern.matcher(text);
 				if (matcher.find()) {
-					text = matcher
-							.replaceFirst(
-									"操作<2009><CharStyle:step\\\\_number02><cOTFContAlt:0><cOTFeatureList:nalt\\\\,7>"
-											+ zenkakuNumberToHankakuNumber(matcher.group(
-													1))
+					text = matcher.replaceFirst(
+							"操作<2009><CharStyle:step\\\\_number02><cOTFContAlt:0><cOTFeatureList:nalt\\\\,7>"
+									+ zenkakuNumberToHankakuNumber(matcher.group(1))
 									+ "<cOTFContAlt:><cOTFeatureList:><cOTFContAlt:0><2009><cOTFContAlt:><CharStyle:>");
 				}
 			}
@@ -261,11 +259,23 @@ public class LongStyleManager {
 			iText.setText(text);
 		}
 
+		// 直前が【HACK】【HACK】【本文】【本文】で、現在が【HACK】【HACK】【で始まらない場合
+		String ret = "";
+		if (m_sPrevLongStyle.equals("【HACK】【HACK】【本文】【本文】") && longStyle.startsWith("【HACK】【HACK】【") == false) {
+			ret = ret
+					+ "<CellEnd:><RowEnd:><RowStart:<tRowAttrHeight:3><tRowAttrMinRowSize:3><tRowAttrMaxRowSize:566.9291338582677>><CellStyle:\\[None\\]><StylePriority:0><CellStart:1,1<tCellAttrLeftInset:0><tCellAttrTopInset:0><tCellAttrRightInset:0><tCellAttrBottomInset:0><tCellFillColor:None><tCellAttrLeftStrokeWeight:0><tCellAttrRightStrokeWeight:0.7086614173228347><tCellAttrTopStrokeWeight:0><tCellAttrBottomStrokeWeight:0><tCellLeftStrokeColor:Black><tCellTopStrokeColor:Black><tCellRightStrokeColor:Black><tCellBottomStrokeColor:Black><tcLeftStrokeType:None><tcRightStrokeType:None><tcTopStrokeType:None><tcBottomStrokeType:None><tTextCellVerticalJustification:1><tCellAttrLeftStrokeTint:100><tCellAttrRightStrokeTint:100><tCellAttrTopStrokeTint:100><tCellAttrBottomStrokeTint:100><tCellLeftStrokeOverprint:0><tCellRightStrokeOverprint:0><tCellTopStrokeOverprint:0><tCellBottomStrokeOverprint:0><tCellLeftStrokeGapTint:100><tCellRightStrokeGapTint:100><tCellTopStrokeGapTint:100><tCellBottomStrokeGapTint:100><tCellLeftStrokeGapColor:Paper><tCellRightStrokeGapColor:Paper><tCellTopStrokeGapColor:Paper><tCellBottomStrokeGapColor:Paper>><ParaStyle:最小段落> <CellEnd:><CellStyle:\\[None\\]><StylePriority:0><CellStart:1,1<tCellAttrTopInset:2><tCellAttrBottomInset:2><tCellAttrLeftStrokeWeight:0.7086614173228347><tCellAttrRightStrokeWeight:0><tCellAttrTopStrokeWeight:0><tCellAttrBottomStrokeWeight:0><tCellLeftStrokeColor:Black><tCellTopStrokeColor:Black><tCellRightStrokeColor:Black><tCellBottomStrokeColor:Black><tcLeftStrokeType:None><tcRightStrokeType:None><tcTopStrokeType:None><tcBottomStrokeType:None><tCellAttrLeftStrokeTint:100><tCellAttrRightStrokeTint:100><tCellAttrTopStrokeTint:100><tCellAttrBottomStrokeTint:100><tCellLeftStrokeOverprint:0><tCellRightStrokeOverprint:0><tCellTopStrokeOverprint:0><tCellBottomStrokeOverprint:0><tCellLeftStrokeGapTint:100><tCellRightStrokeGapTint:100><tCellTopStrokeGapTint:100><tCellBottomStrokeGapTint:100><tCellLeftStrokeGapColor:Paper><tCellRightStrokeGapColor:Paper><tCellTopStrokeGapColor:Paper><tCellBottomStrokeGapColor:Paper><tPageItemCellAttrLeftInset:0><tPageItemCellAttrTopInset:0><tPageItemCellAttrRightInset:0><tPageItemCellAttrBottomInset:0>><CellEnd:><RowEnd:><TableEnd:>"
+					+ Tx2x.getTaggedTextCRLF(m_bMac);
+		}
+
 		// 標準的なチェック（それぞれ独立しているので順不同）
 
 		if (longStyle.equals("【章】【章】") || longStyle.equals("【付録】【章】【章】")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:大見出し>";
+		}
+		if (longStyle.equals("【章サブ】【章サブ】")) {
+			m_sPrevLongStyle = longStyle;
+			return "<ParaStyle:大見出しサブ>";
 		}
 
 		if (longStyle.equals("【節】【節】")) {
@@ -275,7 +285,6 @@ public class LongStyleManager {
 		}
 
 		if (longStyle.equals("【項】【項】") || longStyle.equals("【安全上のご注意】【項】【項】") || longStyle.equals("【付録】【項】【項】")) {
-			String ret = "";
 			iText.setText(iText.getText().substring(3)); // 【節】を削除するつもり
 			// if (iText.getText().equals("フォトサイズを設定する"))
 			// System.out.println("!");
@@ -289,7 +298,6 @@ public class LongStyleManager {
 		}
 
 		if (longStyle.equals("【項2】【項2】")) {
-			String ret = "";
 			iText.setText(iText.getText().substring(4)); // 【節2】を削除するつもり
 			ret += "<ParaStyle:head04\\_2line>";
 			m_sPrevLongStyle = longStyle;
@@ -298,7 +306,6 @@ public class LongStyleManager {
 
 		if (longStyle.equals("【項下】【項下】") || longStyle.equals("【安全上のご注意】【項下】【項下】") || longStyle.equals("【付録】【項下】【項下】")
 				|| longStyle.equals("【付録】【利用許諾】【項下】【項下】")) {
-			String ret = "";
 			iText.setText(iText.getText().substring(4)); // 【項下】を削除するつもり
 			if (m_sPrevLongStyle.equals("【手順】【手順】【本文】【本文】"))
 				ret = "<ParaStyle:head05\\_01>■	";
@@ -315,7 +322,7 @@ public class LongStyleManager {
 			text = text.replace("\\</b\\>", "<CharStyle:>");
 			iText.setText(text);
 			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:本文>";
+			return ret + "<ParaStyle:本文>";
 		}
 
 		if (longStyle.equals("【本文】【本文】【本文】【本文】")) {
@@ -433,7 +440,7 @@ public class LongStyleManager {
 
 		if (longStyle.equals("【画面】【画面】")) {
 			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:body00>";
+			return "<ParaStyle:画面>";
 		}
 
 		if (longStyle.equals("【箇条書き・】【箇条書き・】")) {
@@ -728,6 +735,7 @@ public class LongStyleManager {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:table-cap01>";
 		}
+
 		if (longStyle.equals("【メモ】【メモ】")) {
 			if (iText.getText().equals("▲")) {
 				iText.setText("");
@@ -797,7 +805,6 @@ public class LongStyleManager {
 
 			// 表組みにするか判断
 			// 手順の開始
-			String ret = "";
 
 			// 手順の場合はこの行を表組みにするか検討する
 			// System.out.println("この行を表組みにするか検討します。");
@@ -1120,7 +1127,6 @@ public class LongStyleManager {
 		}
 
 		if (longStyle.compareTo("【表】【行】【セル】【手順】【手順】") == 0 || longStyle.compareTo("【手順】【手順】【表】【行】【セル】【手順】【手順】") == 0) {
-			String ret;
 			String text = iText.getText();
 			if (text.matches("^０\t.*")) {
 				text = text.replaceFirst("^０\t", "");
@@ -1309,7 +1315,7 @@ public class LongStyleManager {
 
 		if (longStyle.compareTo("【1.】【1.】") == 0) {
 			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:body02>";
+			return "<ParaStyle:手順>";
 		}
 
 		if (longStyle.compareTo("【1.】【1.】【本文】【本文】") == 0) {
@@ -1373,6 +1379,82 @@ public class LongStyleManager {
 			return "<ParaStyle:ステップ>";
 		}
 
+		if (longStyle.equals("【ヒント】【ヒント】")) {
+			m_sPrevLongStyle = longStyle;
+			if (iText.getText().startsWith("▼")) {
+				iText.setText(null);
+				m_sPrevLongStyle = longStyle + "▼";
+				return "<ParaStyle:本文><TableStyle:\\[Basic Table\\]><TableStart:2,1:0:0<tCellDefaultCellType:Text><tOuterLeftStrokeWeight:1><tCellOuterLeftStrokeColor:C\\=80 M\\=44 Y\\=15 K\\=0><tOuterRightStrokeWeight:1><tCellOuterRightStrokeColor:C\\=80 M\\=44 Y\\=15 K\\=0><tOuterTopStrokeWeight:1><tCellOuterTopStrokeColor:C\\=80 M\\=44 Y\\=15 K\\=0><tOuterBottomStrokeWeight:1><tCellOuterBottomStrokeColor:C\\=80 M\\=44 Y\\=15 K\\=0><tOuterLeftStrokeTint:50><tOuterRightStrokeTint:50><tOuterTopStrokeTint:50><tOuterBottomStrokeTint:50>><ColStart:<tColAttrWidth:480.8897637793466>><RowStart:<tRowAttrHeight:12.015625><tRowAttrMinRowSize:9>><CellStyle:\\[None\\]><StylePriority:1><CellStart:1,1<tCellAttrLeftInset:2.834645669291339><tCellAttrTopInset:2><tCellAttrRightInset:2.834645669291339><tCellAttrBottomInset:2><tCellFillColor:C\\=80 M\\=44 Y\\=15 K\\=0><tCellAttrFillTint:50><tCellAttrBottomStrokeWeight:0><tCellBottomStrokeColor:Black><tcBottomStrokeType:Solid><tTextCellFirstLineOffset:1><tCellAttrBottomStrokeTint:100><tCellBottomStrokeOverprint:0><tCellBottomStrokeGapTint:100><tCellLeftStrokeGapColor:None><tCellRightStrokeGapColor:None><tCellTopStrokeGapColor:None><tCellBottomStrokeGapColor:None><tCellBottomStrokeGapOverprint:0>><ParaStyle:本文>ヒント<CellEnd:><RowEnd:><RowStart:<tRowAttrHeight:25.015625><tRowAttrMinRowSize:9>><CellStyle:\\[None\\]><StylePriority:1><CellStart:1,1<tCellAttrLeftInset:2.834645669291339><tCellAttrTopInset:4><tCellAttrRightInset:2.834645669291339><tCellAttrBottomInset:2><tCellAttrTopStrokeWeight:0><tCellTopStrokeColor:Black><tcTopStrokeType:Solid><tTextCellFirstLineOffset:1><tCellAttrTopStrokeTint:100><tCellTopStrokeOverprint:0><tCellTopStrokeGapTint:100><tCellLeftStrokeGapColor:None><tCellRightStrokeGapColor:None><tCellTopStrokeGapColor:None><tCellBottomStrokeGapColor:None><tCellTopStrokeGapOverprint:0>>";
+			} else {
+				iText.setText("");
+				m_sPrevLongStyle = longStyle + "▲";
+				return "<CellEnd:><RowEnd:><TableEnd:>";
+			}
+		}
+
+		if (longStyle.equals("【ヒント】【本文】")) {
+			m_sPrevLongStyle = longStyle;
+			return "<ParaStyle:ヒント本文>";
+		}
+
+		if (longStyle.equals("【注意】【注意】")) {
+			m_sPrevLongStyle = longStyle;
+			if (iText.getText().startsWith("▼")) {
+				iText.setText(null);
+				m_sPrevLongStyle = longStyle + "▼";
+				return "<ParaStyle:><cSize:9.000000><cFont:メイリオ><TableStyle:\\[Basic Table\\]><TableStart:2,1:0:0<tCellDefaultCellType:Text><tOuterLeftStrokeWeight:1><tCellOuterLeftStrokeColor:C\\=80 M\\=44 Y\\=15 K\\=0><tOuterRightStrokeWeight:1><tCellOuterRightStrokeColor:C\\=80 M\\=44 Y\\=15 K\\=0><tOuterTopStrokeWeight:1><tCellOuterTopStrokeColor:C\\=80 M\\=44 Y\\=15 K\\=0><tOuterBottomStrokeWeight:1><tCellOuterBottomStrokeColor:C\\=80 M\\=44 Y\\=15 K\\=0><tOuterLeftStrokeTint:50><tOuterRightStrokeTint:50><tOuterTopStrokeTint:50><tOuterBottomStrokeTint:50>><ColStart:<tColAttrWidth:480.8897637793466>><RowStart:<tRowAttrHeight:12.015625><tRowAttrMinRowSize:9>><CellStyle:\\[None\\]><StylePriority:1><CellStart:1,1<tCellAttrLeftInset:2.834645669291339><tCellAttrTopInset:2><tCellAttrRightInset:2.834645669291339><tCellAttrBottomInset:2><tCellFillColor:C\\=21 M\\=79 Y\\=100 K\\=0><tCellAttrFillTint:50><tCellAttrLeftStrokeWeight:1><tCellAttrRightStrokeWeight:1><tCellAttrTopStrokeWeight:1><tCellAttrBottomStrokeWeight:0><tCellLeftStrokeColor:C\\=21 M\\=79 Y\\=100 K\\=0><tCellTopStrokeColor:C\\=21 M\\=79 Y\\=100 K\\=0><tCellRightStrokeColor:C\\=21 M\\=79 Y\\=100 K\\=0><tCellBottomStrokeColor:Black><tcLeftStrokeType:Solid><tcRightStrokeType:Solid><tcTopStrokeType:Solid><tcBottomStrokeType:Solid><tTextCellFirstLineOffset:1><tCellAttrLeftStrokeTint:50><tCellAttrRightStrokeTint:50><tCellAttrTopStrokeTint:50><tCellAttrBottomStrokeTint:100><tCellLeftStrokeOverprint:0><tCellRightStrokeOverprint:0><tCellTopStrokeOverprint:0><tCellBottomStrokeOverprint:0><tCellLeftStrokeGapTint:100><tCellRightStrokeGapTint:100><tCellTopStrokeGapTint:100><tCellBottomStrokeGapTint:100><tCellLeftStrokeGapColor:None><tCellRightStrokeGapColor:None><tCellTopStrokeGapColor:None><tCellBottomStrokeGapColor:None><tCellLeftStrokeGapOverprint:0><tCellRightStrokeGapOverprint:0><tCellTopStrokeGapOverprint:0><tCellBottomStrokeGapOverprint:0>><ParaStyle:本文>注意<CellEnd:><RowEnd:><RowStart:<tRowAttrHeight:25.015625><tRowAttrMinRowSize:9>><CellStyle:\\[None\\]><StylePriority:1><CellStart:1,1<tCellAttrLeftInset:2.834645669291339><tCellAttrTopInset:4><tCellAttrRightInset:2.834645669291339><tCellAttrBottomInset:2><tCellAttrLeftStrokeWeight:1><tCellAttrRightStrokeWeight:1><tCellAttrTopStrokeWeight:0><tCellAttrBottomStrokeWeight:1><tCellLeftStrokeColor:C\\=21 M\\=79 Y\\=100 K\\=0><tCellTopStrokeColor:Black><tCellRightStrokeColor:C\\=21 M\\=79 Y\\=100 K\\=0><tCellBottomStrokeColor:C\\=21 M\\=79 Y\\=100 K\\=0><tcLeftStrokeType:Solid><tcRightStrokeType:Solid><tcTopStrokeType:Solid><tcBottomStrokeType:Solid><tTextCellFirstLineOffset:1><tCellAttrLeftStrokeTint:50><tCellAttrRightStrokeTint:50><tCellAttrTopStrokeTint:100><tCellAttrBottomStrokeTint:50><tCellLeftStrokeOverprint:0><tCellRightStrokeOverprint:0><tCellTopStrokeOverprint:0><tCellBottomStrokeOverprint:0><tCellLeftStrokeGapTint:100><tCellRightStrokeGapTint:100><tCellTopStrokeGapTint:100><tCellBottomStrokeGapTint:100><tCellLeftStrokeGapColor:None><tCellRightStrokeGapColor:None><tCellTopStrokeGapColor:None><tCellBottomStrokeGapColor:None><tCellLeftStrokeGapOverprint:0><tCellRightStrokeGapOverprint:0><tCellTopStrokeGapOverprint:0><tCellBottomStrokeGapOverprint:0>>";
+			} else {
+				iText.setText("");
+				m_sPrevLongStyle = longStyle + "▲";
+				return "<CellEnd:><RowEnd:><TableEnd:>";
+			}
+		}
+
+		if (longStyle.equals("【注意】【本文】")) {
+			m_sPrevLongStyle = longStyle;
+			return "<ParaStyle:注意本文>";
+		}
+
+		if (longStyle.equals("【HACK】【HACK】")) {
+			m_sPrevLongStyle = longStyle;
+			return "<ParaStyle:本文><TableStyle:\\[Basic Table\\]><TableStart:2,2:0:0<tCellDefaultCellType:Text><tOuterLeftStrokeWeight:0><tOuterLeftStrokeType:None><tOuterRightStrokeWeight:0><tOuterRightStrokeType:None><tOuterTopStrokeWeight:0><tOuterTopStrokeType:None><tOuterBottomStrokeWeight:0><tOuterBottomStrokeType:None>><ColStart:<tColAttrWidth:44.220472440763785>><ColStart:<tColAttrWidth:437.6692913385828>><RowStart:<tRowAttrHeight:44.22047244094489><tRowAttrMinRowSize:44.22047244094489><tRowAttrMaxRowSize:566.9291338582677>><CellStyle:\\[None\\]><StylePriority:0><CellStart:1,1<tCellFillColor:C\\=80 M\\=44 Y\\=15 K\\=0><tCellAttrLeftStrokeWeight:0><tCellAttrRightStrokeWeight:0.7086614173228347><tCellAttrTopStrokeWeight:0><tCellAttrBottomStrokeWeight:0><tCellLeftStrokeColor:Black><tCellTopStrokeColor:Black><tCellRightStrokeColor:Black><tCellBottomStrokeColor:Black><tcLeftStrokeType:None><tcRightStrokeType:None><tcTopStrokeType:None><tcBottomStrokeType:None><tTextCellVerticalJustification:1><tCellAttrLeftStrokeTint:100><tCellAttrRightStrokeTint:100><tCellAttrTopStrokeTint:100><tCellAttrBottomStrokeTint:100><tCellLeftStrokeOverprint:0><tCellRightStrokeOverprint:0><tCellTopStrokeOverprint:0><tCellBottomStrokeOverprint:0><tCellLeftStrokeGapTint:100><tCellRightStrokeGapTint:100><tCellTopStrokeGapTint:100><tCellBottomStrokeGapTint:100><tCellLeftStrokeGapColor:Paper><tCellRightStrokeGapColor:Paper><tCellTopStrokeGapColor:Paper><tCellBottomStrokeGapColor:Paper>><ParaStyle:HACK><pTextAlignment:Center>HACK"
+					+ Tx2x.getTaggedTextCRLF(m_bMac)
+					+ "<pTextAlignment:><ParaStyle:HACK-No><pTextAlignment:Center>#1<pTextAlignment:><CellEnd:><CellStyle:\\[None\\]><StylePriority:0><CellStart:2,1<tCellAttrTopInset:2><tCellAttrBottomInset:2><tCellAttrLeftStrokeWeight:0.7086614173228347><tCellAttrRightStrokeWeight:0><tCellAttrTopStrokeWeight:0><tCellAttrBottomStrokeWeight:0><tCellLeftStrokeColor:Black><tCellTopStrokeColor:Black><tCellRightStrokeColor:Black><tCellBottomStrokeColor:Black><tcLeftStrokeType:None><tcRightStrokeType:None><tcTopStrokeType:None><tcBottomStrokeType:None><tCellAttrLeftStrokeTint:100><tCellAttrRightStrokeTint:100><tCellAttrTopStrokeTint:100><tCellAttrBottomStrokeTint:100><tCellLeftStrokeOverprint:0><tCellRightStrokeOverprint:0><tCellTopStrokeOverprint:0><tCellBottomStrokeOverprint:0><tCellLeftStrokeGapTint:100><tCellRightStrokeGapTint:100><tCellTopStrokeGapTint:100><tCellBottomStrokeGapTint:100><tCellLeftStrokeGapColor:Paper><tCellRightStrokeGapColor:Paper><tCellTopStrokeGapColor:Paper><tCellBottomStrokeGapColor:Paper><tPageItemCellAttrLeftInset:0><tPageItemCellAttrTopInset:0><tPageItemCellAttrRightInset:0><tPageItemCellAttrBottomInset:0>><ParaStyle:HACK-見出し>";
+		}
+
+		if (longStyle.equals("【HACK】【HACK】【本文】【本文】")) {
+			m_sPrevLongStyle = longStyle;
+			return "<ParaStyle:本文>";
+		}
+
+		if (longStyle.equals("【コード】【コード】")) {
+			m_sPrevLongStyle = longStyle;
+			if (iText.getText().startsWith("▼")) {
+				iText.setText(null);
+				m_sPrevLongStyle = longStyle + "▼";
+				return "<ParaStyle:本文><TableStyle:\\[Basic Table\\]><TableStart:1,1:0:0<tCellDefaultCellType:Text>><ColStart:<tColAttrWidth:481.1811023620236>><RowStart:<tRowAttrHeight:22.83464566929134>><CellStyle:\\[None\\]><StylePriority:0><CellStart:1,1<tCellFillColor:Black><tCellAttrFillTint:20>>";
+			} else {
+				iText.setText("");
+				m_sPrevLongStyle = longStyle + "▲";
+				return "<CellEnd:><RowEnd:><TableEnd:>";
+			}
+		}
+
+		if (longStyle.equals("【コード】【本文】")) {
+			m_sPrevLongStyle = longStyle;
+			return "<ParaStyle:コード>";
+		}
+
+		if (longStyle.equals("【コード】【コード】【本文】【本文】")) {
+			m_sPrevLongStyle = longStyle;
+			return "<ParaStyle:コード>    ";
+		}
+
+		if (longStyle.equals("【コード】【コード】【本文】【本文】【本文】【本文】")) {
+			m_sPrevLongStyle = longStyle;
+			return "<ParaStyle:コード>        ";
+		}
+
 		if (longStyle.equals("【別紙タイトル】【別紙タイトル】") || longStyle.equals("【安全上のご注意】【別紙タイトル】【別紙タイトル】")
 				|| longStyle.equals("【付録】【別紙タイトル】【別紙タイトル】") || longStyle.equals("【利用許諾】【別紙タイトル】【別紙タイトル】")) {
 			m_sStepCaption = "";
@@ -1403,7 +1485,6 @@ public class LongStyleManager {
 
 			// ページ番号を含んでいた場合は改ページ処理をする
 			int pageNum;
-			String ret = "";
 			try {
 				pageNum = Integer.parseInt(text) / 2;
 				pageNum *= 2;

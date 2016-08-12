@@ -18,3 +18,7 @@ file_out.docx
 build/tmp/jar/MANIFEST.MF
 .classpath
 doc/
+sample-text/word-demo/Test.docx
+sample-text/word-demo/Test.win.indesign.txt
+sample-text/word-demo/~$2xWordTemplate.dotx
+sample-text/word-demo/~$Test.docx

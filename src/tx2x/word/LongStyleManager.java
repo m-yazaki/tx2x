@@ -115,6 +115,10 @@ public class LongStyleManager {
 			return "本文";
 		}
 
+		if (m_sCurrentLongStyle.equals("【HACK】【HACK】【本文】【本文】")) {
+			return "本文";
+		}
+
 		if (m_sCurrentLongStyle.equals("【箇条書き・】【箇条書き・】")) {
 			return "箇条書き";
 		}
