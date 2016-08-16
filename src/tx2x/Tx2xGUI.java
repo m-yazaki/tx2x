@@ -20,16 +20,21 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.TransferHandler;
-import javax.swing.TransferHandler.TransferSupport;
 
 import tx2x.indesign.ConvertToInDesign;
 import tx2x.word.ConvertToWord;
+import tx2x.xhtml.ConvertToXHTML;
 
 public class Tx2xGUI implements ActionListener {
 	/**
 	 * ドロップ操作の処理を行うクラス
 	 */
 	private class DropFileHandler extends TransferHandler {
+
+		/**
+		 *
+		 */
+		private static final long serialVersionUID = 1L;
 
 		/**
 		 * ドロップされたものを受け取るか判断 (ファイルのときだけ受け取る)
@@ -106,7 +111,7 @@ public class Tx2xGUI implements ActionListener {
 		frame.add(panel_mode);
 		JLabel label_mode = new JLabel("MODE: ");
 		panel_mode.add(label_mode);
-		String[] combo_data = { "InDesign（Windows）", "Word（表示）", "Word（非表示）", "HTML" };
+		String[] combo_data = { "HTML", "InDesign（Windows）", "Word（表示）", "Word（非表示）" };
 		combo_mode = new JComboBox<String>(combo_data);
 		panel_mode.add(combo_mode);
 
@@ -160,10 +165,17 @@ public class Tx2xGUI implements ActionListener {
 			}
 
 			Converter cConverter;
-			if (Tx2xOptions.getInstance().getString("mode").equals("Word")) {
+			String mode = Tx2xOptions.getInstance().getString("mode");
+			boolean bDebug = Tx2xOptions.getInstance().getBoolean("debug");
+			if (mode.equals("Word")) {
 				cConverter = new ConvertToWord();
-			} else {
+			} else if (mode.equals("InDesign-Windows")) {
 				cConverter = new ConvertToInDesign();
+			} else if (mode.equals("HTML")) {
+				cConverter = new ConvertToXHTML(bDebug);
+			} else {
+				JOptionPane.showMessageDialog(frame, "変換モードが不正です。");
+				return;
 			}
 			File cFile = new File(Tx2xOptions.getInstance().getString("tx2x_folder_file_name"));
 			if (cFile.exists()) {
