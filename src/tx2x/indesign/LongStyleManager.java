@@ -256,6 +256,14 @@ public class LongStyleManager {
 
 			text = text.replace("★ここまでインデント★", KOKOMADE_INDENT_CHAR);
 
+			{
+				if (text.matches("(\\\\<img src=\"[^\"]+\" ?/?\\\\>)")) {
+					text = text.replaceAll("(\\\\<img src=\"[^\"]+\" ?/?\\\\>)", "★★★$1★★★");
+				} else {
+					text = text.replaceAll("(\\\\<img src=\"[^\"]+\")( ?/?\\\\>)", "★★★$1 inline=\"yes\"$2★★★");
+				}
+			}
+
 			iText.setText(text);
 		}
 
@@ -271,6 +279,7 @@ public class LongStyleManager {
 
 		if (longStyle.equals("【章】【章】") || longStyle.equals("【付録】【章】【章】")) {
 			m_sPrevLongStyle = longStyle;
+			iText.setText(iText.getText().replaceFirst("【章】", ""));
 			return "<ParaStyle:大見出し>";
 		}
 		if (longStyle.equals("【章サブ】【章サブ】")) {
@@ -279,38 +288,20 @@ public class LongStyleManager {
 		}
 
 		if (longStyle.equals("【節】【節】")) {
-			iText.setText(iText.getText().substring(3)); // 【節】を削除するつもり
 			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:小見出し>";
+			iText.setText(iText.getText().replaceFirst("【節】", ""));
+			return "<ParaStyle:中見出し>";
 		}
 
 		if (longStyle.equals("【項】【項】") || longStyle.equals("【安全上のご注意】【項】【項】") || longStyle.equals("【付録】【項】【項】")) {
-			iText.setText(iText.getText().substring(3)); // 【節】を削除するつもり
-			// if (iText.getText().equals("フォトサイズを設定する"))
-			// System.out.println("!");
-			if (m_sPrevLongStyle.equals("【memo】【memo】▲")) {
-				ret += "<ParaStyle:head04\\_01>";
-			} else {
-				ret += "<ParaStyle:head04>";
-			}
 			m_sPrevLongStyle = longStyle;
-			return ret;
-		}
-
-		if (longStyle.equals("【項2】【項2】")) {
-			iText.setText(iText.getText().substring(4)); // 【節2】を削除するつもり
-			ret += "<ParaStyle:head04\\_2line>";
-			m_sPrevLongStyle = longStyle;
-			return ret;
+			iText.setText(iText.getText().replaceFirst("【項】", ""));
+			return "<ParaStyle:小見出し>";
 		}
 
 		if (longStyle.equals("【項下】【項下】") || longStyle.equals("【安全上のご注意】【項下】【項下】") || longStyle.equals("【付録】【項下】【項下】")
 				|| longStyle.equals("【付録】【利用許諾】【項下】【項下】")) {
 			iText.setText(iText.getText().substring(4)); // 【項下】を削除するつもり
-			if (m_sPrevLongStyle.equals("【手順】【手順】【本文】【本文】"))
-				ret = "<ParaStyle:head05\\_01>■	";
-			else
-				ret = "<ParaStyle:head05>■	";
 			m_sPrevLongStyle = longStyle;
 			return ret;
 		}
@@ -325,119 +316,6 @@ public class LongStyleManager {
 			return ret + "<ParaStyle:本文>";
 		}
 
-		if (longStyle.equals("【本文】【本文】【本文】【本文】")) {
-			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:body01>";
-		}
-
-		if (longStyle.equals("【利用許諾】【本文】") || longStyle.equals("【付録】【利用許諾】【本文】")) {
-			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:body03>";
-		}
-
-		if (longStyle.equals("【利用許諾】【手順分岐】【手順分岐】")) {
-			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:body03-Bold01>";
-		}
-
-		if (longStyle.compareTo("【安全上のご注意】【手順分岐】【手順分岐】") == 0) {
-			iText.setText("■\t" + iText.getText().substring(1));
-			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:body02-Bold01>";
-		}
-
-		if (longStyle.equals("【利用許諾】【利用許諾契約（1）】【利用許諾契約（1）】")) {
-			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:body03\\_b>";
-		}
-
-		if (longStyle.equals("【利用許諾】【以上】【以上】")) {
-			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:body03-center01>";
-		}
-
-		if (longStyle.equals("【付録】【利用許諾】【箇条書き・】【箇条書き・】")) {
-			String text = iText.getText();
-			text = text.replaceFirst("・", "•");
-			iText.setText(text);
-			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:body03\\_a>";
-		}
-
-		if (longStyle.equals("【付録】【利用許諾】【箇条書き・】【箇条書き・】【本文】【本文】")) {
-			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:body03\\_a>\t";
-		}
-
-		if (longStyle.equals("【付録】【利用許諾】【箇条書き・】【箇条書き・】【※】【※】")) {
-			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:cap04>";
-		}
-
-		if (longStyle.equals("【付録】【Eng】【本文】")) {
-			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:body\\_Eng00>";
-		}
-
-		if (longStyle.equals("【付録】【Eng】【箇条書き・】【箇条書き・】")) {
-			String text = iText.getText();
-			text = text.replaceFirst("・", "•");
-			iText.setText(text);
-			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:body\\_Eng01\\_01>";
-		}
-
-		if (longStyle.equals("【付録】【Eng】【箇条書き・】【箇条書き・】【本文】【本文】")) {
-			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:body\\_Eng01\\_01>\t";
-		}
-
-		if (longStyle.equals("【付録】【Eng】【表】【行】【セル】【本文】")) {
-			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:body\\_Eng00>";
-		}
-
-		if (longStyle.equals("【目次】【本文】")) {
-			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:contents-body01>";
-		}
-
-		if (longStyle.equals("【目次】【目次】【本文】【本文】")) {
-			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:contents-body02>";
-		}
-
-		if (longStyle.equals("【目次】【目次】【本文】【本文】【本文】【本文】")) {
-			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:contents-body03>";
-		}
-
-		if (longStyle.equals("【目次】【目次】【本文】【本文】【本文】【本文】【本文】【本文】")) {
-			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:contents-body04>";
-		}
-
-		if (longStyle.equals("【編目次】【本文】") || longStyle.equals("【付録】【編目次】【本文】")) {
-			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:HeadContents01>";
-		}
-
-		if (longStyle.equals("【編目次】【編目次】【本文】【本文】") || longStyle.equals("【安全上のご注意】【編目次】【編目次】【本文】【本文】")
-				|| longStyle.equals("【付録】【編目次】【編目次】【本文】【本文】")) {
-			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:HeadContents02>";
-		}
-
-		if (longStyle.equals("【付録】【索引】【本文】")) {
-			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:index-body01>";
-		}
-
-		if (longStyle.equals("【付録】【索引】【索引】【本文】【本文】")) {
-			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:index-body02>";
-		}
-
 		if (longStyle.equals("【画面】【画面】")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:画面>";
@@ -446,294 +324,38 @@ public class LongStyleManager {
 		if (longStyle.equals("【箇条書き・】【箇条書き・】")) {
 			String text = iText.getText();
 			text = text.replaceFirst("・", "•");
-			// <b></b>
-			text = text.replace("\\<b\\>", "<CharStyle:body-M>");
-			text = text.replace("\\</b\\>", "<CharStyle:>");
 			iText.setText(text);
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:バレット>";
 		}
 
-		if (longStyle.equals("【箇条書き・】【箇条書き・】【表】")) {
+		if (longStyle.equals("【箇条書き・】【箇条書き・】【コード】【コード】")) {
 			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:body01>";
-		}
-
-		if (longStyle.equals("【箇条書き・】【箇条書き・】【表】【行】【セル】【本文】")) {
-			m_sPrevLongStyle = longStyle;
-			String text = iText.getText();
-			if (text.matches(".*【中央揃え】.*")) {
-				iText.setText(text.replaceFirst("【中央揃え】", ""));
-				return "<ParaStyle:table-body01-center01>";
+			if (iText.getText().startsWith("▼")) {
+				iText.setText(null);
+				m_sPrevLongStyle = longStyle + "▼";
+				return "<ParaStyle:バレット補足><TableStyle:\\[Basic Table\\]><TableStart:1,1:0:0<tCellDefaultCellType:Text>><ColStart:<tColAttrWidth:471.1811023620237>><RowStart:<tRowAttrHeight:44.83464566929133>><CellStyle:\\[None\\]><StylePriority:2><CellStart:1,1<tCellFillColor:Black><tCellAttrFillTint:20>>";
 			} else {
-				return "<ParaStyle:table-body02>";
+				iText.setText("");
+				m_sPrevLongStyle = longStyle + "▲";
+				return "<CellEnd:><RowEnd:><TableEnd:>";
 			}
-		}
-
-		if (longStyle.equals("【箇条書き・】【箇条書き・】【表】【行】【セル：ヘッダー】【本文】")) {
-			m_sPrevLongStyle = longStyle;
-			String text = iText.getText();
-			if (text.matches(".*【中央揃え】.*")) {
-				iText.setText(text.replaceFirst("【中央揃え】", ""));
-				return "<ParaStyle:table-body01-center01>";
-			} else {
-				return "<ParaStyle:table-body02>";
-			}
-		}
-
-		if (longStyle.equals("【箇条書き・】【箇条書き・】【本文】【本文】") || longStyle.equals("【付録】【箇条書き・】【箇条書き・】【本文】【本文】")) {
-			String text = iText.getText();
-			// <b></b>
-			text = text.replace("\\<b\\>", "<CharStyle:body-M>");
-			text = text.replace("\\</b\\>", "<CharStyle:>");
-			iText.setText(text);
-			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:body01>\t";
-		}
-
-		if (longStyle.equals("【箇条書き・】【箇条書き・】【箇条書き・】【箇条書き・】") || longStyle.equals("【箇条書き・】【箇条書き・】【箇条書き－】【箇条書き－】")
-				|| longStyle.equals("【付録】【箇条書き・】【箇条書き・】【箇条書き－】【箇条書き－】")) {
-			String text = iText.getText();
-			text = text.replaceFirst("－", "-");
-			iText.setText(text);
-			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:body01\\_a>";
-		}
-
-		if (longStyle.equals("【箇条書き・】【箇条書き・】【※】【※】") || longStyle.equals("【付録】【箇条書き・】【箇条書き・】【※】【※】")) {
-			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:cap03>";
-		}
-
-		if (longStyle.equals("【箇条書き・】【箇条書き・】【※】【※】【本文】【本文】")
-				|| longStyle.equals("【付録】【箇条書き・】【箇条書き・】【※】【※】【本文】【本文】【本文】【本文】")) {
-			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:cap03>\t";
-		}
-
-		if (longStyle.equals("【*】【*】") || longStyle.equals("【付録】【*】【*】") || longStyle.equals("【付録】【Eng】【*】【*】")) {
-			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:cap01\\_a>";
-		}
-
-		if (longStyle.equals("【※】【※】") || longStyle.equals("【付録】【※】【※】")) {
-			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:cap01>";
-		}
-
-		if (longStyle.equals("【付録】【※・】【※・】")) {
-			iText.setText(iText.getText().substring(1)); // ※を削除するつもり
-			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:cap01>";
-		}
-
-		if (longStyle.equals("【※】【※】【本文】【本文】") || longStyle.equals("【付録】【※】【※】【本文】【本文】")
-				|| longStyle.equals("【付録】【※・】【※・】【本文】【本文】")) {
-			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:cap01>\t";
-		}
-
-		if (longStyle.equals("【※】【※】【箇条書き・】【箇条書き・】") || longStyle.equals("【付録】【※】【※】【箇条書き・】【箇条書き・】")) {
-			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:cap04>";
-		}
-
-		if (longStyle.equals("【※0】【※0】") || longStyle.equals("【安全上のご注意】【※0】【※0】") || longStyle.equals("【付録】【※0】【※0】")) {
-			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:cap01\\_a>";
-		}
-
-		if (longStyle.equals("【※0】【※0】【本文】【本文】") || longStyle.equals("【付録】【※0】【※0】【本文】【本文】")) {
-			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:cap01\\_a>\t";
 		}
 
 		if (longStyle.equals("【表】")) {
 			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:表\\:表>";
+			return "<ParaStyle:本文>";
 		}
 
 		if (longStyle.equals("【表】【行】【セル：ヘッダー】【本文】")) {
 			m_sPrevLongStyle = longStyle;
 			iText.setText(iText.getText().replace("【ヘッダー】", ""));
-			return "<ParaStyle:表\\:表ヘッダー>";
-		}
-
-		if (longStyle.equals("【付録】【表】【行】【セル：ヘッダー】【本文】")) {
-			m_sPrevLongStyle = longStyle;
-			String text = iText.getText();
-			if (text.matches(".*【中央揃え】.*")) {
-				iText.setText(text.replaceFirst("【中央揃え】", ""));
-				return "<ParaStyle:table-title02>";
-			} else {
-				return "<ParaStyle:table-body03>";
-			}
+			return "<ParaStyle:表ヘッダー>";
 		}
 
 		if (longStyle.equals("【表】【行】【セル】【本文】")) {
 			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:表\\:表本文>";
-		}
-
-		if (longStyle.equals("【安全上のご注意】【表】【行】【セル】【本文】")) {
-			m_sPrevLongStyle = longStyle;
-			String text = iText.getText();
-			if (text.matches(".*【中央揃え】.*")) {
-				iText.setText(text.replaceFirst("【中央揃え】", ""));
-				return "<ParaStyle:table-body03-center01>";
-			} else {
-				return "<ParaStyle:table-body04>";
-			}
-		}
-
-		if (longStyle.equals("【安全上のご注意】【表】【行】【セル：ヘッダー】【本文】")) {
-			m_sPrevLongStyle = longStyle;
-			String text = iText.getText();
-			if (text.matches(".*【中央揃え】.*")) {
-				iText.setText(text.replaceFirst("【中央揃え】", ""));
-				return "<ParaStyle:table-title02>";
-			} else {
-				return "<ParaStyle:table-body03>";
-			}
-		}
-
-		if (longStyle.equals("【安全上のご注意】【表】【行】【セル】【箇条書き・】【箇条書き・】")) {
-			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:table-body04\\_a>";
-		}
-
-		if (longStyle.equals("【安全上のご注意】【表】【行】【セル】【1.】【1.】")) {
-			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:table-body04\\_a>";
-		}
-
-		if (longStyle.equals("【安全上のご注意】【表】【行】【セル】【1.】【1.】【箇条書き・】【箇条書き・】")) {
-			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:table-body04\\_a-tab01>";
-		}
-
-		if (longStyle.equals("【安全上のご注意】【表】【行】【セル】【箇条書き●】【箇条書き●】")) {
-			iText.setText(iText.getText().replaceFirst("●", "<CharStyle:body_color01>●<CharStyle:>") + ""); // ●に色を付ける
-			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:table-body04\\_a>";
-		}
-
-		if (longStyle.equals("【安全上のご注意】【表】【行】【セル】【箇条書き●】【箇条書き●】【本文】【本文】")) {
-			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:table-body04\\_a>\t";
-		}
-
-		if (longStyle.equals("【安全上のご注意】【表】【行】【セル】【箇条書き●】【箇条書き●】【箇条書き・】【箇条書き・】")) {
-			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:table-body04\\_a-tab01>";
-		}
-
-		if (longStyle.equals("【安全上のご注意】【表】【行】【セル】【箇条書き●】【箇条書き●】【箇条書き－】【箇条書き－】")) {
-			m_sPrevLongStyle = longStyle;
-			iText.setText(iText.getText().replaceFirst("－", "<2212>") + "");
-			return "<ParaStyle:table-body04\\_a-tab01>";
-		}
-
-		if (longStyle.equals("【安全上のご注意】【表】【行】【セル】【箇条書き●】【箇条書き●】【※】【※】")) {
-			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:cap04>";
-		}
-
-		if (longStyle.equals("【安全上のご注意】【表】【行】【セル】【箇条書き●】【箇条書き●】【箇条書き・】【箇条書き・】【本文】【本文】")) {
-			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:table-body04\\_a-tab01>\t";
-		}
-
-		if (longStyle.equals("【安全上のご注意】【表】【行】【セル】【箇条書き●】【箇条書き●】【箇条書き・】【箇条書き・】【箇条書き－】【箇条書き－】")) {
-			m_sPrevLongStyle = longStyle;
-			iText.setText(iText.getText().replaceFirst("\t", KOKOMADE_INDENT_CHAR));
-			return "<ParaStyle:table-body04\\_a-tab01>\t";
-		}
-
-		if (longStyle.equals("【安全上のご注意】【表】【行】【セル】【箇条書き●】【箇条書き●】【1.】【1.】")) {
-			iText.setText(iText.getText().replaceFirst("\t", ""));
-			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:table-body04\\_a-tab01>";
-		}
-
-		if (longStyle.equals("【安全上のご注意】【表】【行】【セル】【※】【※】")) {
-			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:cap01>";
-		}
-
-		if (longStyle.equals("【付録】【表】【行】【セル】【本文】")) {
-			m_sPrevLongStyle = longStyle;
-			String text = iText.getText();
-			if (text.matches(".*【中央揃え】.*")) {
-				iText.setText(text.replaceFirst("【中央揃え】", ""));
-				return "<ParaStyle:table-body03-center01>";
-			} else {
-				return "<ParaStyle:table-body03>";
-			}
-		}
-
-		if (longStyle.compareTo("【付録】【表】【行】【セル】【箇条書き・】【箇条書き・】") == 0) {
-			String text = iText.getText();
-			text = text.replaceFirst("・", "•");
-			iText.setText(text);
-			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:table-body03\\_a>";
-		}
-
-		if (longStyle.compareTo("【付録】【表】【行】【セル】【箇条書き・】【箇条書き・】【本文】【本文】") == 0) {
-			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:table-body03\\_a>\t";
-		}
-
-		if (longStyle.compareTo("【付録】【表】【行】【セル】【※】【※】") == 0) {
-			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:table-body04\\_a>\t";
-		}
-
-		if (longStyle.compareTo("【表】【行】【セル】【参照】【参照】") == 0) {
-			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:table-body02\\_a>";
-		}
-
-		if (longStyle.equals("【表】【行】【セル】【箇条書き・】【箇条書き・】")) {
-			m_sPrevLongStyle = longStyle;
-			String text = iText.getText();
-			text = text.replaceFirst("・", "•");
-			iText.setText(text);
-			return "<ParaStyle:表\\:表バレット>";
-		}
-
-		if (longStyle.equals("【表】【行】【セル】【箇条書き・】【箇条書き・】【本文】【本文】")) {
-			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:table-body02\\_a>\t";
-		}
-
-		if (longStyle.compareTo("【表】【行】【セル】【※】【※】") == 0) {
-			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:cap01>";
-		}
-
-		if (longStyle.compareTo("【表】【行】【セル】【手順分岐】【手順分岐】") == 0) {
-			iText.setText("■\t" + iText.getText().substring(1));
-			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:table-body01-Bold01>";
-		}
-
-		if (longStyle.compareTo("【画面囲み】【画面】【画面】") == 0) {
-			m_sPrevLongStyle = longStyle;
-			// iText.setText(iText.getText()
-			// + IDTaggedTextGenerator4KDDI.getCRLF(m_bMac)
-			// + "<ParaStyle:space01>");
-			return "<ParaStyle:body00>" + Tx2x.getTaggedTextCRLF(m_bMac) + "<ParaStyle:body00>"
-					+ Tx2x.getTaggedTextCRLF(m_bMac) + "<ParaStyle:body00>" + Tx2x.getTaggedTextCRLF(m_bMac)
-					+ "<ParaStyle:body00>" + Tx2x.getTaggedTextCRLF(m_bMac) + "<ParaStyle:body00>"
-					+ Tx2x.getTaggedTextCRLF(m_bMac) + "<ParaStyle:body00>" + Tx2x.getTaggedTextCRLF(m_bMac)
-					+ "<ParaStyle:body00>" + Tx2x.getTaggedTextCRLF(m_bMac) + "<ParaStyle:body00>";
-		}
-
-		if (longStyle.compareTo("【画面囲み】【本文】") == 0) {
-			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:table-cap01>";
+			return "<ParaStyle:表本文>";
 		}
 
 		if (longStyle.equals("【メモ】【メモ】")) {
@@ -909,11 +531,6 @@ public class LongStyleManager {
 			m_sPrevStepCaption = m_sStepCaption;
 			m_sPrevLongStyle = longStyle;
 			return ret;
-		}
-
-		if (longStyle.equals("【手順】【手順】【本文】【本文】") || longStyle.equals("【手順】【手順】【画面】【画面】")) {
-			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:リスト補足>";
 		}
 
 		if (longStyle.equals("【手順】【手順】【箇条書き・】【箇条書き・】")) {
@@ -1320,12 +937,13 @@ public class LongStyleManager {
 
 		if (longStyle.compareTo("【1.】【1.】【本文】【本文】") == 0) {
 			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:body02>\t";
+			return "<ParaStyle:手順補足>";
 		}
 
 		if (longStyle.compareTo("【1.】【1.】【箇条書き・】【箇条書き・】") == 0) {
 			m_sPrevLongStyle = longStyle;
-			return "<ParaStyle:body02\\_a>";
+			iText.setText(iText.getText().replaceFirst("・", "•"));
+			return "<ParaStyle:手順バレット>";
 		}
 
 		if (longStyle.compareTo("【1.】【1.】【箇条書き・】【箇条書き・】【本文】【本文】") == 0) {
@@ -1366,6 +984,32 @@ public class LongStyleManager {
 			}
 		}
 
+		if (longStyle.equals("【1.】【1.】【コード】【コード】")) {
+			m_sPrevLongStyle = longStyle;
+			if (iText.getText().startsWith("▼")) {
+				iText.setText(null);
+				m_sPrevLongStyle = longStyle + "▼";
+				return "<ParaStyle:手順補足><TableStyle:\\[Basic Table\\]><TableStart:1,1:0:0<tCellDefaultCellType:Text>><ColStart:<tColAttrWidth:452.83464566911033>><RowStart:<tRowAttrHeight:11.83464566929134>><CellStyle:\\[None\\]><StylePriority:2><CellStart:1,1<tCellFillColor:Black><tCellAttrFillTint:20>>";
+			} else {
+				iText.setText("");
+				m_sPrevLongStyle = longStyle + "▲";
+				return "<CellEnd:><RowEnd:><TableEnd:>";
+			}
+		}
+
+		if (longStyle.equals("【1.】【1.】【ヒント】【ヒント】")) {
+			m_sPrevLongStyle = longStyle;
+			if (iText.getText().startsWith("▼")) {
+				iText.setText(null);
+				m_sPrevLongStyle = longStyle + "▼";
+				return "<ParaStyle:手順補足><TableStyle:\\[Basic Table\\]><TableStart:2,1:0:0<tCellDefaultCellType:Text><tOuterLeftStrokeWeight:1><tCellOuterLeftStrokeColor:C\\=80 M\\=44 Y\\=15 K\\=0><tOuterRightStrokeWeight:1><tCellOuterRightStrokeColor:C\\=80 M\\=44 Y\\=15 K\\=0><tOuterTopStrokeWeight:1><tCellOuterTopStrokeColor:C\\=80 M\\=44 Y\\=15 K\\=0><tOuterBottomStrokeWeight:1><tCellOuterBottomStrokeColor:C\\=80 M\\=44 Y\\=15 K\\=0><tOuterLeftStrokeTint:50><tOuterRightStrokeTint:50><tOuterTopStrokeTint:50><tOuterBottomStrokeTint:50>><ColStart:<tColAttrWidth:452.54330708643306>><RowStart:<tRowAttrHeight:12.015625><tRowAttrMinRowSize:9>><CellStyle:\\[None\\]><StylePriority:1><CellStart:1,1<tCellAttrLeftInset:2.834645669291339><tCellAttrTopInset:2><tCellAttrRightInset:2.834645669291339><tCellAttrBottomInset:2><tCellFillColor:C\\=80 M\\=44 Y\\=15 K\\=0><tCellAttrFillTint:50><tCellAttrBottomStrokeWeight:0><tCellBottomStrokeColor:Black><tcBottomStrokeType:Solid><tTextCellFirstLineOffset:1><tCellAttrBottomStrokeTint:100><tCellBottomStrokeOverprint:0><tCellBottomStrokeGapTint:100><tCellLeftStrokeGapColor:None><tCellRightStrokeGapColor:None><tCellTopStrokeGapColor:None><tCellBottomStrokeGapColor:None><tCellBottomStrokeGapOverprint:0>><ParaStyle:本文>ヒント<CellEnd:><RowEnd:><RowStart:<tRowAttrHeight:47.015625><tRowAttrMinRowSize:9>><CellStyle:\\[None\\]><StylePriority:1><CellStart:1,1<tCellAttrLeftInset:2.834645669291339><tCellAttrTopInset:4><tCellAttrRightInset:2.834645669291339><tCellAttrBottomInset:2><tCellAttrTopStrokeWeight:0><tCellTopStrokeColor:Black><tcTopStrokeType:Solid><tTextCellFirstLineOffset:1><tCellAttrTopStrokeTint:100><tCellTopStrokeOverprint:0><tCellTopStrokeGapTint:100><tCellLeftStrokeGapColor:None><tCellRightStrokeGapColor:None><tCellTopStrokeGapColor:None><tCellBottomStrokeGapColor:None><tCellTopStrokeGapOverprint:0>>";
+			} else {
+				iText.setText("");
+				m_sPrevLongStyle = longStyle + "▲";
+				return "<CellEnd:><RowEnd:><TableEnd:>";
+			}
+		}
+
 		if (longStyle.equals("【例：】【例：】")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:body02-Bold01\\_01>";
@@ -1392,9 +1036,28 @@ public class LongStyleManager {
 			}
 		}
 
-		if (longStyle.equals("【ヒント】【本文】")) {
+		if (longStyle.matches("(【1.】【1.】)?【ヒント】【本文】") == true) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:ヒント本文>";
+		}
+
+		if (longStyle.matches("(【ヒント】|【注意】)【コード】【コード】") == true) {
+			m_sPrevLongStyle = longStyle;
+			if (iText.getText().startsWith("▼")) {
+				iText.setText(null);
+				m_sPrevLongStyle = longStyle + "▼";
+				return "<ParaStyle:本文><TableStyle:\\[Basic Table\\]><TableStart:1,1:0:0<tCellDefaultCellType:Text>><ColStart:<tColAttrWidth:473.8478740157481>><RowStart:<tRowAttrHeight:11.83464566929134>><CellStyle:\\[None\\]><StylePriority:2><CellStart:1,1<tCellFillColor:Black><tCellAttrFillTint:20>>";
+			} else {
+				iText.setText("");
+				m_sPrevLongStyle = longStyle + "▲";
+				return "<CellEnd:><RowEnd:><TableEnd:>";
+			}
+		}
+
+		if (longStyle.equals("【ヒント】【箇条書き・】【箇条書き・】")) {
+			iText.setText(iText.getText().replaceFirst("・", "•"));
+			m_sPrevLongStyle = longStyle;
+			return "<ParaStyle:ヒント-バレット>";
 		}
 
 		if (longStyle.equals("【注意】【注意】")) {
@@ -1417,6 +1080,7 @@ public class LongStyleManager {
 
 		if (longStyle.equals("【HACK】【HACK】")) {
 			m_sPrevLongStyle = longStyle;
+			iText.setText(iText.getText().replaceFirst("【HACK[^】]+】", ""));
 			return "<ParaStyle:本文><TableStyle:\\[Basic Table\\]><TableStart:2,2:0:0<tCellDefaultCellType:Text><tOuterLeftStrokeWeight:0><tOuterLeftStrokeType:None><tOuterRightStrokeWeight:0><tOuterRightStrokeType:None><tOuterTopStrokeWeight:0><tOuterTopStrokeType:None><tOuterBottomStrokeWeight:0><tOuterBottomStrokeType:None>><ColStart:<tColAttrWidth:44.220472440763785>><ColStart:<tColAttrWidth:437.6692913385828>><RowStart:<tRowAttrHeight:44.22047244094489><tRowAttrMinRowSize:44.22047244094489><tRowAttrMaxRowSize:566.9291338582677>><CellStyle:\\[None\\]><StylePriority:0><CellStart:1,1<tCellFillColor:C\\=80 M\\=44 Y\\=15 K\\=0><tCellAttrLeftStrokeWeight:0><tCellAttrRightStrokeWeight:0.7086614173228347><tCellAttrTopStrokeWeight:0><tCellAttrBottomStrokeWeight:0><tCellLeftStrokeColor:Black><tCellTopStrokeColor:Black><tCellRightStrokeColor:Black><tCellBottomStrokeColor:Black><tcLeftStrokeType:None><tcRightStrokeType:None><tcTopStrokeType:None><tcBottomStrokeType:None><tTextCellVerticalJustification:1><tCellAttrLeftStrokeTint:100><tCellAttrRightStrokeTint:100><tCellAttrTopStrokeTint:100><tCellAttrBottomStrokeTint:100><tCellLeftStrokeOverprint:0><tCellRightStrokeOverprint:0><tCellTopStrokeOverprint:0><tCellBottomStrokeOverprint:0><tCellLeftStrokeGapTint:100><tCellRightStrokeGapTint:100><tCellTopStrokeGapTint:100><tCellBottomStrokeGapTint:100><tCellLeftStrokeGapColor:Paper><tCellRightStrokeGapColor:Paper><tCellTopStrokeGapColor:Paper><tCellBottomStrokeGapColor:Paper>><ParaStyle:HACK><pTextAlignment:Center>HACK"
 					+ Tx2x.getTaggedTextCRLF(m_bMac)
 					+ "<pTextAlignment:><ParaStyle:HACK-No><pTextAlignment:Center>#1<pTextAlignment:><CellEnd:><CellStyle:\\[None\\]><StylePriority:0><CellStart:2,1<tCellAttrTopInset:2><tCellAttrBottomInset:2><tCellAttrLeftStrokeWeight:0.7086614173228347><tCellAttrRightStrokeWeight:0><tCellAttrTopStrokeWeight:0><tCellAttrBottomStrokeWeight:0><tCellLeftStrokeColor:Black><tCellTopStrokeColor:Black><tCellRightStrokeColor:Black><tCellBottomStrokeColor:Black><tcLeftStrokeType:None><tcRightStrokeType:None><tcTopStrokeType:None><tcBottomStrokeType:None><tCellAttrLeftStrokeTint:100><tCellAttrRightStrokeTint:100><tCellAttrTopStrokeTint:100><tCellAttrBottomStrokeTint:100><tCellLeftStrokeOverprint:0><tCellRightStrokeOverprint:0><tCellTopStrokeOverprint:0><tCellBottomStrokeOverprint:0><tCellLeftStrokeGapTint:100><tCellRightStrokeGapTint:100><tCellTopStrokeGapTint:100><tCellBottomStrokeGapTint:100><tCellLeftStrokeGapColor:Paper><tCellRightStrokeGapColor:Paper><tCellTopStrokeGapColor:Paper><tCellBottomStrokeGapColor:Paper><tPageItemCellAttrLeftInset:0><tPageItemCellAttrTopInset:0><tPageItemCellAttrRightInset:0><tPageItemCellAttrBottomInset:0>><ParaStyle:HACK-見出し>";
@@ -1440,12 +1104,12 @@ public class LongStyleManager {
 			}
 		}
 
-		if (longStyle.equals("【コード】【本文】")) {
+		if (longStyle.matches("(【ヒント】|【注意】|【1.】【1.】|【箇条書き・】【箇条書き・】)?【コード】【本文】") == true) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:コード>";
 		}
 
-		if (longStyle.equals("【コード】【コード】【本文】【本文】")) {
+		if (longStyle.matches("(【ヒント】|【注意】|【1.】【1.】|【箇条書き・】【箇条書き・】)?【コード】【コード】【本文】【本文】") == true) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:コード>    ";
 		}
@@ -1453,6 +1117,34 @@ public class LongStyleManager {
 		if (longStyle.equals("【コード】【コード】【本文】【本文】【本文】【本文】")) {
 			m_sPrevLongStyle = longStyle;
 			return "<ParaStyle:コード>        ";
+		}
+
+		if (longStyle.equals("【箇条書き（用語）】【箇条書き（用語）】")) {
+			m_sPrevLongStyle = longStyle;
+			iText.setText(iText.getText().replaceFirst("^::", ""));
+			return "<ParaStyle:用語-見出し>";
+		}
+
+		if (longStyle.equals("【箇条書き（用語）】【箇条書き（用語）】【本文】【本文】")) {
+			m_sPrevLongStyle = longStyle;
+			return "<ParaStyle:用語-本文>";
+		}
+
+		if (longStyle.equals("【箇条書き（用語）】【箇条書き（用語）】【箇条書き（用語）】【箇条書き（用語）】")) {
+			m_sPrevLongStyle = longStyle;
+			iText.setText(iText.getText().replaceFirst("^::", ""));
+			return "<ParaStyle:用語-見出し2>";
+		}
+
+		if (longStyle.equals("【箇条書き（用語）】【箇条書き（用語）】【箇条書き（用語）】【箇条書き（用語）】【本文】【本文】")) {
+			m_sPrevLongStyle = longStyle;
+			return "<ParaStyle:用語-本文2>";
+		}
+
+		if (longStyle.equals("【――】【――】")) {
+			m_sPrevLongStyle = longStyle;
+			iText.setText(iText.getText().replaceFirst("----\t", "――"));
+			return "<ParaStyle:執筆者>";
 		}
 
 		if (longStyle.equals("【別紙タイトル】【別紙タイトル】") || longStyle.equals("【安全上のご注意】【別紙タイトル】【別紙タイトル】")
