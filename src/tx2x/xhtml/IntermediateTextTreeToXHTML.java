@@ -6,7 +6,6 @@ package tx2x.xhtml;
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 
 import tx2x.IntermediateTextTreeWalker;
@@ -21,10 +20,6 @@ public class IntermediateTextTreeToXHTML {
 	private boolean m_bDebugMode;
 	private NavPointManager m_cNavPointManager;
 	private LinkedList<TableWriter> m_TableWriterList;
-
-	/* XHTML独自 */
-	private String m_sPrevFilename;
-	private String m_sNextFilename;
 
 	public IntermediateTextTreeToXHTML(boolean bMac, boolean bDebugMode, NavPointManager cNavPointManager) {
 		super();
@@ -91,12 +86,6 @@ public class IntermediateTextTreeToXHTML {
 	}
 
 	private void outputHeader(XHTML_FileWriter fwXHTML, String sTitle) throws IOException {
-		String sManualName, sPartName;
-		sManualName = "";
-		sPartName = "";
-		m_sPrevFilename = "";
-		m_sNextFilename = "";
-
 		fwXHTML.write(
 				"<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">",
 				true, m_bMac);
@@ -104,67 +93,16 @@ public class IntermediateTextTreeToXHTML {
 		fwXHTML.write("<head>", true, m_bMac);
 		fwXHTML.write("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />", true, m_bMac);
 		fwXHTML.write("<title>" + sTitle + "</title>", true, m_bMac);
-		fwXHTML.write("<link rel=\"stylesheet\" type=\"text/css\" href=\"css/Reset.css\" />", true, m_bMac);
-		fwXHTML.write("<link rel=\"stylesheet\" type=\"text/css\" href=\"css/Main.css\" />", true, m_bMac);
-		fwXHTML.write("<link rel=\"stylesheet\" type=\"text/css\" href=\"css/Print.css\" media=\"print\"/>", true,
-				m_bMac);
-		fwXHTML.write("<link rel=\"stylesheet\" type=\"text/css\" href=\"css/CollapsiblePanel.css\" />", true, m_bMac);
-		fwXHTML.write("<link rel=\"stylesheet\" type=\"text/css\" href=\"css/SideMenu.css\" />", true, m_bMac);
-		fwXHTML.write("<script src=\"js/jquery.min.js\"></script>", true, m_bMac);
-		fwXHTML.write("<script src=\"js/CollapsiblePanel.js\" type=\"text/javascript\"></script>", true, m_bMac);
-		fwXHTML.write("", true, m_bMac);
-		fwXHTML.write("<!-- side Menu Active -->", true, m_bMac);
-		fwXHTML.write("<script>", true, m_bMac);
-		fwXHTML.write("$(document).ready(function() {", true, m_bMac);
-		fwXHTML.write("var activeUrl = location.pathname.split(\"/\")[3];", true, m_bMac);
-		// fwXHTML.write("", true, m_bMac);
-		fwXHTML.write("navList = $(\"#SideMenu\").find(\"a\");", true, m_bMac);
-		fwXHTML.write("", true, m_bMac);
-		fwXHTML.write("navList.each(function(){", true, m_bMac);
-		fwXHTML.write("   if( $(this).attr(\"href\").split(\"/\") == activeUrl ) {", true, m_bMac);
-		fwXHTML.write("$(this).addClass(\"Active\");", true, m_bMac);
-		fwXHTML.write("	};", true, m_bMac);
-		fwXHTML.write("	});", true, m_bMac);
-		fwXHTML.write("});", true, m_bMac);
-		fwXHTML.write("</script>", true, m_bMac);
-		fwXHTML.write("", true, m_bMac);
+		fwXHTML.write("<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\" />", true, m_bMac);
 		fwXHTML.write("</head>", true, m_bMac);
 		fwXHTML.write("", true, m_bMac);
 		fwXHTML.write("<body>", true, m_bMac);
 
 		// header
-		fwXHTML.write("<!-- ここからヘッダー -->", true, m_bMac);
-		fwXHTML.write("<div id=\"Header\">", true, m_bMac);
-		fwXHTML.write("	<div id=\"GoHome\"><a href=\"a-1.html\">ホーム</a></div>", true, m_bMac);
-		fwXHTML.write("	<div id=\"Banner\">", true, m_bMac);
-		fwXHTML.write("		<p>IIJ GIOインフラストラクチャーP2 オンラインマニュアル <span>" + sManualName + "</span></p>", true, m_bMac);
-		fwXHTML.write("	</div>", true, m_bMac);
-		fwXHTML.write("</div>", true, m_bMac);
-		fwXHTML.write("<!-- ここまでヘッダー -->", true, m_bMac);
-		fwXHTML.write("", true, m_bMac);
 		fwXHTML.write("<div id=\"Wrapper\">", true, m_bMac);
-		fwXHTML.write("", true, m_bMac);
-		fwXHTML.write("	<!-- ここからメニュー -->", true, m_bMac);
-		fwXHTML.write("	<div id=\"Menu\" class=\"clearfix\">", true, m_bMac);
-		// fwXHTML.write(" <gcse:search></gcse:search>", true, m_bMac);
-		fwXHTML.write("		<div id=\"SideMenu\">", true, m_bMac);
-		fwXHTML.write("			<iframe src=\"menu.html\" height=\"800\" width=\"320\" scrolling=\"no\">", true,
-				m_bMac);
-		fwXHTML.write("				 この部分は iframe 対応のブラウザでご確認下さい。", true, m_bMac);
-		fwXHTML.write("			</iframe>", true, m_bMac);
-		fwXHTML.write("		</div>", true, m_bMac);
-		fwXHTML.write("	</div>", true, m_bMac);
-		fwXHTML.write("	<!-- ここまでメニュー -->", true, m_bMac);
 		fwXHTML.write("", true, m_bMac);
 		fwXHTML.write("	<!-- ここからメインエリア -->", true, m_bMac);
 		fwXHTML.write("	<div id=\"Main\">", true, m_bMac);
-		// パンくずリスト
-		fwXHTML.write("		<ul id=\"TopicPath\" class=\"clearfix\">", true, m_bMac);
-		if (sPartName != null) {
-			fwXHTML.write("			<li>" + sPartName + "</li>", true, m_bMac);
-		}
-		fwXHTML.write("			<li>" + sTitle + "</li>", true, m_bMac);
-		fwXHTML.write("		</ul>", true, m_bMac);
 	}
 
 	private void outputResult(XHTML_FileWriter fwXHTML, ControlText resultText, LongStyleManagerXHTML lsManager,
@@ -319,29 +257,10 @@ public class IntermediateTextTreeToXHTML {
 	}
 
 	private void outputFooter(XHTML_FileWriter fwXHTML) throws IOException {
-		fwXHTML.write("", true, m_bMac);
-		fwXHTML.write("		<div id=\"Move\">", true, m_bMac);
-		fwXHTML.write("			<ul>", true, m_bMac);
-		fwXHTML.write("				<li><a href=\"" + m_sPrevFilename + "\">前の項目へ</a></li>", true, m_bMac);
-		fwXHTML.write("				<li><a href=\"" + m_sNextFilename + "\">次の項目へ</a></li>", true, m_bMac);
-		fwXHTML.write("			</ul>", true, m_bMac);
-		fwXHTML.write("			<div id=\"GoWrapper\">", true, m_bMac);
-		fwXHTML.write(
-				"				<a href=\"#Wrapper\"><img src=\"img/go_wrapper.gif\" width=\"25\" height=\"120\" alt=\"ページ先頭へ\" /></a>",
-				true, m_bMac);
-		fwXHTML.write("			</div>", true, m_bMac);
-		fwXHTML.write("		</div>", true, m_bMac);
-		fwXHTML.write("		", true, m_bMac);
 		fwXHTML.write("	</div>", true, m_bMac);
 		fwXHTML.write("	<!-- ここまでメインエリア -->", true, m_bMac);
 		// fwXHTML.write("", true, m_bMac);
 		fwXHTML.write("</div>", true, m_bMac);
-		fwXHTML.write("", true, m_bMac);
-		fwXHTML.write("<!-- ここからフッター -->", true, m_bMac);
-		fwXHTML.write("<div id=\"Footer\">", true, m_bMac);
-		fwXHTML.write("	<p>&copy; <?php echo date(\"Y\");?> Internet Initiative Japan Inc.</p>", true, m_bMac);
-		fwXHTML.write("</div>", true, m_bMac);
-		fwXHTML.write("<!-- ここまでフッター -->", true, m_bMac);
 		fwXHTML.write("", true, m_bMac);
 		fwXHTML.write("</body>", true, m_bMac);
 		fwXHTML.write("</html>", true, m_bMac);

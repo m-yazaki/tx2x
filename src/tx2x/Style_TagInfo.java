@@ -22,15 +22,20 @@ public class Style_TagInfo {
 	private String m_sSmallBlockCloseInfo;
 	private String m_sBigBlockCloseInfo;
 
-	public Style_TagInfo(String sBigBlockOpenInfo, String sSmallBlockOpenInfo,
-			String sLineOpenInfo, String sLine, String sLineCloseInfo,
-			String sSmallBlockCloseInfo, String sBigBlockCloseInfo) {
+	public Style_TagInfo(String sBigBlockOpenInfo, String sSmallBlockOpenInfo, String sLineOpenInfo, String sLine,
+			String sLineCloseInfo, String sSmallBlockCloseInfo, String sBigBlockCloseInfo) {
 		m_sBigBlockOpenInfo = sBigBlockOpenInfo;
 		m_sSmallBlockOpenInfo = sSmallBlockOpenInfo;
+		if (m_sSmallBlockOpenInfo != null) {
+			System.out.println("m_sSmallBlockOpenInfo != null");
+		}
 		m_sLineOpenInfo = sLineOpenInfo;
 		m_sLine = sLine;
 		m_sLineCloseInfo = sLineCloseInfo;
 		m_sSmallBlockCloseInfo = sSmallBlockCloseInfo;
+		if (m_sSmallBlockCloseInfo != null) {
+			System.out.println("m_sSmallBlockCloseInfo != null");
+		}
 		m_sBigBlockCloseInfo = sBigBlockCloseInfo;
 	}
 

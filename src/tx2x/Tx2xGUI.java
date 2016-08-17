@@ -26,62 +26,8 @@ import tx2x.word.ConvertToWord;
 import tx2x.xhtml.ConvertToXHTML;
 
 public class Tx2xGUI implements ActionListener {
-	/**
-	 * ドロップ操作の処理を行うクラス
-	 */
-	private class DropFileHandler extends TransferHandler {
-
-		/**
-		 *
-		 */
-		private static final long serialVersionUID = 1L;
-
-		/**
-		 * ドロップされたものを受け取るか判断 (ファイルのときだけ受け取る)
-		 */
-		@Override
-		public boolean canImport(TransferSupport support) {
-			if (!support.isDrop()) {
-				// ドロップ操作でない場合は受け取らない
-				return false;
-			}
-
-			if (!support.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
-				// ドロップされたのがファイルでない場合は受け取らない
-				return false;
-			}
-
-			return true;
-		}
-
-		/**
-		 * ドロップされたファイルを受け取る
-		 */
-		@Override
-		public boolean importData(TransferSupport support) {
-			// 受け取っていいものか確認する
-			if (!canImport(support)) {
-				return false;
-			}
-
-			// ドロップ処理
-			Transferable t = support.getTransferable();
-			try {
-				@SuppressWarnings("unchecked")
-				List<File> files = (List<File>) t.getTransferData(DataFlavor.javaFileListFlavor);
-
-				// テキストエリアにファイル名のリストを表示する
-				if (files.size() > 0) {
-					text_file.setText(files.get(0).toString());
-				}
-			} catch (UnsupportedFlavorException |
-
-					IOException e) {
-				e.printStackTrace();
-			}
-			return true;
-		}
-	}
+	// 変換モード
+	private String[] sConvertMode_ComboData = { "HTML", "InDesign（Windows）", "Word（表示）", "Word（非表示）" };
 
 	private JTextField text_file;
 	private JButton button_ok;
@@ -111,8 +57,7 @@ public class Tx2xGUI implements ActionListener {
 		frame.add(panel_mode);
 		JLabel label_mode = new JLabel("MODE: ");
 		panel_mode.add(label_mode);
-		String[] combo_data = { "InDesign（Windows）", "Word（表示）", "Word（非表示）", "HTML" };
-		combo_mode = new JComboBox<String>(combo_data);
+		combo_mode = new JComboBox<String>(sConvertMode_ComboData);
 		panel_mode.add(combo_mode);
 
 		checkbox_debug = new JCheckBox("DEBUG");
@@ -210,4 +155,59 @@ public class Tx2xGUI implements ActionListener {
 		frame.setVisible(b);
 	}
 
+	/**
+	 * ドロップ操作の処理を行うクラス
+	 */
+	private class DropFileHandler extends TransferHandler {
+		/**
+		 *
+		 */
+		private static final long serialVersionUID = 1L;
+
+		/**
+		 * ドロップされたものを受け取るか判断 (ファイルのときだけ受け取る)
+		 */
+		@Override
+		public boolean canImport(TransferSupport support) {
+			if (!support.isDrop()) {
+				// ドロップ操作でない場合は受け取らない
+				return false;
+			}
+
+			if (!support.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
+				// ドロップされたのがファイルでない場合は受け取らない
+				return false;
+			}
+
+			return true;
+		}
+
+		/**
+		 * ドロップされたファイルを受け取る
+		 */
+		@Override
+		public boolean importData(TransferSupport support) {
+			// 受け取っていいものか確認する
+			if (!canImport(support)) {
+				return false;
+			}
+
+			// ドロップ処理
+			Transferable t = support.getTransferable();
+			try {
+				@SuppressWarnings("unchecked")
+				List<File> files = (List<File>) t.getTransferData(DataFlavor.javaFileListFlavor);
+
+				// テキストエリアにファイル名のリストを表示する
+				if (files.size() > 0) {
+					text_file.setText(files.get(0).toString());
+				}
+			} catch (UnsupportedFlavorException |
+
+					IOException e) {
+				e.printStackTrace();
+			}
+			return true;
+		}
+	}
 }

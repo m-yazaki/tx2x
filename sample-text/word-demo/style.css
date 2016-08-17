@@ -1,0 +1,179 @@
+* {
+    font-family: "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "游ゴシック", YuGothic, Verdana, "メイリオ", Meiryo, Osaka, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+}
+
+h2 {
+    background: #cae8ea;
+    padding: 3px 3px 3px 12px;
+}
+
+h3 {
+    color: #64a59d;
+    padding: 3px 3px 3px 12px;
+    border-bottom: 1px solid #64a59d;
+}
+
+div.h1_sub {
+    text-align:right;
+}
+
+table.information {
+    margin:0 0 0 1px;
+    padding:0;
+    border:0;
+    border-spacing:0;
+    border-collapse:collapse;
+}
+
+table.information th {
+    color:#4f6b72;
+    border:1px solid #c1dad7;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    text-align:left;
+    padding:6px 12px 6px 12px;
+    background:#cae8ea;
+}
+
+table.information td {
+    border:1px solid #c1dad7;
+    background:#fff;
+    padding:6px 12px 6px 12px;
+    color:#4f6b72;
+}
+
+div.hint {
+    padding:12px;
+    border:solid 1px #cae8ea;
+    border-radius:6px;
+    background-color:#e9fafb;
+    margin-top:30px;margin-bottom:30px;
+}
+
+div.hint div.title{
+    font-weight:bold;
+}
+
+div.hint p{
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+div.note {
+    padding:12px;
+    border:solid 1px #eacaca;
+    border-radius:6px;
+    background-color:#fbe9e9;
+    margin-top:30px;margin-bottom:30px;
+}
+
+div.note div.title{
+    font-weight:bold;
+    color: #de0f0f;
+}
+
+div.note p{
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+div.hack_no {
+    font-weight: bold;
+    width: 50px;
+    float: left;
+    background-color: #c1dad7;
+    margin-right: 6px;
+    padding: 12px 6px 12px 6px;
+}
+
+div.hack_no div.title{
+    text-align:center;
+    font-size:12px;
+}
+
+div.hack_no div.no{
+    text-align:center;
+    font-size:24px;
+    line-height: 1em;
+}
+
+div.hack p {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+div.hack_no + p {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+div.code {
+    background-color: lightgray;
+    padding-left: 12px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+div.code p {
+    font-family: Courier;
+    line-height: 1em;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+div.step_block div.code {
+    margin-left: 38px;
+}
+
+div.step_block div.code p{
+    margin-left: 0px;
+}
+
+div.step_block div.hint {
+    margin-left: 38px;
+}
+
+div.step_block div.hint p{
+    margin-left: 0px;
+}
+
+div.step {
+    font-weight: bold;
+}
+
+div.step span.no{
+    font-size: 24px;
+    font-style: oblique;
+    color: #64a59d;
+}
+
+div.step_block p {
+    margin-top: 0px;
+    margin-left: 38px;
+}
+
+div.step_block ul {
+    margin-left: 38px;
+}
+
+div.glossary {
+    border-left: 1px solid black;
+    padding-left: 12px;
+}
+
+div.glossary div.item {
+    padding-left: 2em;
+}
+
+div.glossary div.item div.title {
+    margin-left: -2em;
+    font-weight: bold;
+}
+
+div.hack_author {
+    text-align:right;
+}
+
+img {
+    max-width: 100%;
+}

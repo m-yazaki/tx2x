@@ -25,17 +25,12 @@ public class TableWriter {
 		m_nY = 0;
 		String currentLongStyle = lsManager.getLongStyleFromArrayList(nLsIndex + 1);
 		String ret = "";
-		if (currentLongStyle.equals("【表】【行】【セル】【本文】【本文】") || currentLongStyle
-				.equals("【表】【行】【セル：ヘッダー】【本文】【本文】")/*
-													 * 2013.12.19
-													 */) {
-			ret = "\n\t\t<table class=\"Configuration\">";
-		} else if (currentLongStyle.equals("【手順】【手順】【表】【行】【セル】【本文】【本文】")) {
-			ret = "\n\t\t<table class=\"Configuration Indent2\">";
+		if (currentLongStyle.equals("【表】【行】【セル：ヘッダー】【本文】【本文】【本文】")) {
+			ret = "\n\t\t<table class=\"information\">";
 		} else {
 			System.out.println("【警告】表のclassが正しいことを確認してください。");
 			System.out.println(currentLongStyle);
-			ret = "\n\t\t<table class=\"Configuration\"><!-- " + currentLongStyle + " -->";
+			ret = "\n\t\t<table class=\"information\"><!-- " + currentLongStyle + " -->";
 		}
 		if (m_tManager.hasCaption()) {
 			ret = ret + "\n\t\t\t<caption>" + m_tManager.getCaption() + "</caption>";
