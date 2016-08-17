@@ -30,7 +30,7 @@ public class TableWriter {
 		m_nCellSize = tManager.getCellSize();
 	}
 
-	public String getHeader(LongStyleManager lsManager, int nLsIndex) {
+	public String getHeader(LongStyleManagerInDesign lsManager, int nLsIndex) {
 		String longStyle = lsManager.getLongStyle();
 		m_nX = 0;
 		m_nY = 0;
@@ -109,7 +109,7 @@ public class TableWriter {
 		return header;
 	}
 
-	public String getCellHeader(LongStyleManager lsManager) throws ArrayIndexOutOfBoundsException {
+	public String getCellHeader(LongStyleManagerInDesign lsManager) throws ArrayIndexOutOfBoundsException {
 		m_nX++;
 		String header = "<CellStyle:\\[None\\]><StylePriority:0><CellStart:";
 
@@ -178,20 +178,11 @@ public class TableWriter {
 		return header;
 	}
 
-	public String getRowHeader(LongStyleManager lsManager) {
+	public String getRowHeader(LongStyleManagerInDesign lsManager) {
 		String rowHeader = "";
 		m_nY++;
 		m_nX = 0;
 		rowHeader += "<RowStart:<tRowAttrHeight:10><tRowAttrMinRowSize:10><tRowAutoGrow:1><tRowKeeps:1>>";
-		String longStyle = lsManager.getLongStyle();
-		if ((longStyle.equals("【手順】【手順】【箇条書き・】【箇条書き・】【表】【行】") == false)
-				&& (lsManager.m_sStepCaption.equals("") == false) && (lsManager.m_sStepCaption.equals(" ") == false)) {
-			rowHeader += "<CellStart:1,1<tCellAttrLeftInset:0><tCellAttrTopInset:0><tCellAttrRightInset:0><tCellAttrBottomInset:0><tCellFillColor:None><tCellAttrLeftStrokeWeight:0><tCellAttrRightStrokeWeight:0.5><tCellAttrTopStrokeWeight:0><tCellAttrBottomStrokeWeight:0><tCellLeftStrokeColor:Black><tCellTopStrokeColor:Black><tCellRightStrokeColor:Black><tCellBottomStrokeColor:Black><tcLeftStrokeType:Solid><tcRightStrokeType:Solid><tcTopStrokeType:Solid><tcBottomStrokeType:Solid><tTextCellFirstLineOffset:3><tTextCellVerticalJustification:0><tCellAttrLeftStrokeTint:100><tCellAttrRightStrokeTint:100><tCellAttrTopStrokeTint:100><tCellAttrBottomStrokeTint:100><tCellLeftStrokeOverprint:0><tCellRightStrokeOverprint:0><tCellTopStrokeOverprint:0><tCellBottomStrokeOverprint:0><tTextCellVerticalComposition:1><tCellLeftStrokeGapTint:100><tCellRightStrokeGapTint:100><tCellTopStrokeGapTint:100><tCellBottomStrokeGapTint:100><tCellLeftStrokeGapColor:Paper><tCellRightStrokeGapColor:Paper><tCellTopStrokeGapColor:Paper><tCellBottomStrokeGapColor:Paper>>";
-			if (m_nY == 1) {
-				rowHeader += "<ParaStyle:step-title01>" + lsManager.m_sStepCaption;
-			}
-			rowHeader += "<CellEnd:>";
-		}
 		return rowHeader;
 	}
 

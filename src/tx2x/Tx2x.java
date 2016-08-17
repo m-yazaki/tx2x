@@ -32,6 +32,7 @@ public class Tx2x {
 	 */
 	public static void main(String[] args) {
 		Tx2xGUI frame = new Tx2xGUI();
+		frame.setVisible(true);
 	}
 
 	/**

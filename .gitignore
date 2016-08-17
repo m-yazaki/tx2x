@@ -25,3 +25,5 @@ sample-text/word-demo - GOOD/
 sample-text/word-demo/Test.html
 sample-text/word-demo/Test2.docx
 sample-text/word-demo/Test2.txt
+*.idlk
+sample-text/word-demo/Tag.txt

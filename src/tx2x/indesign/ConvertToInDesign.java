@@ -12,12 +12,10 @@ import tx2x.Utils;
 import tx2x.core.ControlText;
 
 public class ConvertToInDesign extends Converter {
-	private String m_sMaker;
 	private boolean m_bMac;
 
 	public ConvertToInDesign() {
 		super(Tx2xOptions.getInstance().getBoolean("debug"));
-		m_sMaker = Tx2xOptions.getInstance().getString("maker");
 		String sMode = Tx2xOptions.getInstance().getString("mode");
 		if (sMode.equals("InDesign-Macintosh")) {
 			m_bMac = true;
@@ -38,7 +36,7 @@ public class ConvertToInDesign extends Converter {
 		try {
 			// iTextツリーを作成
 			IntermediateTextTreeBuilder ciTextTreeBuilder = new IntermediateTextTreeBuilder(m_bDebugMode);
-			LongStyleManager lsManager = new LongStyleManager(m_sMaker, m_bMac);
+			LongStyleManagerInDesign lsManager = new LongStyleManagerInDesign(m_bMac);
 			ControlText resultRootText = ciTextTreeBuilder.parse_file(cTargetFile, lsManager);
 
 			// これ以降、resultRootTextはFixされていると仮定する
@@ -56,8 +54,8 @@ public class ConvertToInDesign extends Converter {
 				// 出力
 				File cOutputFile = new File(sOutputFilename);
 				IntermediateTextTreeToInDesign ciTextTreeToInDesign = new IntermediateTextTreeToInDesign(false,
-						m_sMaker, m_bDebugMode); // Macintosh用のテキストを出力する場合は、Windows用も出力する
-				ciTextTreeToInDesign.output(cOutputFile, resultRootText, cTreeWalker);
+						m_bDebugMode); // Macintosh用のテキストを出力する場合は、Windows用も出力する
+				ciTextTreeToInDesign.output(cOutputFile, resultRootText, lsManager, cTreeWalker);
 			}
 
 			// inddファイルのコピー
@@ -80,8 +78,8 @@ public class ConvertToInDesign extends Converter {
 				} else {
 					File cOutputFile = new File(sOutputFilename);
 					IntermediateTextTreeToInDesign ciTextTreeToInDesign = new IntermediateTextTreeToInDesign(true,
-							m_sMaker, m_bDebugMode);
-					ciTextTreeToInDesign.output(cOutputFile, resultRootText, cTreeWalker);
+							m_bDebugMode);
+					ciTextTreeToInDesign.output(cOutputFile, resultRootText, lsManager, cTreeWalker);
 				}
 			}
 		} catch (IOException e) {

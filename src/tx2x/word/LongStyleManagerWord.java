@@ -19,7 +19,6 @@ import com.jacob.com.Variant;
 
 import tx2x.LongStyleManager;
 import tx2x.Tx2xOptions;
-import tx2x.core.ControlText;
 import tx2x.core.IntermediateText;
 
 public class LongStyleManagerWord extends LongStyleManager {
@@ -278,6 +277,7 @@ public class LongStyleManagerWord extends LongStyleManager {
 			System.out.println(longStyle);
 		}
 
+		// 段落スタイルを設定するだけではない、特別なデザインが必要なもの
 		if (longStyle.equals("【画面】【画面】【画面】")) {
 			Dispatch oDocument = Dispatch.call(oSelection, "Document").toDispatch();
 			Dispatch oTables = Dispatch.call(oDocument, "Tables").toDispatch();
@@ -395,34 +395,6 @@ public class LongStyleManagerWord extends LongStyleManager {
 		} else {
 			Dispatch.call(oSelection, "TypeParagraph"); // 改行
 		}
-	}
-
-	private void writeHintParts(Dispatch oSelection, double dLeftIndent) {
-		Dispatch oDocument = Dispatch.call(oSelection, "Document").toDispatch();
-		Dispatch oTables = Dispatch.call(oDocument, "Tables").toDispatch();
-		Variant oRange = Dispatch.call(oSelection, "Range");
-		Dispatch oTable = Dispatch.call(oTables, "Add", oRange, 1, 2).toDispatch();
-
-		// 左端からのインデント
-		Dispatch oRows = Dispatch.get(oTable, "Rows").toDispatch();
-		Dispatch.put(oRows, "LeftIndent", dLeftIndent);
-
-		// ヒントアイコン
-		Dispatch oCell = Dispatch.call(oTable, "Cell", 1, 1).getDispatch();
-		setCellWidth(oCell, 15 * MM);
-
-		Dispatch.call(oCell, "Select");
-		Dispatch.put(oSelection, "Style", "本文");
-		Dispatch oInlineShapes = Dispatch.get(oSelection, "InlineShapes").toDispatch();
-		Dispatch.call(oInlineShapes, "AddPicture",
-				Tx2xOptions.getInstance().getString("tx2x_folder_name") + "\\hint.png", "False", "True");
-
-		// ヒント本文
-		oCell = Dispatch.call(oTable, "Cell", 1, 2).getDispatch();
-		setCellWidth(oCell, 136.9 * MM - dLeftIndent);
-
-		Dispatch.call(oCell, "Select");
-		Dispatch.call(oSelection, "MoveLeft"); // 左へ移動（カーソルを立てる）
 	}
 
 	private void setCellWidth(Dispatch oCell, double dWidth) {

@@ -664,6 +664,7 @@ public class IntermediateTextTreeBuilder {
 			IntermediateText iText = it.next();
 			if (m_bDebugMode)
 				System.out.println(iText.getDebugText());
+
 			if (iText instanceof ControlText) {
 				ControlText cText = (ControlText) iText;
 				Style currentStyle = cText.getStyle();

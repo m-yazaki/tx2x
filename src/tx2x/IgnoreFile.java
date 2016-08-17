@@ -24,8 +24,7 @@ public class IgnoreFile {
 		sIgnoreFilelist.add(cTx2xIgnore.getName());
 		try {
 			// 入力ファイル
-			BufferedReader bf = new BufferedReader(new InputStreamReader(
-					new FileInputStream(cTx2xIgnore), "UTF-8"));
+			BufferedReader bf = new BufferedReader(new InputStreamReader(new FileInputStream(cTx2xIgnore), "UTF-8"));
 
 			String line;
 			while ((line = bf.readLine()) != null) {
@@ -35,8 +34,7 @@ public class IgnoreFile {
 
 			bf.close();
 		} catch (FileNotFoundException e1) {
-			Tx2x.appendWarn("ファイルが見つかりません@IgnoreFile："
-					+ cTx2xIgnore.getAbsolutePath());
+			Tx2x.appendWarn("ファイルが見つかりません@IgnoreFile：" + cTx2xIgnore.getAbsolutePath());
 			return;
 		} catch (IOException e) {
 			// TODO 自動生成された catch ブロック
@@ -49,11 +47,7 @@ public class IgnoreFile {
 		// file.getAbsolutePath()：D:\test-text、/home/user/test-text
 		String sAbsolutePath = file.getAbsolutePath();
 		String[] sPart;
-		if (File.separator.equals("\\")) {
-			sPart = sAbsolutePath.split("\\" + File.separator);
-		} else {
-			sPart = sAbsolutePath.split(File.separator);
-		}
+		sPart = sAbsolutePath.split(File.separatorChar == '\\' ? "\\\\" : File.separator);
 		for (int i = 0; i < sIgnoreFilelist.size(); i++) {
 			for (int j = 0; j < sPart.length; j++) {
 				if (sPart[j].matches(sIgnoreFilelist.get(i))) {

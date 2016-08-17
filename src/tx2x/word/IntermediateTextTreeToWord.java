@@ -1,5 +1,5 @@
 /**
- * IntermediateTextを、InDesignのタグ付きテキストに変換する
+ * IntermediateTextを、Wordデータに変換する
  */
 package tx2x.word;
 
@@ -8,36 +8,28 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import com.jacob.activeX.ActiveXComponent;
+import com.jacob.com.ComFailException;
+import com.jacob.com.Dispatch;
+import com.jacob.com.Variant;
+
 import tx2x.IntermediateTextTreeWalker;
-import tx2x.StyleManager;
-import tx2x.StyleManagerFactory;
-import tx2x.Style_TagInfo;
 import tx2x.Tx2xOptions;
 import tx2x.core.ControlText;
 import tx2x.core.IntermediateText;
 import tx2x.core.Style;
 import tx2x.core.TableManager;
 
-import com.jacob.activeX.ActiveXComponent;
-import com.jacob.com.ComFailException;
-import com.jacob.com.Dispatch;
-import com.jacob.com.Variant;
-
 public class IntermediateTextTreeToWord {
 	LinkedList<TableWriter> m_TableWriterList = null;
 	int m_nLsIndex = 0;
 	private boolean m_bDebugMode;
 	String m_sTemplateDoc = "Tx2xWordTemplate.dotx";
-	// private TableManager m_currentTable;
-	private StyleManager m_cStyleManager;
 
 	public IntermediateTextTreeToWord(boolean bDebugMode) {
 		super();
 		m_TableWriterList = new LinkedList<TableWriter>();
 		m_bDebugMode = bDebugMode;
-
-		StyleManagerFactory cFactory = StyleManagerFactory.getInstance();
-		m_cStyleManager = cFactory.getStyleManager();
 	}
 
 	public void output(File cWordFile, ControlText resultRootText, LongStyleManagerWord lsManager,

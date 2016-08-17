@@ -111,7 +111,7 @@ public class Tx2xGUI implements ActionListener {
 		frame.add(panel_mode);
 		JLabel label_mode = new JLabel("MODE: ");
 		panel_mode.add(label_mode);
-		String[] combo_data = { "Word（表示）", "Word（非表示）", "InDesign（Windows）", "HTML" };
+		String[] combo_data = { "InDesign（Windows）", "Word（表示）", "Word（非表示）", "HTML" };
 		combo_mode = new JComboBox<String>(combo_data);
 		panel_mode.add(combo_mode);
 
@@ -127,7 +127,6 @@ public class Tx2xGUI implements ActionListener {
 		panel_buttons.add(button_cancel);
 		button_ok.addActionListener(this);
 		button_cancel.addActionListener(this);
-		frame.setVisible(true);
 	}
 
 	@Override
@@ -205,6 +204,10 @@ public class Tx2xGUI implements ActionListener {
 			System.out.println("Cancel");
 			frame.dispose();
 		}
+	}
+
+	public void setVisible(boolean b) {
+		frame.setVisible(b);
 	}
 
 }

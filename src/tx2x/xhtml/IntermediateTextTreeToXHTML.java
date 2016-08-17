@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
-import java.util.Set;
 
 import tx2x.IntermediateTextTreeWalker;
 import tx2x.Style_TagInfo;
@@ -93,10 +92,8 @@ public class IntermediateTextTreeToXHTML {
 
 	private void outputHeader(XHTML_FileWriter fwXHTML, String sTitle) throws IOException {
 		String sManualName, sPartName;
-		LinkedHashMap<String, String> cParents;
 		sManualName = "";
 		sPartName = "";
-		cParents = null;
 		m_sPrevFilename = "";
 		m_sNextFilename = "";
 
@@ -165,16 +162,6 @@ public class IntermediateTextTreeToXHTML {
 		fwXHTML.write("		<ul id=\"TopicPath\" class=\"clearfix\">", true, m_bMac);
 		if (sPartName != null) {
 			fwXHTML.write("			<li>" + sPartName + "</li>", true, m_bMac);
-		}
-		if (cParents != null) {
-			Set<String> keySet = cParents.keySet();
-			Iterator<String> it = keySet.iterator();
-			while (it.hasNext()) {
-				String sTitleTemp = it.next();
-				String sFilenameTemp = cParents.get(sTitleTemp);
-				fwXHTML.write("			<li><a href=\"" + sFilenameTemp + "\">" + sTitleTemp + "</a></li>", true,
-						m_bMac);
-			}
 		}
 		fwXHTML.write("			<li>" + sTitle + "</li>", true, m_bMac);
 		fwXHTML.write("		</ul>", true, m_bMac);
