@@ -111,7 +111,7 @@ public class Tx2xGUI implements ActionListener {
 		frame.add(panel_mode);
 		JLabel label_mode = new JLabel("MODE: ");
 		panel_mode.add(label_mode);
-		String[] combo_data = { "HTML", "InDesign（Windows）", "Word（表示）", "Word（非表示）" };
+		String[] combo_data = { "Word（表示）", "Word（非表示）", "InDesign（Windows）", "HTML" };
 		combo_mode = new JComboBox<String>(combo_data);
 		panel_mode.add(combo_mode);
 
@@ -166,13 +166,12 @@ public class Tx2xGUI implements ActionListener {
 
 			Converter cConverter;
 			String mode = Tx2xOptions.getInstance().getString("mode");
-			boolean bDebug = Tx2xOptions.getInstance().getBoolean("debug");
 			if (mode.equals("Word")) {
 				cConverter = new ConvertToWord();
 			} else if (mode.equals("InDesign-Windows")) {
 				cConverter = new ConvertToInDesign();
 			} else if (mode.equals("HTML")) {
-				cConverter = new ConvertToXHTML(bDebug);
+				cConverter = new ConvertToXHTML();
 			} else {
 				JOptionPane.showMessageDialog(frame, "変換モードが不正です。");
 				return;
@@ -202,9 +201,7 @@ public class Tx2xGUI implements ActionListener {
 			System.out.println(message);
 		}
 
-		if (e.getSource() == button_cancel)
-
-		{
+		if (e.getSource() == button_cancel) {
 			System.out.println("Cancel");
 			frame.dispose();
 		}

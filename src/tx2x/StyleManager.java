@@ -9,96 +9,108 @@ import tx2x.core.Style_NoteLike;
 import tx2x.core.Style_Table;
 import tx2x.core.Style_TableCell;
 import tx2x.core.Style_TableCellHeader;
+import tx2x.core.Style_TableCellHeaderRow;
 import tx2x.core.Style_TableRow;
 
 public class StyleManager {
-	private static StyleManager instance = new StyleManager();
+	protected ArrayList<Style_BulletLike> m_cStyle_BulletLike_List;
+	protected ArrayList<Style_NoteLike> m_cStyle_NoteLike_List;
+	private ArrayList<Style_Table> m_cStyle_TableLike_List;
+	private static Style m_cBodyStyle = new Style_BulletLike("【本文】", ".*", ".*");
+	private static Style m_cRootStyle = new Style_BulletLike("【Root】", "", "");
 	private ArrayList<Style> m_cStyleList;
 
-	private StyleManager() {
-		// StyleManagerにStyleを登録セヨ
-		m_cStyleList = new ArrayList<Style>();
-
-		// 箇条書きの類似品
-		m_cStyleList.add(new Style_BulletLike("【箇条書き・】", "^・\t.*", "^[^・].*")); // 箇条書き「・」
-		m_cStyleList.add(new Style_BulletLike("【箇条書き－】", "^－\t.*", "^[^－].*")); // 箇条書き「－」
-		m_cStyleList.add(new Style_BulletLike("【箇条書き◎】", "^◎\t.*", "^[^◎].*")); // 箇条書き「◎」
-		m_cStyleList.add(new Style_BulletLike("【箇条書き●】", "^●\t.*", "^[^●].*")); // 箇条書き「◎」
-		m_cStyleList.add(new Style_BulletLike("【※】", "^※\t.*", "^[^※].*")); // ※
-		m_cStyleList.add(new Style_BulletLike("【*】", "^\\*+\t.*", "^[^\\*].*")); // *
-		m_cStyleList
-				.add(new Style_BulletLike("【※0】", "^※[0-9]\t.*", "^[^※].*")); // ※[0-9]
-		m_cStyleList.add(new Style_BulletLike("【※・】", "^※・\t.*", "^[^※].*")); // ※・
-		m_cStyleList.add(new Style_BulletLike("【手順】", "^[０-９]+\t.*",
-				"^[^０-９].*")); // 手順
-		m_cStyleList.add(new Style_BulletLike("【手順分岐】", "^■[^■].*", "^[^■].*")); // 手順分岐
-		m_cStyleList.add(new Style_BulletLike("【①】",
-				"^[①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳]\t.*", "[^①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳].*")); // ①～⑳
-		m_cStyleList.add(new Style_BulletLike("【①：】",
-				"^[①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳]：\t.*", "[^①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳].*")); // ①：～⑳：
-		m_cStyleList.add(new Style_BulletLike("【（M）①】",
-				"^（M）[①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳]\t.*", "(^（M）).*"));
-		m_cStyleList.add(new Style_BulletLike("【（M）】", "^（M）\t.*", "(^（M）).*"));
-		m_cStyleList.add(new Style_BulletLike("【キー説明】", "^【.*キー】(（.+）)?：.*",
-				"^[^【]].*")); // キー説明。終わりはだいぶ適当…。
-		m_cStyleList.add(new Style_BulletLike("【利用許諾契約（1）】", "^（[0-9]+）\t.*",
-				"^[^（].*")); // 利用許諾契約
-		m_cStyleList.add(new Style_BulletLike("【1.】", "^[0-9]+\\.\t.*",
-				"^[^0-9].*")); // 1.
-		m_cStyleList
-				.add(new Style_BulletLike("【1】", "^[0-9]+\t.*", "^[^0-9].*")); // 1.
-		m_cStyleList.add(new Style_BulletLike("【Step 1】", "^Step [0-9]+\t.*",
-				"^(?!Step [0-9]+\t).*")); // Step 1.
-		m_cStyleList.add(new Style_BulletLike("【箇条書き（用語）】", "^::.*",
-				"^(?!::).*")); // 箇条書き「::」
-
-		// どちらかというと箇条書きの類似品
-		m_cStyleList.add(new Style_BulletLike("【項】", "^【項】.*", ".*")); // 【項】
-		m_cStyleList.add(new Style_BulletLike("【項2】", "^【項2】.*", ".*")); // 【項2】
-		m_cStyleList.add(new Style_BulletLike("【項下】", "^【項下】.*", ".*")); // 【項下】
-		m_cStyleList.add(new Style_BulletLike("【節】", "^【節】.*", ".*")); // 【節】
-		m_cStyleList.add(new Style_BulletLike("【節2】", "^【節2】.*", ".*")); // 【節2】
-		m_cStyleList.add(new Style_BulletLike("【章】", "^【章】.*", ".*")); // 【章】
-		m_cStyleList.add(new Style_BulletLike("【章サブ】",
-				"^Hack #[0-9]+(-[0-9]+)?$", ".*")); // 【章サブ】
-		m_cStyleList.add(new Style_BulletLike("【編】", "^【編】.*", ".*")); // 【編】
-		m_cStyleList.add(new Style_BulletLike("【例：】", "^例：.*", ".*")); // 【例：】
-		m_cStyleList.add(new Style_BulletLike("【画面】", "^【画面.*】.*", ".*")); // 【画面】
-		m_cStyleList.add(new Style_BulletLike("【参照】", "^▼P.[●0-9]+「.*」", ".*")); // 【参照】
-		m_cStyleList.add(new Style_BulletLike("【以上】", "^－以　上－", ".*"));
-		m_cStyleList.add(new Style_BulletLike("【別紙タイトル】", "^■■■■■別紙.*", ".*"));
-		m_cStyleList.add(new Style_BulletLike("【PL危険】", "^★危険★\t.*", ".*"));
-		m_cStyleList.add(new Style_BulletLike("【PL警告】", "^★警告★\t.*", ".*"));
-		m_cStyleList.add(new Style_BulletLike("【PL注意】", "^★注意★\t.*", ".*"));
-		m_cStyleList.add(new Style_BulletLike("【HACK】", "^【HACK #[0-9]+】.*",
-				".*"));
-		m_cStyleList.add(new Style_BulletLike("【画面】", "^<img .*>$", ".*")); // 【画面】
-		m_cStyleList.add(new Style_BulletLike("【――】", "^----\t.*",
-				"^(?!----\t).*")); // 【――】
-
-		// お知らせの類似品
-		m_cStyleList.add(new Style_NoteLike("【メモ】", "^▼メモ.*", "▲.*")); // memo
-		m_cStyleList.add(new Style_NoteLike("【ヒント】", "^▼ヒント.*", "▲.*")); // ヒント
-		m_cStyleList.add(new Style_NoteLike("【注意】", "^▼注意.*", "▲.*")); // ヒント
-		m_cStyleList.add(new Style_NoteLike("【画面囲み】", "^▼画面囲み.*", "▲.*")); // 画面囲み
-		m_cStyleList.add(new Style_NoteLike("【付録】", "^▼付録.*", "▲.*")); // 付録
-		m_cStyleList.add(new Style_NoteLike("【利用許諾】", "^▼利用許諾.*", "▲.*")); // 利用許諾
-		m_cStyleList.add(new Style_NoteLike("【Eng】", "^▼Eng.*", "▲.*")); // Eng
-		m_cStyleList.add(new Style_NoteLike("【編目次】", "^▼編目次.*", "▲.*")); // 編目次
-		m_cStyleList.add(new Style_NoteLike("【目次】", "^▼目次.*", "▲.*")); // 編目次
-		m_cStyleList.add(new Style_NoteLike("【索引】", "^▼索引.*", "▲.*")); // 索引
-		m_cStyleList.add(new Style_NoteLike("【安全上のご注意】", "^▼安全上のご注意.*", "▲.*")); // 安全上のご注意
-		m_cStyleList.add(new Style_NoteLike("【コード】", "^▼コード.*", "▲.*")); // コード
-
-		// 表組関連
-		m_cStyleList.add(new Style_Table()); // 表組み
-		m_cStyleList.add(new Style_TableCell()); // セル
-		m_cStyleList.add(new Style_TableCellHeader()); // セル：ヘッダー
-		m_cStyleList.add(new Style_TableRow()); // 行
+	protected StyleManager() {
+		defineStyles();
+		packToStyleList();
 	}
 
-	public static StyleManager getInstance() {
-		return instance;
+	protected void defineStyles() {
+		// StyleManagerにStyleを登録する
+		clearStyles();
+		defineDefaultStyles();
+	}
+
+	protected void clearStyles() {
+		m_cStyle_BulletLike_List = new ArrayList<Style_BulletLike>();
+		m_cStyle_NoteLike_List = new ArrayList<Style_NoteLike>();
+		m_cStyle_TableLike_List = new ArrayList<Style_Table>();
+	}
+
+	protected void defineDefaultStyles() {
+		// 箇条書きの類似品（標準的なものを定義）
+		m_cStyle_BulletLike_List.add(new Style_BulletLike("【箇条書き・】", "^・\t.*", "^(?!^\t).*")); // 箇条書き「・」
+		m_cStyle_BulletLike_List.add(new Style_BulletLike("【箇条書き－】", "^－\t.*", "^[^－].*")); // 箇条書き「－」
+		m_cStyle_BulletLike_List.add(new Style_BulletLike("【箇条書き◎】", "^◎\t.*", "^[^◎].*")); // 箇条書き「◎」
+		m_cStyle_BulletLike_List.add(new Style_BulletLike("【箇条書き●】", "^●\t.*", "^[^●].*")); // 箇条書き「◎」
+		m_cStyle_BulletLike_List.add(new Style_BulletLike("【※】", "^※\t.*", "^[^※].*")); // ※
+		m_cStyle_BulletLike_List.add(new Style_BulletLike("【*】", "^\\*+\t.*", "^[^\\*].*")); // *
+		m_cStyle_BulletLike_List.add(new Style_BulletLike("【※0】", "^※[0-9]\t.*", "^[^※].*")); // ※[0-9]
+		m_cStyle_BulletLike_List.add(new Style_BulletLike("【手順】", "^[０-９]+[\\.．]\t.*", "^(?![０-９]+[\\.．]\t).*")); // 手順
+		m_cStyle_BulletLike_List.add(new Style_BulletLike("【①】", "^[①-⑳㉑-㉟]\t.*", "^(?!①-⑳㉑-㉟]\t).*")); // ①～⑳㉑～㉟
+		m_cStyle_BulletLike_List.add(new Style_BulletLike("【1.】", "^[0-9]+\\.\t.*", "^[^0-9].*")); // 1.
+		m_cStyle_BulletLike_List.add(new Style_BulletLike("【1】", "^[0-9]+\t.*", "^[^0-9].*")); // 1.
+		m_cStyle_BulletLike_List.add(new Style_BulletLike("【Step 1】", "^Step [0-9]+\t.*", "^(?!Step [0-9]+\t).*")); // Step
+																													// 1.
+		m_cStyle_BulletLike_List.add(new Style_BulletLike("【箇条書き（用語）】", "^::.*", "^(?!::).*")); // 箇条書き「::」
+		m_cStyle_BulletLike_List.add(new Style_BulletLike("【＃】", "^＃.*", "^(?!＃).*"));
+
+		// どちらかというと箇条書きの類似品
+		m_cStyle_BulletLike_List.add(new Style_BulletLike("【項】", "^【項】.*", ".*")); // 【項】
+		m_cStyle_BulletLike_List.add(new Style_BulletLike("【項】", "^[0-9]+\\.[0-9]+\\.[0-9]+ .*", ".*")); // 【項】
+		m_cStyle_BulletLike_List.add(new Style_BulletLike("【項2】", "^【項2】.*", ".*")); // 【項2】
+		m_cStyle_BulletLike_List.add(new Style_BulletLike("【項下】", "^【項下】.*", ".*")); // 【項下】
+		m_cStyle_BulletLike_List.add(new Style_BulletLike("【項下下】", "^【項下下】.*", ".*")); // 【項下下】
+		m_cStyle_BulletLike_List.add(new Style_BulletLike("【■】", "^■[^■].*", "^[^■].*")); // 【■】
+		m_cStyle_BulletLike_List.add(new Style_BulletLike("【□】", "^□[^□].*", "^[^□].*")); // 【□】
+		m_cStyle_BulletLike_List.add(new Style_BulletLike("【節】", "^【節】.*", ".*")); // 【節】
+		m_cStyle_BulletLike_List.add(new Style_BulletLike("【節2】", "^【節2】.*", ".*")); // 【節2】
+		m_cStyle_BulletLike_List.add(new Style_BulletLike("【章】", "^【章】.*", ".*")); // 【章】
+		m_cStyle_BulletLike_List.add(new Style_BulletLike("【章】", "^[0-9]+\\. .*", ".*")); // 【章】
+		m_cStyle_BulletLike_List.add(new Style_BulletLike("【章サブ】", "^Hack #[0-9]+(-[0-9]+)?$", ".*")); // 【章サブ】
+		m_cStyle_BulletLike_List.add(new Style_BulletLike("【編】", "^【編】.*", ".*")); // 【編】
+		m_cStyle_BulletLike_List.add(new Style_BulletLike("【例：】", "^例：.*", ".*")); // 【例：】
+		m_cStyle_BulletLike_List.add(new Style_BulletLike("【画面】", "^【(画面|画像).*】.*", ".*")); // 【画面】
+		m_cStyle_BulletLike_List.add(new Style_BulletLike("【別紙タイトル】", "^■■■■■別紙.*", ".*"));
+		m_cStyle_BulletLike_List.add(new Style_BulletLike("【PL危険】", "^★危険★\t.*", ".*"));
+		m_cStyle_BulletLike_List.add(new Style_BulletLike("【PL警告】", "^★警告★\t.*", ".*"));
+		m_cStyle_BulletLike_List.add(new Style_BulletLike("【PL注意】", "^★注意★\t.*", ".*"));
+		m_cStyle_BulletLike_List.add(new Style_BulletLike("【HACK】", "^【HACK #[0-9]+】.*", ".*"));
+		m_cStyle_BulletLike_List.add(new Style_BulletLike("【画面】", "^<img .*>$", ".*")); // 【画面】
+		m_cStyle_BulletLike_List.add(new Style_BulletLike("【――】", "^----\t.*", "^(?!----\t).*")); // 【――】
+
+		// お知らせの類似品
+		m_cStyle_NoteLike_List.add(new Style_NoteLike("【メモ】", "^▼メモ.*", "▲.*")); // memo
+		m_cStyle_NoteLike_List.add(new Style_NoteLike("【ヒント】", "^▼ヒント.*", "▲.*")); // ヒント
+		m_cStyle_NoteLike_List.add(new Style_NoteLike("【重要】", "^▼重要.*", "▲.*")); // 重要
+		m_cStyle_NoteLike_List.add(new Style_NoteLike("【注意】", "^▼注意.*", "▲.*")); // 注意
+		m_cStyle_NoteLike_List.add(new Style_NoteLike("【補足】", "^▼補 *足.*", "▲.*")); // 補足
+		m_cStyle_NoteLike_List.add(new Style_NoteLike("【囲み】", "^▼囲み.*", "▲.*")); // 囲み
+		m_cStyle_NoteLike_List.add(new Style_NoteLike("【付録】", "^▼付録.*", "▲.*")); // 付録
+		m_cStyle_NoteLike_List.add(new Style_NoteLike("【利用許諾】", "^▼利用許諾.*", "▲.*")); // 利用許諾
+		m_cStyle_NoteLike_List.add(new Style_NoteLike("【編目次】", "^▼編目次.*", "▲.*")); // 編目次
+		m_cStyle_NoteLike_List.add(new Style_NoteLike("【目次】", "^▼目次.*", "▲.*")); // 編目次
+		m_cStyle_NoteLike_List.add(new Style_NoteLike("【索引】", "^▼索引.*", "▲.*")); // 索引
+		m_cStyle_NoteLike_List.add(new Style_NoteLike("【安全上のご注意】", "^▼安全上のご注意.*", "▲.*")); // 安全上のご注意
+		m_cStyle_NoteLike_List.add(new Style_NoteLike("【コード】", "^▼コード.*", "▲.*")); // コード
+		m_cStyle_NoteLike_List.add(new Style_NoteLike("【リンク】", "^▼リンク.*", "▲.*")); // リンク
+		m_cStyle_NoteLike_List.add(new Style_NoteLike("【コマンド】", "^▼コマンド.*", "▲.*")); // コード
+
+		// 表組関連
+		m_cStyle_TableLike_List.add(new Style_Table()); // 表組み
+		m_cStyle_TableLike_List.add(new Style_TableCell()); // セル
+		m_cStyle_TableLike_List.add(new Style_TableCellHeader()); // セル：ヘッダー
+		m_cStyle_TableLike_List.add(new Style_TableCellHeaderRow()); // セル：行ヘッダー
+		m_cStyle_TableLike_List.add(new Style_TableRow()); // 行
+	}
+
+	public void packToStyleList() {
+		m_cStyleList = new ArrayList<Style>();
+		m_cStyleList.addAll(m_cStyle_BulletLike_List);
+		m_cStyleList.addAll(m_cStyle_NoteLike_List);
+		m_cStyleList.addAll(m_cStyle_TableLike_List);
+		// 本文（最後に入れる）
+		m_cStyleList.add(m_cBodyStyle); // 本文
 	}
 
 	/*
@@ -141,5 +153,13 @@ public class StyleManager {
 			}
 		}
 		return null;
+	}
+
+	static public Style getBodyStyle() {
+		return m_cBodyStyle;
+	}
+
+	static public Style getRootStyle() {
+		return m_cRootStyle;
 	}
 }

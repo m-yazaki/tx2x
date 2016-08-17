@@ -8,7 +8,10 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import tx2x.IntermediateTextTreeWalker;
 import tx2x.StyleManager;
+import tx2x.StyleManagerFactory;
+import tx2x.Style_TagInfo;
 import tx2x.Tx2xOptions;
 import tx2x.core.ControlText;
 import tx2x.core.IntermediateText;
@@ -25,127 +28,69 @@ public class IntermediateTextTreeToWord {
 	int m_nLsIndex = 0;
 	private boolean m_bDebugMode;
 	String m_sTemplateDoc = "Tx2xWordTemplate.dotx";
-	private TableManager m_currentTable;
+	// private TableManager m_currentTable;
+	private StyleManager m_cStyleManager;
 
 	public IntermediateTextTreeToWord(boolean bDebugMode) {
 		super();
 		m_TableWriterList = new LinkedList<TableWriter>();
 		m_bDebugMode = bDebugMode;
+
+		StyleManagerFactory cFactory = StyleManagerFactory.getInstance();
+		m_cStyleManager = cFactory.getStyleManager();
 	}
 
-	public void output(File cWordFile, ControlText resultRootText)
-			throws IOException {
+	public void output(File cWordFile, ControlText resultRootText, LongStyleManagerWord lsManager,
+			IntermediateTextTreeWalker cTreeWalker) throws IOException {
 
 		boolean tVisible = Tx2xOptions.getInstance().getBoolean("Visible");
 		ActiveXComponent oWord = new ActiveXComponent("Word.Application");
 		oWord.setProperty("Visible", new Variant(tVisible));
 		Dispatch oDocuments = oWord.getProperty("Documents").toDispatch();
-		Dispatch.call(oDocuments, "Add",
-				cWordFile.getParent() + "\\" + m_sTemplateDoc).toDispatch();
+		Dispatch.call(oDocuments, "Add", cWordFile.getParent() + "\\" + m_sTemplateDoc).toDispatch();
 		Dispatch oSelection = oWord.getProperty("Selection").toDispatch();
 
 		// 書き込み
-		LongStyleManager lsManager = new LongStyleManager(oSelection);
-		preScan(resultRootText, lsManager); // プレスキャン。lsManagerにスタイル情報（longStyle）のArrayListを準備する
-		outputResult(oSelection, resultRootText, lsManager);
+		outputResult(oSelection, resultRootText, lsManager, cTreeWalker);
 
 		// 保存
 		try {
-			Dispatch oDocument = Dispatch.call(oSelection, "Document")
-					.toDispatch();
+			Dispatch oDocument = Dispatch.call(oSelection, "Document").toDispatch();
 			Dispatch.call(oDocument, "SaveAs2", cWordFile.getAbsolutePath(), 12 /* wdFormatXMLDocument */);
 		} catch (ComFailException e) {
-			System.out.println("---------- error ----------\n"
-					+ e.getLocalizedMessage() + "---------------------------");
+			System.out
+					.println("---------- error ----------\n" + e.getLocalizedMessage() + "---------------------------");
 		}
 		oWord.setProperty("Visible", new Variant(true));
 	}
 
-	private void preScan(ControlText resultText, LongStyleManager lsManager) {
-		// TODO 自動生成されたメソッド・スタブ
+	private void outputResult(Dispatch oSelection, ControlText resultText, LongStyleManagerWord lsManager,
+			IntermediateTextTreeWalker cTreeWalker) throws IOException {
 		Iterator<IntermediateText> it = resultText.getChildList().iterator();
+		IntermediateText iText_TreeWalker_Temp = null;
 		while (it.hasNext()) {
 			IntermediateText iText = it.next();
-			if (iText.hasChild()) {
-				// 子供がいる＝ControlTextである
-				ControlText cText = (ControlText) iText;
-				Style currentStyle = cText.getStyle();
 
-				lsManager.addStyle(currentStyle);
-
-				/*
-				 * ControlTextでも、手順・表の場合は少し特別な出力方法をとる
-				 */
-				// 表・行・セルの開始
-				if (currentStyle != null && currentStyle.bTableLikeStyle()) {
-					if (currentStyle.getStyleName().compareTo("【表】") == 0) {
-						if (m_bDebugMode)
-							System.out.println("【表】");
-						/* 注目しているcTextは表の始まりなので、Width,Heightを取得して処理を始める */
-						TableManager currentTable = new TableManager(cText,
-								m_bDebugMode);
-						TableWriter tWriter = new TableWriter(currentTable);
-						m_TableWriterList.add(tWriter);
-					} else if (currentStyle.getStyleName().compareTo("【行】") == 0) {
-						// TableWriter tWriter = m_TableWriterList.getLast();
-						if (m_bDebugMode)
-							System.out.println("【行】");
-					} else if (currentStyle.getStyleName().compareTo("【セル】") == 0) {
-						// TableWriter tWriter = m_TableWriterList.getLast();
-						if (m_bDebugMode)
-							System.out.println("【セル】");
-						if (cText.getChildList().get(0).getText()
-								.matches(".*【ヘッダー】.*")) {
-							StyleManager styleManager = StyleManager
-									.getInstance();
-							Style newStyle = styleManager.getStyle("【セル：ヘッダー】");
-							lsManager.removeLastStyle();
-							lsManager.addStyle(newStyle);
-						}
-					}
-				}
-				preScan(cText, lsManager); // さらに奥深くへ（再帰）
-				// 表・行・セルの終了
-				if (currentStyle != null && currentStyle.bTableLikeStyle()) {
-					if (currentStyle.getStyleName().compareTo("【表】") == 0) {
-						m_TableWriterList.removeLast(); // 表終了
-						lsManager.setPrevLongStyle("【表】▲");
-					} else if (currentStyle.getStyleName().compareTo("【行】") == 0) {
-					} else if (currentStyle.getStyleName().compareTo("【セル】") == 0) {
-					}
-				}
-				lsManager.removeLastStyle();
+			// TreeWalkerに引っ越す用
+			IntermediateText iText_dup = iText;
+			IntermediateText iText_TreeWalker = null;
+			if (iText_TreeWalker_Temp == null) {
+				iText_TreeWalker = cTreeWalker.firstChild();
+				iText_TreeWalker_Temp = iText_TreeWalker;
 			} else {
-				// 子供がいない
-				Style currentStyle = iText.getStyle();
-				if (currentStyle != null) {
-					// スタイルがある
-					if (currentStyle.getStyleName().compareTo("【表】") == 0) {
-						// 表の場合は何もしない…？
-					} else if (iText.getText() != null) {
-						// 表以外の場合は…
-
-						// （共通）テキストを出力
-						lsManager.addStyle(currentStyle); // スタイルをpush
-						lsManager.addLongStyleToArrayList();
-						lsManager.removeLastStyle(); // スタイルをpop
-					}
-				} else {
-					// スタイルがないのでテキストを出力するのみ
-					if (iText.getText() != null) {
-						lsManager.addLongStyleToArrayList();
-					}
-				}
+				iText_TreeWalker = cTreeWalker.nextSibling();
+				iText_TreeWalker_Temp = iText_TreeWalker;
 			}
-		}
-	}
+			if (iText_dup != iText_TreeWalker) {
+				System.out.println("ERROR!");
+				System.out.println("iText:");
+				System.out.println(iText_dup.getDebugText());
+				System.out.println("iText_TreeWalker:");
+				System.out.println(iText_TreeWalker.getDebugText());
+				System.out.println("Ooooooops;");
+			}
 
-	private void outputResult(Dispatch oSelection, ControlText resultText,
-			LongStyleManager lsManager) throws IOException {
-		Iterator<IntermediateText> it = resultText.getChildList().iterator();
-		while (it.hasNext()) {
-			IntermediateText iText = it.next();
-			if (iText.hasChild()) {
+			if (iText instanceof ControlText) {
 				// 子供がいる＝ControlTextである
 				ControlText cText = (ControlText) iText;
 				Style currentStyle = cText.getStyle();
@@ -158,28 +103,27 @@ public class IntermediateTextTreeToWord {
 				// 表・行・セルの開始
 				if (currentStyle != null && currentStyle.bTableLikeStyle()) {
 					if (currentStyle.getStyleName().compareTo("【表】") == 0) {
-						m_currentTable = new TableManager(cText, m_bDebugMode);
-						TableWriter tWriter = new TableWriter(m_currentTable);
+						TableManager currentTable = new TableManager(cText, cTreeWalker, m_bDebugMode);
+						TableWriter tWriter = new TableWriter(currentTable);
 						m_TableWriterList.add(tWriter);
 						tWriter.write(oSelection);
 					} else if (currentStyle.getStyleName().compareTo("【行】") == 0) {
 						TableWriter tWriter = m_TableWriterList.getLast();
 						tWriter.selectNextRow();
+					} else if (currentStyle.getStyleName().equals("【セル：ヘッダー】")) {
+						TableWriter tWriter = m_TableWriterList.getLast();
+						tWriter.selectNextCell();
 					} else if (currentStyle.getStyleName().compareTo("【セル】") == 0) {
 						TableWriter tWriter = m_TableWriterList.getLast();
 						tWriter.selectNextCell();
-
-						if (cText.getChildList().get(0).getText()
-								.matches(".*【ヘッダー】.*")) {
-							StyleManager styleManager = StyleManager
-									.getInstance();
-							Style newStyle = styleManager.getStyle("【セル：ヘッダー】");
-							lsManager.removeLastStyle();
-							lsManager.addStyle(newStyle);
-						}
 					}
 				}
-				outputResult(oSelection, cText, lsManager); // さらに奥深くへ（再帰）
+
+				ControlTextWriter cControlTextWriter = new ControlTextWriter();
+				cControlTextWriter.writeBigBlockOpenInfo(oSelection, lsManager, cText);
+				outputResult(oSelection, cText, lsManager, cTreeWalker); // さらに奥深くへ（再帰）
+				cControlTextWriter.writeBigBlockCloseInfo(oSelection, lsManager, cText);
+
 				// 表・行・セルの終了
 				if (currentStyle != null && currentStyle.bTableLikeStyle()) {
 					if (currentStyle.getStyleName().compareTo("【表】") == 0) {
@@ -216,11 +160,11 @@ public class IntermediateTextTreeToWord {
 				}
 			}
 		}
+		cTreeWalker.parentNode();
 	}
 
-	private void outputText(Dispatch oSelection, LongStyleManager lsManager,
-			IntermediateText iText) {
-		if (iText.hasChild()) {
+	private void outputText(Dispatch oSelection, LongStyleManagerWord lsManager, IntermediateText iText) {
+		if (iText instanceof ControlText) {
 			// System.out.println("outputText:" + iText.getText());
 			return; // ControlTextはカエレ！
 		}
@@ -232,13 +176,12 @@ public class IntermediateTextTreeToWord {
 			// System.out.println("longStyle OK");
 		} else {
 			// NG!
-			System.out.println("longStyle NG:" + realtimeStyle + "/"
-					+ bufferingStyle);
+			System.out.println("longStyle NG:" + realtimeStyle + "/" + bufferingStyle);
 		}
 		// iTextとsLongStyleから必要な処理を行う
 		try {
 			String style = lsManager.getTargetStyle(iText, m_nLsIndex + 1);
-			lsManager.writeTargetData(oSelection, style, iText, m_nLsIndex + 1);
+			lsManager.writeTargetIntermediateText(oSelection, style, iText, m_nLsIndex + 1);
 		} catch (IOException e) {
 			// TODO 自動生成された catch ブロック
 			e.printStackTrace();

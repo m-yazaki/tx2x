@@ -9,14 +9,14 @@ import tx2x.core.ControlText;
 import tx2x.core.IntermediateText;
 import tx2x.core.TableManager;
 
-public class GioPriNasTableWriter {
+public class TableWriter {
 	private TableManager m_tManager;
 
 	/* 注目しているセル座標 */
 	private int m_nX;
 	private int m_nY;
 
-	public GioPriNasTableWriter(ControlText cText, IntermediateTextTreeWalker cTreeWalker, boolean bDebugMode) {
+	public TableWriter(ControlText cText, IntermediateTextTreeWalker cTreeWalker, boolean bDebugMode) {
 		m_tManager = new TableManager(cText, cTreeWalker, bDebugMode);
 	}
 
@@ -25,17 +25,20 @@ public class GioPriNasTableWriter {
 		m_nY = 0;
 		String currentLongStyle = lsManager.getLongStyleFromArrayList(nLsIndex + 1);
 		String ret = "";
-		if (currentLongStyle.matches("【表】【行】【セル(：ヘッダー)?】【本文】【本文】【本文】")) {
-			ret = "\t\t<table class=\"Configuration\">";
-		} else if (currentLongStyle.matches("【手順】【手順】【表】【行】【セル(：ヘッダー)?】【本文】【本文】【本文】")) {
-			ret = "\t\t<table class=\"Configuration Indent15\">";
+		if (currentLongStyle.equals("【表】【行】【セル】【本文】【本文】") || currentLongStyle
+				.equals("【表】【行】【セル：ヘッダー】【本文】【本文】")/*
+													 * 2013.12.19
+													 */) {
+			ret = "\n\t\t<table class=\"Configuration\">";
+		} else if (currentLongStyle.equals("【手順】【手順】【表】【行】【セル】【本文】【本文】")) {
+			ret = "\n\t\t<table class=\"Configuration Indent2\">";
 		} else {
 			System.out.println("【警告】表のclassが正しいことを確認してください。");
-			System.out.println(" > " + currentLongStyle);
-			ret = "\t\t<table class=\"Configuration\"><!-- " + currentLongStyle + " -->";
+			System.out.println(currentLongStyle);
+			ret = "\n\t\t<table class=\"Configuration\"><!-- " + currentLongStyle + " -->";
 		}
 		if (m_tManager.hasCaption()) {
-			ret = ret + "\t\t\t<caption>" + m_tManager.getCaption() + "</caption>";
+			ret = ret + "\n\t\t\t<caption>" + m_tManager.getCaption() + "</caption>";
 		}
 		return ret;
 	}
@@ -54,9 +57,9 @@ public class GioPriNasTableWriter {
 		 */
 		// そもそも【[上下左右]と結合】だった場合は、セルを出力しない
 		{
-			IntermediateText iText = ((ControlText) cText.getChildList().get(0)).getChildList().get(0);
+			IntermediateText iText = cText.getChildList().get(0);
 			if (iText instanceof ControlText) {
-				if (((ControlText) iText).getChildList().get(0).getText().matches("【[上下左右]と結合】"))
+				if (((ControlText) iText).getChildList().get(0).getChildText().matches("【[上下左右]と結合】"))
 					return "";
 			} else {
 				if (iText.getText().matches("【[上下左右]と結合】"))
@@ -79,10 +82,6 @@ public class GioPriNasTableWriter {
 		// Col1-NoWrap/Wide100スタイルの場合は、1列目だけ幅が決められていて、改行禁止
 		else if (m_tManager.getStyle().equals("Col1-NoWrap/Wide100") && m_nX == 1) {
 			return "\t\t\t\t<th class=\"Wide100\">";
-		}
-		// Col1-NoWrapスタイルの場合は、【ヘッダー】はすべて改行禁止
-		else if (m_tManager.getStyle().equals("Col1-NoWrap")) {
-			return "\t\t\t\t<th class=\"NoWrap\">";
 		}
 		// 標準
 		return "\t\t\t\t<th" + width_attribute + height_attribute + ">";
@@ -178,9 +177,9 @@ public class GioPriNasTableWriter {
 	}
 
 	public String getHeaderCellFooter(LongStyleManagerXHTML lsManager, ControlText cText) {
-		IntermediateText iText = ((ControlText) cText.getChildList().get(0)).getChildList().get(0);
+		IntermediateText iText = cText.getChildList().get(0);
 		if (iText instanceof ControlText) {
-			if (((ControlText) iText).getChildList().get(0).getText().matches("【[上下左右]と結合】"))
+			if (((ControlText) iText).getChildList().get(0).getChildText().matches("【[上下左右]と結合】"))
 				return "";
 		} else {
 			if (iText.getText().matches("【[上下左右]と結合】"))

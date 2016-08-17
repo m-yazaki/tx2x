@@ -8,6 +8,7 @@ package tx2x.core;
 public class IntermediateText {
 	Style m_cAStyle; // 一致したスタイルを保持
 	String m_sLine; // テキスト本文
+	Object m_cOption; // オプション
 
 	public IntermediateText(Style style, String line) {
 		super();
@@ -23,8 +24,8 @@ public class IntermediateText {
 		return m_sLine;
 	}
 
-	public boolean hasChild() {
-		return false;
+	public String getChildText() {
+		return getText();
 	}
 
 	public void setText(String line) {
@@ -33,5 +34,17 @@ public class IntermediateText {
 
 	public void setStyle(Style newStyle) {
 		m_cAStyle = newStyle;
+	}
+
+	public String getDebugText() {
+		return "(iText)" + m_cAStyle.getStyleName() + ":" + m_sLine + "\n";
+	}
+
+	public void setOption(Object newOption) {
+		m_cOption = newOption;
+	}
+
+	public Object getOption() {
+		return m_cOption;
 	}
 }

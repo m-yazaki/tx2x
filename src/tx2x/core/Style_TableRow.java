@@ -2,15 +2,10 @@ package tx2x.core;
 
 import java.util.ArrayList;
 
-public class Style_TableRow extends Style {
+public class Style_TableRow extends Style_Table {
 
 	public Style_TableRow() {
 		super("【行】", "^=====.*", "^(=====.*|▲表?)");
-	}
-
-	@Override
-	public boolean bTableLikeStyle() {
-		return true;
 	}
 
 	@Override

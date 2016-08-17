@@ -4,25 +4,27 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.ListIterator;
 
+import tx2x.IntermediateTextTreeBuilder;
 import tx2x.StyleManager;
-/**
- * iTextツリーを構築する
- */
-import tx2x.StyleManagerFactory;
 import tx2x.core.ControlText;
 import tx2x.core.IntermediateText;
 import tx2x.core.Style;
 
-public class IntermediateTextTreeBuilderXHTML extends tx2x.xhtml.IntermediateTextTreeBuilderXHTML {
+/**
+ * iTextツリーを構築する
+ *
+ * @author yazaki.makoto
+ *
+ */
+public class IntermediateTextTreeBuilderXHTML extends IntermediateTextTreeBuilder {
+
 	public IntermediateTextTreeBuilderXHTML(boolean bDebugMode) {
 		super(bDebugMode);
-
-		// StyleManagerの作成と登録
-		StyleManagerFactory cFactory = StyleManagerFactory.getInstance();
-		m_cStyleManager = new GioPriNasStyleManager();
-		cFactory.regist(m_cStyleManager);
 	}
 
+	/*
+	 * 整形
+	 */
 	protected ControlText preFormatControlText(ControlText resultRootText) {
 		ArrayList<IntermediateText> cDeleteBlock = new ArrayList<IntermediateText>();
 		ArrayList<IntermediateText> cRootChildList = resultRootText.getChildList();
@@ -35,32 +37,23 @@ public class IntermediateTextTreeBuilderXHTML extends tx2x.xhtml.IntermediateTex
 			ControlText cText = (ControlText) it.next();
 			Style style = cText.getStyle();
 			if (style != null && (style.getStyleName().equals("【項】") || style.getStyleName().equals("【項下】")
-					|| style.getStyleName().equals("【：】") || style.getStyleName().equals("【■】")
-					|| style.getStyleName().equals("【対応パッケージ】"))) {
+					|| style.getStyleName().equals("【■】") || style.getStyleName().equals("【対応パッケージ】"))) {
 
-				// 次の行があるかチェック
-				if (cRootChildList.size() <= it.nextIndex()) {
-					break; // チェック終了
-				}
-				// 次の行が【本文】の場合は、削除できるかもしれない
 				ControlText cNextText = (ControlText) cRootChildList.get(it.nextIndex());
-				if (cNextText.getStyle() == StyleManager.getBodyStyle()) {
-					ArrayList<IntermediateText> cChildList = cNextText.getChildList();
-					for (int i = 0; i < cChildList.size();) {
-						IntermediateText iText1 = cChildList.get(i);
-						IntermediateText iText2 = ((ControlText) iText1).getChildList().get(0);
-						if (iText2.getStyle() == StyleManager.getBodyStyle() && iText2.getText().equals("")) {
-							cChildList.remove(i);
-						} else {
-							break;
-						}
+				ArrayList<IntermediateText> cChildList = cNextText.getChildList();
+				for (int i = 0; i < cChildList.size();) {
+					IntermediateText iText = cChildList.get(i);
+					if (iText.getStyle() == StyleManager.getBodyStyle() && iText.getChildText().equals("")) {
+						cChildList.remove(i);
+					} else {
+						break;
 					}
-					if (cText.getChildList().size() == 0) {
-						// 何もなくなった（後で削除する）
-						// + "の直後の空行（スタイル：標準）を削除");
-						cDeleteBlock.add(cText);
-						// break;
-					}
+				}
+				if (cText.getChildList().size() == 0) {
+					// 何もなくなった（後で削除する）
+					// + "の直後の空行（スタイル：標準）を削除");
+					cDeleteBlock.add(cText);
+					// break;
 				}
 			}
 		}
@@ -81,11 +74,10 @@ public class IntermediateTextTreeBuilderXHTML extends tx2x.xhtml.IntermediateTex
 			ControlText cText = (ControlText) it.next();
 			Style style = cText.getStyle();
 
-			if (style != null && (style.getStyleName().equals("【項下】") || style.getStyleName().equals("【：】")
-					|| style.getStyleName().equals("【■】") || style.getStyleName().equals("【項下下】")
-					|| style.getStyleName().equals("【手順】") || style.getStyleName().equals("【重要】")
-					|| style.getStyleName().equals("【注意】") || style.getStyleName().equals("【補足】")
-					|| style.getStyleName().equals("【表】"))) {
+			if (style != null && (style.getStyleName().equals("【項下】") || style.getStyleName().equals("【■】")
+					|| style.getStyleName().equals("【項下下】") || style.getStyleName().equals("【手順】")
+					|| style.getStyleName().equals("【重要】") || style.getStyleName().equals("【注意】")
+					|| style.getStyleName().equals("【補足】") || style.getStyleName().equals("【表】"))) {
 				while (true) {
 					if (cPrevBlock == null)
 						break;
@@ -183,4 +175,73 @@ public class IntermediateTextTreeBuilderXHTML extends tx2x.xhtml.IntermediateTex
 		return resultRootText;
 	}
 
+	/**
+	 * ●1個は本文と同じ扱いにする
+	 *
+	 * @param cText
+	 */
+	public void convertOneBulletToBody(ControlText cText) {
+		Style style = cText.getStyle();
+		if (style != null && (style.getStyleName().equals("【重要】") || style.getStyleName().equals("【注意】")
+				|| style.getStyleName().equals("【補足】"))) {
+			ArrayList<IntermediateText> cChildList = cText.getChildList();
+			if (cChildList.size() > 1)
+				return;
+			Iterator<IntermediateText> itChild = cChildList.iterator();
+			while (itChild.hasNext()) {
+				ControlText cChildText = (ControlText) itChild.next();
+				if (cChildText.getStyle().getStyleName().equals("【箇条書き●】")) {
+					ArrayList<IntermediateText> cBulletList = cChildText.getChildList();
+					if (cBulletList.size() == 1) {
+						// 箇条書きが1個しかない
+						Style bodyStyle = StyleManager.getBodyStyle();
+						cChildText.setStyle(bodyStyle);
+						ControlText cOneBulletText = (ControlText) cBulletList.get(0);
+						// ControlTextの書き替え
+						cOneBulletText.setStyle(bodyStyle);
+						// cOneBulletText.setText("【本文】");
+						// cChildList.set(0, cOneBulletText);
+
+						// itBulletChildは、
+						// iText（ごにょごにょ）
+						// cText（【本文】）
+						// を巡るイテレータ
+						Iterator<IntermediateText> itBulletChild = cOneBulletText.getChildList().iterator();
+
+						// ●以外に何かがある
+						// 1つ目を【本文】にする
+						IntermediateText iOneBulletText = itBulletChild.next();
+						iOneBulletText.setText(iOneBulletText.getText().replaceFirst("●\t", ""));
+						iOneBulletText.setStyle(bodyStyle);
+
+						if (cOneBulletText.getChildList().size() > 1) {
+							IntermediateText iOneBulletTextNext = (ControlText) cOneBulletText.getChildList().get(1);
+
+							// 2つ目が【本文】なら1つ目を2つ目の子供に移動する
+							if (iOneBulletTextNext.getStyle().getStyleName().equals("【本文】")) {
+								ArrayList<IntermediateText> childList = ((ControlText) iOneBulletTextNext)
+										.getChildList();
+								cChildText.getChildList().addAll(childList);
+								cOneBulletText.getChildList().remove(1);
+								break;
+							} else {
+								// 2つ目が【本文】以外なら2つ目以降を1レベル上げる
+								ArrayList<IntermediateText> childList = ((ControlText) cText.getChildList().get(0))
+										.getChildList();
+
+								// 移動対象のcText
+								int count = childList.size() - 1;
+								for (int i = 0; i < count; i++) {
+									ControlText moveControlText = (ControlText) childList.get(1);
+									cText.getChildList().add(i + 1, moveControlText);
+									childList.remove(moveControlText);
+								}
+								break;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 }

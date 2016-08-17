@@ -8,10 +8,26 @@ public class CellInfo {
 	/* 結合セル数 */
 	int m_nWidth;
 	int m_nHeight;
+	private int m_nDiffX;
+	private int m_nDiffY;
 	/* 背景色 */
 	private int m_nColor;
 	/* 上下の揃えかた */
 	private String m_sVerticalJustification;
+	private CellInfo m_cParent;
+
+	private boolean m_bHeader;
+	private boolean m_bRowHeader;
+	private boolean m_bColumnHeader;
+	private String m_sCellStyle;
+
+	public int getDiffX() {
+		return m_nDiffX;
+	}
+
+	public int getDiffY() {
+		return m_nDiffY;
+	}
 
 	public CellInfo(int width, int height) {
 		m_nWidth = width;
@@ -71,7 +87,45 @@ public class CellInfo {
 		return m_sVerticalJustification;
 	}
 
+	public void setMerged(CellInfo cParent, int nDiffX, int nDiffY) {
+		m_cParent = cParent;
+		m_nDiffX = nDiffX;
+		m_nDiffY = nDiffY;
+	}
+
+	public CellInfo isMerged() {
+		return m_cParent;
+	}
+
+	public void setHeader(boolean bHeader) {
+		m_bHeader = bHeader;
+	}
+
 	public boolean isHeader() {
-		return (m_nColor != 0);
+		return m_bHeader;
+	}
+
+	public void setRowHeader(boolean bRowHeader) {
+		m_bRowHeader = bRowHeader;
+	}
+
+	public boolean isRowHeader() {
+		return m_bRowHeader;
+	}
+
+	public void setColumnHeader(boolean bColumnHeader) {
+		m_bColumnHeader = bColumnHeader;
+	}
+
+	public boolean isColumnHeader() {
+		return m_bColumnHeader;
+	}
+
+	public void setCellStyle(String sCellStyle) {
+		m_sCellStyle = sCellStyle;
+	}
+
+	public String getCellStyle() {
+		return m_sCellStyle;
 	}
 }

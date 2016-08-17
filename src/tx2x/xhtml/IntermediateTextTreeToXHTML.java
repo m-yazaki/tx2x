@@ -15,16 +15,13 @@ import tx2x.Style_TagInfo;
 import tx2x.core.ControlText;
 import tx2x.core.IntermediateText;
 import tx2x.core.Style;
-import tx2x.xhtml.MenuNode;
-import tx2x.xhtml.NavPointManager;
-import tx2x.xhtml.XHTML_FileWriter;
 
 public class IntermediateTextTreeToXHTML {
 	protected boolean m_bMac;
 	int m_nLsIndex = 0;
 	private boolean m_bDebugMode;
 	private NavPointManager m_cNavPointManager;
-	private LinkedList<GioPriNasTableWriter> m_TableWriterList;
+	private LinkedList<TableWriter> m_TableWriterList;
 
 	/* XHTML独自 */
 	private String m_sPrevFilename;
@@ -35,7 +32,7 @@ public class IntermediateTextTreeToXHTML {
 		m_bMac = bMac;
 		m_bDebugMode = bDebugMode;
 		m_cNavPointManager = cNavPointManager;
-		m_TableWriterList = new LinkedList<GioPriNasTableWriter>();
+		m_TableWriterList = new LinkedList<TableWriter>();
 	}
 
 	public void output(File cXHTML, ControlText resultRootText, LongStyleManagerXHTML lsManager,
@@ -95,28 +92,13 @@ public class IntermediateTextTreeToXHTML {
 	}
 
 	private void outputHeader(XHTML_FileWriter fwXHTML, String sTitle) throws IOException {
-		GioPriNasMenuManager cMenuManager = GioPriNasMenuManager.getInstance();
-
-		// menu.htmlでは、1.xxxのようにピリオドの後ろにスペースがないものと仮定している
-		sTitle = sTitle.replaceFirst("^([0-9]+\\.) ", "$1");
-		sTitle = sTitle.replaceFirst("（Line2）", "");
-		MenuNode cMenuNode = cMenuManager.getMenuNode(sTitle);
-
 		String sManualName, sPartName;
 		LinkedHashMap<String, String> cParents;
-		if (cMenuNode != null) {
-			sManualName = cMenuNode.getManualName_DUP();
-			sPartName = cMenuNode.getPartName();
-			cParents = cMenuNode.getParents();
-			m_sPrevFilename = cMenuNode.getPrevFilename();
-			m_sNextFilename = cMenuNode.getNextFilename();
-		} else {
-			sManualName = "";
-			sPartName = "";
-			cParents = null;
-			m_sPrevFilename = "";
-			m_sNextFilename = "";
-		}
+		sManualName = "";
+		sPartName = "";
+		cParents = null;
+		m_sPrevFilename = "";
+		m_sNextFilename = "";
 
 		fwXHTML.write(
 				"<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">",
@@ -239,19 +221,19 @@ public class IntermediateTextTreeToXHTML {
 				if (currentStyle != null && currentStyle.bTableLikeStyle()) {
 					if (currentStyle.getStyleName().compareTo("【表】") == 0) {
 						/* 注目しているcTextは表の始まりなので、Width,Heightを取得して処理を始める */
-						GioPriNasTableWriter currentTable = new GioPriNasTableWriter(cText, cTreeWalker, m_bDebugMode);
+						TableWriter currentTable = new TableWriter(cText, cTreeWalker, m_bDebugMode);
 						m_TableWriterList.add(currentTable);
 
 						// lsManager.getStyle(cText)は、表を挿入する行のスタイルを返してくれる
 						fwXHTML.write(currentTable.getTableHeader(lsManager, m_nLsIndex), false, m_bMac);
 					} else if (currentStyle.getStyleName().compareTo("【行】") == 0) {
-						GioPriNasTableWriter currentTable = m_TableWriterList.getLast();
+						TableWriter currentTable = m_TableWriterList.getLast();
 						fwXHTML.write(currentTable.getRowHeader(lsManager), false, m_bMac);
 					} else if (currentStyle.getStyleName().compareTo("【セル：ヘッダー】") == 0) {
-						GioPriNasTableWriter currentTable = m_TableWriterList.getLast();
+						TableWriter currentTable = m_TableWriterList.getLast();
 						fwXHTML.write(currentTable.getHeaderCellHeader(lsManager, cText), false, m_bMac);
 					} else if (currentStyle.getStyleName().compareTo("【セル】") == 0) {
-						GioPriNasTableWriter currentTable = m_TableWriterList.getLast();
+						TableWriter currentTable = m_TableWriterList.getLast();
 						fwXHTML.write(currentTable.getCellHeader(lsManager, cText), false, m_bMac);
 					}
 				}
@@ -268,19 +250,19 @@ public class IntermediateTextTreeToXHTML {
 				// 表・行・セルの終了
 				if (currentStyle != null && currentStyle.bTableLikeStyle()) {
 					if (currentStyle.getStyleName().compareTo("【表】") == 0) {
-						GioPriNasTableWriter currentTable = m_TableWriterList.getLast();
+						TableWriter currentTable = m_TableWriterList.getLast();
 						fwXHTML.write(currentTable.getTableFooter(lsManager, m_nLsIndex), false, m_bMac);
 
 						m_TableWriterList.removeLast(); // 表を1つ捨てる
 						lsManager.setPrevLongStyle("【表】▲");
 					} else if (currentStyle.getStyleName().compareTo("【行】") == 0) {
-						GioPriNasTableWriter currentTable = m_TableWriterList.getLast();
+						TableWriter currentTable = m_TableWriterList.getLast();
 						fwXHTML.write(currentTable.getRowFooter(lsManager), false, m_bMac);
 					} else if (currentStyle.getStyleName().compareTo("【セル：ヘッダー】") == 0) {
-						GioPriNasTableWriter currentTable = m_TableWriterList.getLast();
+						TableWriter currentTable = m_TableWriterList.getLast();
 						fwXHTML.write(currentTable.getHeaderCellFooter(lsManager, cText), false, m_bMac);
 					} else if (currentStyle.getStyleName().compareTo("【セル】") == 0) {
-						GioPriNasTableWriter currentTable = m_TableWriterList.getLast();
+						TableWriter currentTable = m_TableWriterList.getLast();
 						fwXHTML.write(currentTable.getCellFooter(lsManager, cText), false, m_bMac);
 					}
 				}

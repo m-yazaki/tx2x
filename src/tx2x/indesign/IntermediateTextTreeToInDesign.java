@@ -8,8 +8,9 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import tx2x.IntermediateTextTreeWalker;
 import tx2x.StyleManager;
-import tx2x.Tx2x;
+import tx2x.StyleManagerFactory;
 import tx2x.core.ControlText;
 import tx2x.core.IntermediateText;
 import tx2x.core.Style;
@@ -21,19 +22,24 @@ public class IntermediateTextTreeToInDesign {
 	int m_nLsIndex = 0;
 	private boolean m_bDebugMode;
 	String m_sMaker;
+	private StyleManager m_cStyleManager;
 
 	public IntermediateTextTreeToInDesign(boolean bMac, String sMaker, boolean bDebugMode) {
 		this();
 		m_bMac = bMac;
 		m_sMaker = sMaker;
 		m_bDebugMode = bDebugMode;
+		/* StyleManagerを拡張するための仕組み */
+		StyleManagerFactory cFactory = StyleManagerFactory.getInstance();
+		m_cStyleManager = cFactory.getStyleManager();
 	}
 
 	public IntermediateTextTreeToInDesign() {
 		m_TableWriterList = new LinkedList<TableWriter>();
 	}
 
-	public void output(File cInDesign, ControlText resultRootText) throws IOException {
+	public void output(File cInDesign, ControlText resultRootText, IntermediateTextTreeWalker cTreeWalker)
+			throws IOException {
 		InDesignTT_FileWriter fwInDesign;
 		try {
 			fwInDesign = new InDesignTT_FileWriter(cInDesign);
@@ -45,9 +51,9 @@ public class IntermediateTextTreeToInDesign {
 
 		// 書き込み
 		LongStyleManager lsManager = new LongStyleManager(m_sMaker, m_bMac);
-		preScan(resultRootText, lsManager); // プレスキャン。lsManagerにスタイル情報（longStyle）のArrayListを準備する
+		preScan(resultRootText, lsManager, cTreeWalker); // プレスキャン。lsManagerにスタイル情報（longStyle）のArrayListを準備する
 		outputHeader(fwInDesign);
-		outputResult(fwInDesign, resultRootText, lsManager);
+		outputResult(fwInDesign, resultRootText, lsManager, cTreeWalker);
 
 		try {
 			fwInDesign.close(m_bMac);
@@ -57,11 +63,11 @@ public class IntermediateTextTreeToInDesign {
 		}
 	}
 
-	private void preScan(ControlText resultText, LongStyleManager lsManager) {
+	private void preScan(ControlText resultText, LongStyleManager lsManager, IntermediateTextTreeWalker cTreeWalker) {
 		Iterator<IntermediateText> it = resultText.getChildList().iterator();
 		while (it.hasNext()) {
 			IntermediateText iText = it.next();
-			if (iText.hasChild()) {
+			if (iText instanceof ControlText) {
 				// 子供がいる＝ControlTextである
 				ControlText cText = (ControlText) iText;
 				Style currentStyle = cText.getStyle();
@@ -76,9 +82,6 @@ public class IntermediateTextTreeToInDesign {
 					if (currentStyle.getStyleName().compareTo("【表】") == 0) {
 						if (m_bDebugMode)
 							System.out.println("【表】");
-						// widthを取得
-						String sTableInfo = cText.getChildList().get(0).getText();
-
 						// String sStyle = "";
 						// if (sTableInfo.indexOf("style:") != -1) {
 						// sStyle = sTableInfo.replaceFirst(
@@ -86,7 +89,7 @@ public class IntermediateTextTreeToInDesign {
 						// }
 
 						/* 注目しているcTextは表の始まりなので、Width,Heightを取得して処理を始める */
-						TableManager currentTable = new TableManager(cText, m_bDebugMode);
+						TableManager currentTable = new TableManager(cText, cTreeWalker, m_bDebugMode);
 						TableWriter tWriter = new TableWriter(currentTable);
 						m_TableWriterList.add(tWriter);
 
@@ -99,14 +102,13 @@ public class IntermediateTextTreeToInDesign {
 						if (m_bDebugMode)
 							System.out.println("【セル】");
 						if (cText.getChildList().get(0).getText().matches(".*【ヘッダー】.*")) {
-							StyleManager styleManager = StyleManager.getInstance();
-							Style newStyle = styleManager.getStyle("【セル：ヘッダー】");
+							Style newStyle = m_cStyleManager.getStyle("【セル：ヘッダー】");
 							lsManager.removeLastStyle();
 							lsManager.addStyle(newStyle);
 						}
 					}
 				}
-				preScan(cText, lsManager); // さらに奥深くへ（再帰）
+				preScan(cText, lsManager, cTreeWalker); // さらに奥深くへ（再帰）
 				// 表・行・セルの終了
 				if (currentStyle != null && currentStyle.bTableLikeStyle()) {
 					if (currentStyle.getStyleName().compareTo("【表】") == 0) {
@@ -153,12 +155,12 @@ public class IntermediateTextTreeToInDesign {
 		fwInDesign.write("<Version:7><FeatureSet:InDesign-Japanese><ColorTable:=>", true, m_bMac);
 	}
 
-	private void outputResult(InDesignTT_FileWriter fwInDesign, ControlText resultText, LongStyleManager lsManager)
-			throws IOException {
+	private void outputResult(InDesignTT_FileWriter fwInDesign, ControlText resultText, LongStyleManager lsManager,
+			IntermediateTextTreeWalker cTreeWalker) throws IOException {
 		Iterator<IntermediateText> it = resultText.getChildList().iterator();
 		while (it.hasNext()) {
 			IntermediateText iText = it.next();
-			if (iText.hasChild()) {
+			if (iText instanceof ControlText) {
 				// 子供がいる＝ControlTextである
 				ControlText cText = (ControlText) iText;
 				Style currentStyle = cText.getStyle();
@@ -171,8 +173,6 @@ public class IntermediateTextTreeToInDesign {
 				// 表・行・セルの開始
 				if (currentStyle != null && currentStyle.bTableLikeStyle()) {
 					if (currentStyle.getStyleName().compareTo("【表】") == 0) {
-						// widthを取得
-						String sTableInfo = cText.getChildList().get(0).getText();
 						// String sStyle = "";
 						// if (sTableInfo.indexOf("style:") != -1) {
 						// sStyle = sTableInfo.replaceFirst(
@@ -180,7 +180,7 @@ public class IntermediateTextTreeToInDesign {
 						// }
 
 						/* 注目しているcTextは表の始まりなので、Width,Heightを取得して処理を始める */
-						TableManager currentTable = new TableManager(cText, m_bDebugMode);
+						TableManager currentTable = new TableManager(cText, cTreeWalker, m_bDebugMode);
 						TableWriter tWriter = new TableWriter(currentTable);
 						m_TableWriterList.add(tWriter);
 
@@ -196,14 +196,13 @@ public class IntermediateTextTreeToInDesign {
 						fwInDesign.write(tWriter.getCellHeader(lsManager), false, m_bMac);
 
 						if (cText.getChildList().get(0).getText().matches(".*【ヘッダー】.*")) {
-							StyleManager styleManager = StyleManager.getInstance();
-							Style newStyle = styleManager.getStyle("【セル：ヘッダー】");
+							Style newStyle = m_cStyleManager.getStyle("【セル：ヘッダー】");
 							lsManager.removeLastStyle();
 							lsManager.addStyle(newStyle);
 						}
 					}
 				}
-				outputResult(fwInDesign, cText, lsManager); // さらに奥深くへ（再帰）
+				outputResult(fwInDesign, cText, lsManager, cTreeWalker); // さらに奥深くへ（再帰）
 				// 表・行・セルの終了
 				if (currentStyle != null && currentStyle.bTableLikeStyle()) {
 					if (currentStyle.getStyleName().compareTo("【表】") == 0) {
@@ -244,7 +243,7 @@ public class IntermediateTextTreeToInDesign {
 	}
 
 	private void outputText(InDesignTT_FileWriter fwInDesign, LongStyleManager lsManager, IntermediateText iText) {
-		if (iText.hasChild()) {
+		if (iText instanceof ControlText) {
 			// System.out.println("outputText:" + iText.getText());
 			return; // ControlTextはカエレ！
 		}

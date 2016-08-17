@@ -20,7 +20,7 @@ import tx2x.core.Style;
 
 import static tx2x.Constants.*; // 定数クラス
 
-public class LongStyleManager {
+public class LongStyleManager extends tx2x.LongStyleManager {
 	private static final String KOKOMADE_INDENT_CHAR = String.valueOf((char) 7); // ここまでインデント文字
 	LinkedList<Style> m_StyleLinkedList; // スタイル情報をpush/popする
 	String m_sPrevLongStyle; // 直前の長いスタイル名
@@ -74,6 +74,7 @@ public class LongStyleManager {
 	}
 
 	public String getInDesignStyle(IntermediateText iText, int nLsIndex) throws IOException {
+		setPrevLongStyle();
 		String longStyle = getLongStyle();
 		if (iText.getStyle() == null) {
 			longStyle += "【本文】";

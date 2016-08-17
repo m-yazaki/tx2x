@@ -11,16 +11,16 @@ import org.xml.sax.SAXException;
 import org.xml.sax.ext.DefaultHandler2;
 
 import tx2x.Converter;
+import tx2x.IntermediateTextTreeBuildException;
+import tx2x.IntermediateTextTreeWalker;
 import tx2x.Tx2xOptions;
 import tx2x.core.ControlText;
 
 public class ConvertToXHTML extends Converter {
-	private boolean m_bDebugMode;
 	static File m_cTargetFile;
 
 	public ConvertToXHTML() {
-		super();
-		m_bDebugMode = Tx2xOptions.getInstance().getBoolean("debug");
+		super(Tx2xOptions.getInstance().getBoolean("debug"));
 	}
 
 	@Override
@@ -87,17 +87,6 @@ public class ConvertToXHTML extends Converter {
 		}
 	}
 
-	@Override
 	public void setup(File cFile) {
-		GioPriNasMenuManager cMenuManager = GioPriNasMenuManager.getInstance();
-		File cMenuHtml;
-		if (cFile.isDirectory()) {
-			cMenuHtml = new File(cFile.getAbsolutePath() + "\\menu.html");
-		} else {
-			cMenuHtml = new File(cFile.getParent() + "\\menu.html");
-		}
-		System.out.println("==========目次ファイル（menu.html）を読み込みます==========");
-		System.out.println(cMenuHtml.getAbsolutePath());
-		cMenuManager.readMenuHtml(cMenuHtml);
 	}
 }

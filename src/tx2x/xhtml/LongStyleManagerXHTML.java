@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,20 +22,27 @@ import tx2x.Style_TagInfo;
 import tx2x.Utils;
 import tx2x.core.ControlText;
 import tx2x.core.IntermediateText;
+import tx2x.core.Style;
 import tx2x.xhtml.NavPointManager;
 
-public class LongStyleManagerXHTML extends tx2x.xhtml.LongStyleManagerXHTML {
+public class LongStyleManagerXHTML extends tx2x.LongStyleManager {
 	// 未定義のスタイル（dummy000）を管理するための変数
 	int m_nDummyCounter;
 	Hashtable<String, Style_TagInfo> m_cDummyStyleHashTable;
 
+	protected boolean m_bDebugMode;
+	protected NavPointManager m_cNavPointManager;
+	protected File m_cTargetFile;
+	protected Stack<ControlText> m_cParentText;
+
 	public LongStyleManagerXHTML(boolean bDebugMode, File cTargetFile, NavPointManager cNavPointManager) {
-		super(bDebugMode, cTargetFile, cNavPointManager);
+		super();
 		m_nDummyCounter = 0;
 		m_cDummyStyleHashTable = new Hashtable<String, Style_TagInfo>();
 		m_bDebugMode = bDebugMode;
 		m_cTargetFile = cTargetFile;
 		m_cNavPointManager = cNavPointManager;
+		m_cParentText = new Stack<ControlText>();
 	}
 
 	public Style_TagInfo getStyle_TagInfo(IntermediateText iText_dup, IntermediateTextTreeWalker cTreeWalker,
@@ -878,6 +886,24 @@ public class LongStyleManagerXHTML extends tx2x.xhtml.LongStyleManagerXHTML {
 		return
 
 		dummyStyle(longStyle, iText);// + longStyle;
+	}
+
+	protected String getNextSiblingTextStyle(IntermediateText iText) {
+		String sNextTextStyle = null;
+		Iterator<IntermediateText> it = m_cParentText.get(0).getChildList().iterator(); // get(0)は仮
+		while (it.hasNext()) {
+			IntermediateText iTemp = it.next();
+			if (iTemp == iText) {
+				// 次のスタイルを調べる
+				if (it.hasNext()) {
+					IntermediateText iTempNext = it.next();
+					Style iTempNextStyle = iTempNext.getStyle();
+					sNextTextStyle = iTempNextStyle.getStyleName();
+					break;
+				}
+			}
+		}
+		return sNextTextStyle;
 	}
 
 	private String setWidthProperty(IntermediateText iText) throws IOException {
