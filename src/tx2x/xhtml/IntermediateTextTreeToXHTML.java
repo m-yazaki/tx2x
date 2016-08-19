@@ -297,7 +297,7 @@ public class IntermediateTextTreeToXHTML {
 	private void writeBlockCloseInfoWithIndent(XHTML_FileWriter fwXHTML, LongStyleManagerXHTML lsManager,
 			Style_TagInfo style) throws IOException {
 		if (style.getCloseInfo().length() > 0) {
-			String[] saCloseInfoSplit = style.getCloseInfo().split("\n");
+			String[] saCloseInfoSplit = style.getCloseInfo().split("\n", -1);
 			int i;
 			for (i = 0; i < saCloseInfoSplit.length - 1; i++) {
 				fwXHTML.write(lsManager.getHTMLTagIndent() + saCloseInfoSplit[i], true, m_bMac);

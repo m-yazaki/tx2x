@@ -198,7 +198,7 @@ public class LongStyleManagerXHTML extends tx2x.LongStyleManager {
 		}
 
 		if (longStyle.matches("(【ヒント】|【注意】|【1.】【1.】|【箇条書き・】【箇条書き・】)?【コード】")) {
-			return new Style_TagInfo("\t", "\n<div class=\"code\">\n", "", "</div>\n\n");
+			return new Style_TagInfo("\t", "\n<div class=\"code\">\n", "", "</div>\n");
 		}
 
 		if (longStyle.matches("(【ヒント】|【注意】|【1.】【1.】|【箇条書き・】【箇条書き・】)?【コード】【本文】")
