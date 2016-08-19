@@ -9,7 +9,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import tx2x.IntermediateTextTreeWalker;
-import tx2x.Style_TagInfo;
 import tx2x.core.ControlText;
 import tx2x.core.IntermediateText;
 import tx2x.core.Style;
@@ -151,34 +150,33 @@ public class IntermediateTextTreeToXHTML {
 						m_TableWriterList.add(currentTable);
 
 						// lsManager.getStyle(cText)は、表を挿入する行のスタイルを返してくれる
-						fwXHTML.write(currentTable.getTableHeader(lsManager, m_nLsIndex), false, m_bMac);
+						fwXHTML.write(currentTable.getTableHeader(lsManager, m_nLsIndex), true, m_bMac);
 					} else if (currentStyle.getStyleName().compareTo("【行】") == 0) {
 						TableWriter currentTable = m_TableWriterList.getLast();
-						fwXHTML.write(currentTable.getRowHeader(lsManager), false, m_bMac);
+						fwXHTML.write(currentTable.getRowHeader(lsManager), true, m_bMac);
 					} else if (currentStyle.getStyleName().compareTo("【セル：ヘッダー】") == 0) {
 						TableWriter currentTable = m_TableWriterList.getLast();
-						fwXHTML.write(currentTable.getHeaderCellHeader(lsManager, cText), false, m_bMac);
+						fwXHTML.write(currentTable.getHeaderCellHeader(lsManager, cText), true, m_bMac);
 					} else if (currentStyle.getStyleName().compareTo("【セル】") == 0) {
 						TableWriter currentTable = m_TableWriterList.getLast();
-						fwXHTML.write(currentTable.getCellHeader(lsManager, cText), false, m_bMac);
+						fwXHTML.write(currentTable.getCellHeader(lsManager, cText), true, m_bMac);
 					}
 				}
 
 				Style_TagInfo style = lsManager.getStyle_TagInfo(cText, cTreeWalker, m_nLsIndex + 1);
-				if (style != null && style.getBigBlockOpenInfo() != null) {
-					fwXHTML.write(style.getBigBlockOpenInfo(), false, m_bMac);
+				if (style.getOpenInfo().length() > 0) {
+					writeOpenInfoWithIndent(fwXHTML, lsManager, style);
 				}
+				lsManager.addHTMLTagIndent(style.getHTMLTagIndent());
 				outputResult(fwXHTML, cText, lsManager, cTreeWalker); // さらに奥深くへ（再帰）
-				if (style != null && style.getBigBlockCloseInfo() != null) {
-					fwXHTML.write(style.getBigBlockCloseInfo(), false, m_bMac);
-				}
+				lsManager.removeHTMLTagIndent(style.getHTMLTagIndent());
+				writeBlockCloseInfoWithIndent(fwXHTML, lsManager, style);
 
 				// 表・行・セルの終了
 				if (currentStyle != null && currentStyle.bTableLikeStyle()) {
 					if (currentStyle.getStyleName().compareTo("【表】") == 0) {
 						TableWriter currentTable = m_TableWriterList.getLast();
 						fwXHTML.write(currentTable.getTableFooter(lsManager, m_nLsIndex), false, m_bMac);
-
 						m_TableWriterList.removeLast(); // 表を1つ捨てる
 						lsManager.setPrevLongStyle("【表】▲");
 					} else if (currentStyle.getStyleName().compareTo("【行】") == 0) {
@@ -244,17 +242,72 @@ public class IntermediateTextTreeToXHTML {
 			m_nLsIndex++;
 			return;
 		}
-		// sLongStyleを正しいスタイルに変換
+
+		// スタイル情報を取得して、HTMLファイルに書き出す
 		try {
 			Style_TagInfo style = lsManager.getStyle_TagInfo(iText, cTreeWalker, m_nLsIndex + 1);
-			if (style != null) {
-				fwXHTML.write(style.getLineOpenInfo() + style.getLine() + style.getLineCloseInfo(), false, m_bMac);
+			if (style.getLine().length() > 0) {
+				writeOpenInfoWithIndent(fwXHTML, lsManager, style);
 			}
+			fwXHTML.write(style.getLine(), false, m_bMac);
+			writeLineCloseInfoWithIndent(fwXHTML, lsManager, style);
 		} catch (IOException e) {
 			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
 		}
 		m_nLsIndex++;
+	}
+
+	private void writeOpenInfoWithIndent(XHTML_FileWriter fwXHTML, LongStyleManagerXHTML lsManager, Style_TagInfo style)
+			throws IOException {
+		String[] saOpenInfoSplit = style.getOpenInfo().split("\n");
+		int i;
+		for (i = 0; i < saOpenInfoSplit.length - 1; i++) {
+			fwXHTML.write(lsManager.getHTMLTagIndent() + saOpenInfoSplit[i], true, m_bMac);
+		}
+		if (style.getOpenInfo().lastIndexOf("\n") > -1
+				&& style.getOpenInfo().lastIndexOf("\n") == style.getOpenInfo().length() - 1) {
+			fwXHTML.write(lsManager.getHTMLTagIndent() + saOpenInfoSplit[i], true, m_bMac);
+		} else {
+			fwXHTML.write(lsManager.getHTMLTagIndent() + saOpenInfoSplit[i], false, m_bMac);
+		}
+	}
+
+	// ライン（Line）のCloseInfoを書く
+	private void writeLineCloseInfoWithIndent(XHTML_FileWriter fwXHTML, LongStyleManagerXHTML lsManager,
+			Style_TagInfo style) throws IOException {
+		if (style.getLine().length() > 0 && style.getCloseInfo().length() > 0) {
+			String[] saCloseInfoSplit = style.getCloseInfo().split("\n", -1);
+			if (saCloseInfoSplit.length == 0) {
+				fwXHTML.write("", true, m_bMac);
+			} else {
+				int i;
+				// 最初の要素は、lsManager.getHTMLTagIndent()が不要。
+				fwXHTML.write(saCloseInfoSplit[0], true, m_bMac);
+				for (i = 1; i < saCloseInfoSplit.length; i++) {
+					fwXHTML.write(lsManager.getHTMLTagIndent() + saCloseInfoSplit[i], true, m_bMac);
+				}
+			}
+		} else {
+			fwXHTML.write("", true, m_bMac);
+		}
+	}
+
+	// ブロック（Block）のCloseInfoを書く
+	private void writeBlockCloseInfoWithIndent(XHTML_FileWriter fwXHTML, LongStyleManagerXHTML lsManager,
+			Style_TagInfo style) throws IOException {
+		if (style.getCloseInfo().length() > 0) {
+			String[] saCloseInfoSplit = style.getCloseInfo().split("\n");
+			int i;
+			for (i = 0; i < saCloseInfoSplit.length - 1; i++) {
+				fwXHTML.write(lsManager.getHTMLTagIndent() + saCloseInfoSplit[i], true, m_bMac);
+			}
+			if (style.getOpenInfo().lastIndexOf("\n") == style.getOpenInfo().length() - 1) {
+				fwXHTML.write(lsManager.getHTMLTagIndent() + saCloseInfoSplit[i], true, m_bMac);
+			} else {
+				fwXHTML.write(lsManager.getHTMLTagIndent() + saCloseInfoSplit[i], false, m_bMac);
+			}
+		}
 	}
 
 	private void outputFooter(XHTML_FileWriter fwXHTML) throws IOException {

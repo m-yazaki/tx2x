@@ -26,7 +26,7 @@ public class TableWriter {
 		String currentLongStyle = lsManager.getLongStyleFromArrayList(nLsIndex + 1);
 		String ret = "";
 		if (currentLongStyle.equals("【表】【行】【セル：ヘッダー】【本文】【本文】【本文】")) {
-			ret = "\n\t\t<table class=\"information\">\n";
+			ret = "\n\t\t<table class=\"information\">";
 		} else {
 			System.out.println("【警告】表のclassが正しいことを確認してください。");
 			System.out.println(currentLongStyle);
@@ -35,13 +35,15 @@ public class TableWriter {
 		if (m_tManager.hasCaption()) {
 			ret = ret + "\n\t\t\t<caption>" + m_tManager.getCaption() + "</caption>";
 		}
+		lsManager.addHTMLTagIndent("\t");
 		return ret;
 	}
 
 	public String getRowHeader(LongStyleManagerXHTML lsManager) {
 		m_nY++;
 		m_nX = 0;
-		return "\t\t\t<tr>\n";
+		lsManager.addHTMLTagIndent("\t");
+		return "\t\t\t<tr>";
 	}
 
 	public String getHeaderCellHeader(LongStyleManagerXHTML lsManager, ControlText cText) {
@@ -69,6 +71,8 @@ public class TableWriter {
 			width_attribute = " colspan=\"" + cCellSize[m_nY - 1][m_nX - 1].getWidth() + "\"";
 		if (cCellSize[m_nY - 1][m_nX - 1].getHeight() > 1)
 			height_attribute = " rowspan=\"" + cCellSize[m_nY - 1][m_nX - 1].getHeight() + "\"";
+
+		lsManager.addHTMLTagIndent("\t");
 
 		// Wide100スタイルの場合は、1列目だけ幅が決められている
 		if (m_tManager.getStyle().equals("Wide100") && m_nX == 1) {
@@ -107,6 +111,8 @@ public class TableWriter {
 			colspan_attribute = " colspan=\"" + cCellSize[m_nY - 1][m_nX - 1].getWidth() + "\"";
 		if (cCellSize[m_nY - 1][m_nX - 1].getHeight() > 1)
 			rowspan_attribute = " rowspan=\"" + cCellSize[m_nY - 1][m_nX - 1].getHeight() + "\"";
+
+		lsManager.addHTMLTagIndent("\t");
 
 		// Wide100スタイルの場合は、1列目だけ幅が決められている
 		if (m_tManager.getStyle().equals("Wide100") && m_nX == 1) {
@@ -168,7 +174,8 @@ public class TableWriter {
 			if (iText.getText().matches("【[上下左右]と結合】"))
 				return "";
 		}
-		return "</td>\n";
+		lsManager.removeHTMLTagIndent("\t");
+		return lsManager.getHTMLTagIndent() + "</td>\n";
 	}
 
 	public String getHeaderCellFooter(LongStyleManagerXHTML lsManager, ControlText cText) {
@@ -180,15 +187,18 @@ public class TableWriter {
 			if (iText.getText().matches("【[上下左右]と結合】"))
 				return "";
 		}
-		return "</th>\n";
+		lsManager.removeHTMLTagIndent("\t");
+		return lsManager.getHTMLTagIndent() + "</th>\n";
 	}
 
 	public String getRowFooter(LongStyleManagerXHTML lsManager) {
-		return "\t\t\t</tr>\n";
+		lsManager.removeHTMLTagIndent("\t");
+		return lsManager.getHTMLTagIndent() + "</tr>\n";
 	}
 
 	public String getTableFooter(LongStyleManagerXHTML lsManager, int nLsIndex) {
-		return "\t\t</table>\n\n";
+		lsManager.removeHTMLTagIndent("\t");
+		return lsManager.getHTMLTagIndent() + "</table>\n\n";
 	}
 
 }
