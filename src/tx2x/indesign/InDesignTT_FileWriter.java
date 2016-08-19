@@ -15,34 +15,32 @@ import tx2x.Tx2xOptions;
 public class InDesignTT_FileWriter {
 	OutputStreamWriter m_fwInDesign;
 	boolean m_bCRLFBuffer; // write()に渡されたbCRLFを保持する。次のwrite()呼びだし時に改行コード（CRLFなど）を書き込む
+	private boolean m_bMac; // Mac用のテキストにする場合はtrue
 
-	public InDesignTT_FileWriter(File inDesign) throws IOException {
+	public InDesignTT_FileWriter(File inDesign, boolean bMac) throws IOException {
 		// m_fwInDesign = new DataOutputStream(new FileOutputStream(inDesign));
-		m_fwInDesign = new OutputStreamWriter(new FileOutputStream(inDesign),
-				"UnicodeLittleUnmarked");
+		m_fwInDesign = new OutputStreamWriter(new FileOutputStream(inDesign), "UnicodeLittleUnmarked");
 		m_bCRLFBuffer = false;
+		m_bMac = bMac;
 	}
 
-	public void close(boolean bMac) throws IOException {
+	public void close() throws IOException {
 		if (m_bCRLFBuffer)
-			m_fwInDesign.write(Tx2x.getTaggedTextCRLF(bMac).toCharArray());
+			m_fwInDesign.write(Tx2x.getTaggedTextCRLF(m_bMac).toCharArray());
 
 		m_fwInDesign.close();
 	}
 
 	/**
 	 * FileWriter.write()に、置換機能を追加する
-	 * 
+	 *
 	 * @param string
 	 *            書き込む文字列
 	 * @param bCRLF
 	 *            改行文字が必要かどうか。改行文字は、次のwrite()またはclose()を呼び出したときに出力されます。
-	 * @param bMac
-	 *            Mac用のテキストにする場合はtrue
 	 * @throws IOException
 	 */
-	public void write(String string, boolean bCRLF, boolean bMac)
-			throws IOException {
+	public void write(String string, boolean bCRLF) throws IOException {
 
 		/* CellEndの次の改行は省略 */
 		if (string.indexOf("<CellEnd:>") == 0) {
@@ -51,23 +49,21 @@ public class InDesignTT_FileWriter {
 
 		/* 改行を追加 */
 		if (m_bCRLFBuffer)
-			m_fwInDesign.write(Tx2x.getTaggedTextCRLF(bMac).toCharArray());
+			m_fwInDesign.write(Tx2x.getTaggedTextCRLF(m_bMac).toCharArray());
 
 		/* セルのコントロールコードを削除 */
 		string = string.replaceAll("【黒[0-9]+%】", "");
 
-		string = string.replaceAll("<ParaStyle:table-body[0-9]+>【[上下左右]と結合】",
-				"");
+		string = string.replaceAll("<ParaStyle:table-body[0-9]+>【[上下左右]と結合】", "");
 		string = string.replaceAll("<ParaStyle:memo[0-9]+>【[上下左右]と結合】", "");
-		string = string.replaceAll("<ParaStyle:table-body[0-9]+>【[左右]上から斜線】",
-				"");
+		string = string.replaceAll("<ParaStyle:table-body[0-9]+>【[左右]上から斜線】", "");
 
 		string = string.replaceAll("【上下センター】", "");
 
 		/* コントロールコードを置換 */
 		string = string.replaceAll("【ここまでインデント】", "");
 
-		if (bMac) {
+		if (m_bMac) {
 			/*
 			 * DTP用（旧Mac用）のタグ付きテキストでの特別処理 ・\マークを\\の形式に（エスケープ）する必要がある
 			 */

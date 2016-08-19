@@ -62,11 +62,12 @@ public class ConvertToInDesign extends Converter {
 			if (cTargetFile.exists()) {
 				try {
 					Utils.copyFile(cTargetFile.getParent() + "\\Tx2xTemplate.indesign.indd",
-							Utils.removeFileExtension(cTargetFile.getName()) + ".indd");
-					System.out.println("InDesignファイル：" + Utils.removeFileExtension(cTargetFile.getName()) + ".indd");
+							Utils.removeFileExtension(cTargetFile.getParent() + "\\" + cTargetFile.getName())
+									+ ".indd");
+					System.out.println("InDesignファイル：" + cTargetFile.getParent() + "\\"
+							+ Utils.removeFileExtension(cTargetFile.getName()) + ".indd");
 				} catch (IOException e2) {
-					// TODO 自動生成された catch ブロック
-					e2.printStackTrace();
+					System.out.println(e2);
 				}
 			}
 

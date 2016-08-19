@@ -42,15 +42,17 @@ public class IntermediateTextTreeToXHTML {
 				sTitle = searchTitle(resultRootText, "【節】");
 			if (sTitle == null)
 				sTitle = searchTitle(resultRootText, "【項】");
+			if (sTitle == null)
+				sTitle = searchTitle(resultRootText, "【■】");
 			if (sTitle == null) {
 				if (resultRootText.getChildList().size() > 0) {
-					System.out.println("【章】【節】【項】に該当するスタイルが見つかりません。BOM付きUTF-8になっていませんか。");
+					System.out.println("【編】【章】【節】【項】【■】に該当するスタイルが見つかりません。BOM付きUTF-8になっていませんか。");
 					sTitle = resultRootText.getChildList().get(0).getChildText();
 				} else
 					sTitle = "";
 			} else
 				sTitle = sTitle.replaceFirst("\t", " ");
-			sTitle = sTitle.replaceFirst("【[編章節項]】", "");
+			sTitle = sTitle.replaceFirst("^(【[編章節項]】|■)", "");
 			outputHeader(fwXHTML, sTitle);
 			outputResult(fwXHTML, resultRootText, lsManager, cTreeWalker);
 			outputFooter(fwXHTML);

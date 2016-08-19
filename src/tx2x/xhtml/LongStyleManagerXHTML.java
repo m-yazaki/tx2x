@@ -87,7 +87,7 @@ public class LongStyleManagerXHTML extends tx2x.LongStyleManager {
 		/**
 		 * 標準的なチェック（それぞれ独立しているので順不同）
 		 */
-		if (longStyle.equals("【章】") || longStyle.equals("【章】【章】")) {
+		if (longStyle.matches("(【章】){1,2}")) {
 			return Style_TagInfo.NULL_STYLE_TAGINFO;
 		}
 
@@ -96,7 +96,16 @@ public class LongStyleManagerXHTML extends tx2x.LongStyleManager {
 			return new Style_TagInfo("", "\n<h1>", sString, "</h1>\n");
 		}
 
-		if (longStyle.equals("【章サブ】") || longStyle.equals("【章サブ】【章サブ】")) {
+		if (longStyle.matches("(【■】){1,2}")) {
+			return Style_TagInfo.NULL_STYLE_TAGINFO;
+		}
+
+		if (longStyle.equals("【■】【■】【■】")) {
+			String sString = iText.getText().replaceFirst("■", "");
+			return new Style_TagInfo("", "\n<h1>", sString, "</h1>\n");
+		}
+
+		if (longStyle.equals("(【章サブ】){1,2}")) {
 			return Style_TagInfo.NULL_STYLE_TAGINFO;
 		}
 

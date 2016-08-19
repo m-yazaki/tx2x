@@ -34,7 +34,7 @@ public class IntermediateTextTreeToInDesign {
 			IntermediateTextTreeWalker cTreeWalker) throws IOException {
 		InDesignTT_FileWriter fwInDesign;
 		try {
-			fwInDesign = new InDesignTT_FileWriter(cInDesign);
+			fwInDesign = new InDesignTT_FileWriter(cInDesign, m_bMac);
 		} catch (IOException e) {
 			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
@@ -47,7 +47,7 @@ public class IntermediateTextTreeToInDesign {
 		outputResult(fwInDesign, resultRootText, lsManager, cTreeWalker);
 
 		try {
-			fwInDesign.close(m_bMac);
+			fwInDesign.close();
 		} catch (IOException e1) {
 			// TODO 自動生成された catch ブロック
 			e1.printStackTrace();
@@ -158,13 +158,13 @@ public class IntermediateTextTreeToInDesign {
 
 	private void outputHeader(InDesignTT_FileWriter fwInDesign) throws IOException {
 		if (m_bMac == true) {
-			// fwInDesign.write("<SJIS-MAC>", true, m_bMac);
-			fwInDesign.write("<UNICODE-MAC>", true, m_bMac);
+			// fwInDesign.write("<SJIS-MAC>", true);
+			fwInDesign.write("<UNICODE-MAC>", true);
 		} else {
-			// fwInDesign.write("<SJIS-WIN>", true, m_bMac);
-			fwInDesign.write("<UNICODE-WIN>", true, m_bMac);
+			// fwInDesign.write("<SJIS-WIN>", true);
+			fwInDesign.write("<UNICODE-WIN>", true);
 		}
-		fwInDesign.write("<Version:7><FeatureSet:InDesign-Japanese><ColorTable:=>", true, m_bMac);
+		fwInDesign.write("<Version:7><FeatureSet:InDesign-Japanese><ColorTable:=>", true);
 	}
 
 	private void outputResult(InDesignTT_FileWriter fwInDesign, ControlText resultText,
@@ -213,16 +213,16 @@ public class IntermediateTextTreeToInDesign {
 						// coStartを出力
 						// lsManager.getInDesignStyle(cText)は、表を挿入する行のスタイルを返してくれる
 						fwInDesign.write(lsManager.getInDesignStyle(cText, m_nLsIndex + 1)
-								+ tWriter.getHeader(lsManager, m_nLsIndex), false, m_bMac);
+								+ tWriter.getHeader(lsManager, m_nLsIndex), false);
 					} else if (currentStyle.getStyleName().compareTo("【行】") == 0) {
 						TableWriter tWriter = m_TableWriterList.getLast();
-						fwInDesign.write(tWriter.getRowHeader(lsManager), false, m_bMac);
+						fwInDesign.write(tWriter.getRowHeader(lsManager), false);
 					} else if (currentStyle.getStyleName().compareTo("【セル：ヘッダー】") == 0) {
 						TableWriter tWriter = m_TableWriterList.getLast();
-						fwInDesign.write(tWriter.getCellHeader(lsManager), false, m_bMac);
+						fwInDesign.write(tWriter.getCellHeader(lsManager), false);
 					} else if (currentStyle.getStyleName().compareTo("【セル】") == 0) {
 						TableWriter tWriter = m_TableWriterList.getLast();
-						fwInDesign.write(tWriter.getCellHeader(lsManager), false, m_bMac);
+						fwInDesign.write(tWriter.getCellHeader(lsManager), false);
 					}
 				}
 
@@ -234,15 +234,15 @@ public class IntermediateTextTreeToInDesign {
 				// 表・行・セルの終了
 				if (currentStyle != null && currentStyle.bTableLikeStyle()) {
 					if (currentStyle.getStyleName().compareTo("【表】") == 0) {
-						fwInDesign.write("<TableEnd:>", true, m_bMac);
+						fwInDesign.write("<TableEnd:>", true);
 						m_TableWriterList.removeLast(); // 表終了
 						lsManager.setPrevLongStyle("【表】▲");
 					} else if (currentStyle.getStyleName().compareTo("【行】") == 0) {
-						fwInDesign.write("<RowEnd:>", false, m_bMac);
+						fwInDesign.write("<RowEnd:>", false);
 					} else if (currentStyle.getStyleName().compareTo("【セル：ヘッダー】") == 0) {
-						fwInDesign.write("<CellEnd:>", false, m_bMac);
+						fwInDesign.write("<CellEnd:>", false);
 					} else if (currentStyle.getStyleName().compareTo("【セル】") == 0) {
-						fwInDesign.write("<CellEnd:>", false, m_bMac);
+						fwInDesign.write("<CellEnd:>", false);
 					}
 				}
 				lsManager.removeLastStyle();
@@ -294,9 +294,9 @@ public class IntermediateTextTreeToInDesign {
 			String style = lsManager.getInDesignStyle(iText, m_nLsIndex + 1);
 			if (style.equals("") == false) {
 				if (iText.getText() != null) {
-					fwInDesign.write(style + iText.getText(), true, m_bMac);
+					fwInDesign.write(style + iText.getText(), true);
 				} else {
-					fwInDesign.write(style, false, m_bMac);
+					fwInDesign.write(style, false);
 				}
 				if (m_bDebugMode)
 					System.out.println("[" + style + "]" + iText.getText());

@@ -33,27 +33,33 @@ public class IntermediateTextTreeToWord {
 	}
 
 	public void output(File cWordFile, ControlText resultRootText, LongStyleManagerWord lsManager,
-			IntermediateTextTreeWalker cTreeWalker) throws IOException {
+			IntermediateTextTreeWalker cTreeWalker) {
 
 		boolean tVisible = Tx2xOptions.getInstance().getBoolean("Visible");
 		ActiveXComponent oWord = new ActiveXComponent("Word.Application");
 		oWord.setProperty("Visible", new Variant(tVisible));
 		Dispatch oDocuments = oWord.getProperty("Documents").toDispatch();
-		Dispatch.call(oDocuments, "Add", cWordFile.getParent() + "\\" + m_sTemplateDoc).toDispatch();
-		Dispatch oSelection = oWord.getProperty("Selection").toDispatch();
-
-		// 書き込み
-		outputResult(oSelection, resultRootText, lsManager, cTreeWalker);
-
-		// 保存
 		try {
+			Dispatch.call(oDocuments, "Add", cWordFile.getParent() + "\\" + m_sTemplateDoc).toDispatch();
+			Dispatch oSelection = oWord.getProperty("Selection").toDispatch();
+
+			// 書き込み
+			outputResult(oSelection, resultRootText, lsManager, cTreeWalker);
+
+			// 保存
 			Dispatch oDocument = Dispatch.call(oSelection, "Document").toDispatch();
 			Dispatch.call(oDocument, "SaveAs2", cWordFile.getAbsolutePath(), 12 /* wdFormatXMLDocument */);
+
+			oWord.setProperty("Visible", new Variant(true));
+		} catch (IOException e1) {
+			e1.printStackTrace();
 		} catch (ComFailException e) {
-			System.out
-					.println("---------- error ----------\n" + e.getLocalizedMessage() + "---------------------------");
+			System.out.println("---------- error ----------\n" + e.getLocalizedMessage());
+			if (e.getLocalizedMessage().indexOf("Description: ファイルが見つかりません。") != -1) {
+				System.out.println(cWordFile.getParent() + "\\" + m_sTemplateDoc);
+			}
+			System.out.println("---------------------------");
 		}
-		oWord.setProperty("Visible", new Variant(true));
 	}
 
 	private void outputResult(Dispatch oSelection, ControlText resultText, LongStyleManagerWord lsManager,

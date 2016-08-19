@@ -146,6 +146,19 @@ public class LongStyleManagerInDesign extends tx2x.LongStyleManager {
 				}
 			}
 
+			{
+				Pattern pattern = Pattern.compile("\\\\<a href=\"([^\"]+)\"\\\\>([^<]+)\\\\</a\\\\>");
+				Matcher matcher = pattern.matcher(text);
+				while (matcher.find()) {
+					text = text.replaceAll("\\\\<a href=\"([^\"]+)\"\\\\>([^<]+)\\\\</a\\\\>",
+							"<CharStyle:Hyperlink><Hyperlink:=<HyperlinkName:" + normalizeTag(matcher.group(2))
+									+ "><HyperlinkDest:" + normalizeTag(matcher.group(1))
+									+ "><HyperlinkDestKey:1><CharStyleRef:ハイパーリンク><HyperlinkLength:"
+									+ matcher.group(2).length()
+									+ "><HyperlinkStartOffset:0><Hidden:0><BrdrVisible:0><BrdrWidth:Thin><BrdrHilight:None><BrdrStyle:Solid><BrdrColor:0\\\\,0\\\\,0>>$2<CharStyle:>");
+				}
+			}
+
 			iText.setText(text);
 		}
 
@@ -157,6 +170,12 @@ public class LongStyleManagerInDesign extends tx2x.LongStyleManager {
 			iText.setText(iText.getText().replaceFirst("【章】", ""));
 			return "<ParaStyle:大見出し>";
 		}
+
+		if (longStyle.equals("【■】【■】【■】")) {
+			iText.setText(iText.getText().replaceFirst("■", ""));
+			return "<ParaStyle:大見出し>";
+		}
+
 		if (longStyle.equals("【章サブ】【章サブ】【章サブ】")) {
 			return "<ParaStyle:大見出しサブ>";
 		}
@@ -174,7 +193,7 @@ public class LongStyleManagerInDesign extends tx2x.LongStyleManager {
 		if (longStyle.equals("【本文】【本文】【本文】")) {
 			String text = iText.getText();
 			// <b></b>
-			text = text.replace("\\<b\\>", "<CharStyle:body-M>");
+			text = text.replace("\\<b\\>", "<CharStyle:太字>");
 			text = text.replace("\\</b\\>", "<CharStyle:>");
 			iText.setText(text);
 			return ret + "<ParaStyle:本文>";
@@ -479,6 +498,10 @@ public class LongStyleManagerInDesign extends tx2x.LongStyleManager {
 		// 以降、ダミースタイルの処理
 		return dummyStyle(longStyle);// + longStyle;
 		// throw new IOException("Unknown Style:" + longStyle);
+	}
+
+	private String normalizeTag(String src) {
+		return src.replaceAll("([:/\\?=&%])", "\\\\\\\\$1");
 	}
 
 	private String getEscapeText(String text) {

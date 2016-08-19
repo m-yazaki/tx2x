@@ -50,6 +50,10 @@ public class LongStyleManagerWord extends LongStyleManager {
 			return "見出し 1";
 		}
 
+		if (m_sCurrentLongStyle.equals("【■】【■】【■】")) {
+			return "見出し 1";
+		}
+
 		if (m_sCurrentLongStyle.equals("【章サブ】【章サブ】【章サブ】")) {
 			return "見出し 1サブ";
 		}
@@ -374,11 +378,24 @@ public class LongStyleManagerWord extends LongStyleManager {
 			Dispatch.call(oSelection, "TypeParagraph"); // 改行
 			return;
 		} else if (longStyle.equals("【章】【章】【章】") || longStyle.equals("【節】【節】【節】") || longStyle.equals("【項】【項】【項】")) {
-			iText.setText(iText.getText().replaceFirst("【.】", ""));
+			iText.setText(iText.getText().replaceFirst("^【.】", ""));
+		} else if (longStyle.equals("【■】【■】【■】")) {
+			iText.setText(iText.getText().replaceFirst("^■", ""));
 		}
 
 		// 標準的な処理
-		Dispatch.put(oSelection, "Text", iText.getText());
+		String[] t = iText.getText().split("((?<=</?b>)|(?=</?b>))", -1);
+		for (int i = 0; i < t.length; i++) {
+			System.out.println("t[" + i + "] : " + t[i]);
+			if (t[i].equals("<b>")) {
+				Tx2xDispatch.call(oSelection, "Font.Bold", true);
+			} else if (t[i].equals("</b>")) {
+				Tx2xDispatch.call(oSelection, "Font.Bold", false);
+			} else {
+				Dispatch.put(oSelection, "Text", t[i]);
+			}
+		}
+
 		try {
 			Dispatch.put(oSelection, "Style", sWordStyle);
 		} catch (Exception e) {

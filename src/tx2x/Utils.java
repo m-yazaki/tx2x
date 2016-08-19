@@ -84,8 +84,8 @@ public class Utils {
 		// ダイジェストの計算
 		DigestInputStream inStream;
 		try {
-			inStream = new DigestInputStream(new ByteArrayInputStream(
-					string.getBytes()), MessageDigest.getInstance("MD5"));
+			inStream = new DigestInputStream(new ByteArrayInputStream(string.getBytes()),
+					MessageDigest.getInstance("MD5"));
 			byte[] buf = new byte[1024];
 			for (;;) {
 				if (inStream.read(buf) <= 0)
