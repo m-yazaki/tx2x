@@ -26,7 +26,7 @@ public class TableWriter {
 		String currentLongStyle = lsManager.getLongStyleFromArrayList(nLsIndex + 1);
 		String ret = "";
 		if (currentLongStyle.equals("【表】【行】【セル：ヘッダー】【本文】【本文】【本文】")) {
-			ret = "\n\t\t<table class=\"information\">";
+			ret = "\n\t\t<table class=\"information\">\n";
 		} else {
 			System.out.println("【警告】表のclassが正しいことを確認してください。");
 			System.out.println(currentLongStyle);
@@ -188,7 +188,7 @@ public class TableWriter {
 	}
 
 	public String getTableFooter(LongStyleManagerXHTML lsManager, int nLsIndex) {
-		return "\t\t</table>\n";
+		return "\t\t</table>\n\n";
 	}
 
 }

@@ -51,6 +51,7 @@ public class IntermediateTextTreeToXHTML {
 					sTitle = "";
 			} else
 				sTitle = sTitle.replaceFirst("\t", " ");
+			sTitle = sTitle.replaceFirst("【[編章節項]】", "");
 			outputHeader(fwXHTML, sTitle);
 			outputResult(fwXHTML, resultRootText, lsManager, cTreeWalker);
 			outputFooter(fwXHTML);

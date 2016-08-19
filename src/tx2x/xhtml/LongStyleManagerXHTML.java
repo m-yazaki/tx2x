@@ -102,7 +102,7 @@ public class LongStyleManagerXHTML extends tx2x.LongStyleManager {
 
 		if (longStyle.equals("【章サブ】【章サブ】【章サブ】")) {
 			String sString = iText.getText();
-			return new Style_TagInfo(null, null, "<div class=\"h1_sub\">", sString, "</div>\n", null, null);
+			return new Style_TagInfo(null, null, "\t\t<div class=\"h1_sub\">", sString, "</div>\n", null, null);
 		}
 
 		if (longStyle.equals("【節】") || longStyle.equals("【節】【節】")) {
@@ -123,23 +123,33 @@ public class LongStyleManagerXHTML extends tx2x.LongStyleManager {
 			return new Style_TagInfo(null, null, "\n		<h3>", sString, "</h3>\n\n", null, null);
 		}
 
-		if (longStyle.matches("(【1.】【1.】)?【ヒント】")) {
-			return new Style_TagInfo("\n\t\t<div class=\"hint\">\n\t\t\t<div class=\"title\">ヒント</div>\n", null, null,
-					"", null, null, "\t\t</div>\n");
+		if (longStyle.matches("【ヒント】")) {
+			return new Style_TagInfo("\t\t<div class=\"hint\">\n\t\t\t<div class=\"title\">ヒント</div>\n", null, null, "",
+					null, null, "\t\t</div>\n");
+		}
+
+		if (longStyle.matches("【1.】【1.】【ヒント】")) {
+			return new Style_TagInfo("\t\t\t\t<div class=\"hint\">\n\t\t\t\t\t<div class=\"title\">ヒント</div>\n", null,
+					null, "", null, null, "\t\t\t\t</div>\n");
 		}
 
 		if (longStyle.matches("(【1.】【1.】)?【ヒント】【本文】") || longStyle.matches("(【1.】【1.】)?【ヒント】【本文】【本文】")) {
 			return new Style_TagInfo("", null, null, null, null, null, "");
 		}
 
-		if (longStyle.matches("(【1.】【1.】)?【ヒント】【本文】【本文】【本文】")) {
+		if (longStyle.matches("【ヒント】【本文】【本文】【本文】")) {
 			String sString = iText.getText();
-			return new Style_TagInfo("", null, "<p>", sString, "</p>", null, "");
+			return new Style_TagInfo("", null, "\t\t\t<p>", sString, "</p>\n", null, "");
+		}
+
+		if (longStyle.matches("【1.】【1.】【ヒント】【本文】【本文】【本文】")) {
+			String sString = iText.getText();
+			return new Style_TagInfo("", null, "\t\t\t\t\t<p>", sString, "</p>\n", null, "");
 		}
 
 		if (longStyle.equals("【注意】")) {
-			return new Style_TagInfo("\n\t\t<div class=\"note\">\n\t\t\t<div class=\"title\">注意</div>\n", null, null,
-					"", null, null, "\t\t</div>\n");
+			return new Style_TagInfo("\t\t<div class=\"note\">\n\t\t\t<div class=\"title\">注意</div>\n", null, null, "",
+					null, null, "\t\t</div>\n");
 		}
 
 		if (longStyle.equals("【注意】【本文】") || longStyle.equals("【注意】【本文】【本文】")) {
@@ -148,11 +158,11 @@ public class LongStyleManagerXHTML extends tx2x.LongStyleManager {
 
 		if (longStyle.equals("【注意】【本文】【本文】【本文】")) {
 			String sString = iText.getText();
-			return new Style_TagInfo("", null, "<p>", sString, "</p>", null, "");
+			return new Style_TagInfo("", null, "\t\t\t<p>", sString, "</p>\n", null, "");
 		}
 
 		if (longStyle.equals("【HACK】")) {
-			return new Style_TagInfo("<div class=\"hack\">", null, null, null, null, null, "</div><!-- hack -->");
+			return new Style_TagInfo("\t\t<div class=\"hack\">", null, null, null, null, null, "\t\t</div>\n");
 		}
 
 		if (longStyle.equals("【HACK】【HACK】")) {
@@ -166,8 +176,8 @@ public class LongStyleManagerXHTML extends tx2x.LongStyleManager {
 			matcher.find();
 			return new Style_TagInfo("", null,
 					"<div class=\"hack_no\"><div class=\"title\">HACK</div><div class=\"no\">" + matcher.group(1)
-							+ "</div></div><p>",
-					matcher.group(2) + "</p>", "", null, "");
+							+ "</div></div>\n\t\t\t<p>",
+					matcher.group(2) + "</p>\n", "", null, "");
 		}
 
 		if (longStyle.equals("【HACK】【HACK】【本文】") || longStyle.equals("【HACK】【HACK】【本文】【本文】")) {
@@ -176,28 +186,57 @@ public class LongStyleManagerXHTML extends tx2x.LongStyleManager {
 
 		if (longStyle.equals("【HACK】【HACK】【本文】【本文】【本文】")) {
 			String sString = iText.getText();
-			return new Style_TagInfo("", null, "<p>", sString, "</p>", null, "");
+			return new Style_TagInfo("", null, "\t\t\t<p>", sString, "</p>\n", null, "");
 		}
 
 		if (longStyle.matches("(【ヒント】|【1.】【1.】)?【箇条書き・】")) {
-			return new Style_TagInfo("\t\t<ul>\n", null, null, null, null, null, "\t\t</ul>\n");
+			if (longStyle.matches("^【ヒント】.*")) {
+				return new Style_TagInfo("\t\t\t<ul>\n", null, null, null, null, null, "\t\t\t</ul>\n");
+			} else if (longStyle.equals("【1.】【1.】【箇条書き・】")) {
+				return new Style_TagInfo("\t\t\t\t<ul>\n", null, null, null, null, null, "\t\t\t\t</ul>\n");
+			} else {
+				return new Style_TagInfo("\t\t<ul>\n", null, null, null, null, null, "\t\t</ul>\n");
+			}
 		}
 
 		if (longStyle.matches("(【ヒント】|【1.】【1.】)?【箇条書き・】【箇条書き・】")) {
-			return new Style_TagInfo("\t\t\t<li>", null, null, null, null, null, "</li>\n");
+			if (longStyle.matches("^【ヒント】.*")) {
+				return new Style_TagInfo("\t\t\t\t<li>\n", null, null, null, null, null, "\t\t\t\t</li>\n");
+			} else if (longStyle.equals("【1.】【1.】【箇条書き・】【箇条書き・】")) {
+				return new Style_TagInfo("\t\t\t\t\t<li>\n", null, null, null, null, null, "\t\t\t\t\t</li>\n");
+			} else {
+				return new Style_TagInfo("\t\t\t<li>\n", null, null, null, null, null, "\t\t\t</li>\n");
+			}
 		}
 
 		if (longStyle.matches("(【ヒント】|【1.】【1.】)?【箇条書き・】【箇条書き・】【箇条書き・】")) {
 			String sString = iText.getText().replaceFirst("・\t", "");
-			return new Style_TagInfo("", null, "", sString, "", null, "");
+			if (longStyle.matches("^【ヒント】.*")) {
+				return new Style_TagInfo("", null, "", "\t\t\t\t\t" + sString + "\n", "", null, "");
+			} else if (longStyle.equals("【1.】【1.】【箇条書き・】【箇条書き・】【箇条書き・】")) {
+				return new Style_TagInfo("", null, "", "\t\t\t\t\t\t" + sString + "\n", "", null, "");
+			} else {
+				return new Style_TagInfo("", null, "", "\t\t\t\t" + sString + "\n", "", null, "");
+			}
 		}
 
 		if (longStyle.matches("(【ヒント】|【注意】|【1.】【1.】|【箇条書き・】【箇条書き・】)?【コード】")) {
-			return new Style_TagInfo("\n\t\t<div class=\"code\">\n", null, null, "", null, null, "\t\t</div>\n");
+			if (longStyle.matches("^【コード】")) {
+				return new Style_TagInfo("\n\t\t<div class=\"code\">\n", null, null, "", null, null, "\t\t</div>\n\n");
+			} else if (longStyle.matches("(【1.】【1.】|【箇条書き・】【箇条書き・】)【コード】")) {
+				return new Style_TagInfo("\n\t\t\t\t<div class=\"code\">\n", null, null, "", null, null,
+						"\t\t\t\t</div>\n\n");
+			} else {
+				return new Style_TagInfo("\n\t\t\t<div class=\"code\">\n", null, null, "", null, null,
+						"\t\t\t</div>\n\n");
+			}
+
 		}
 
 		if (longStyle.matches("(【ヒント】|【注意】|【1.】【1.】|【箇条書き・】【箇条書き・】)?【コード】【本文】")
-				|| longStyle.matches("(【ヒント】|【注意】|【1.】【1.】|【箇条書き・】【箇条書き・】)?【コード】【本文】【本文】")) {
+				|| longStyle.matches("(【ヒント】|【注意】|【1.】【1.】|【箇条書き・】【箇条書き・】)?【コード】【本文】【本文】"))
+
+		{
 			return new Style_TagInfo("", null, null, null, null, null, "");
 		}
 
@@ -206,7 +245,11 @@ public class LongStyleManagerXHTML extends tx2x.LongStyleManager {
 				return new Style_TagInfo("", null, null, null, null, null, "");
 			} else {
 				String sString = iText.getText();
-				return new Style_TagInfo("", null, "<p>", sString, "</p>", null, "");
+				if (longStyle.matches("^【コード】.*")) {
+					return new Style_TagInfo("", null, "\t\t\t<p>", sString, "</p>\n", null, "");
+				} else {
+					return new Style_TagInfo("", null, "\t\t\t\t\t<p>", sString, "</p>\n", null, "");
+				}
 			}
 		}
 
@@ -219,7 +262,13 @@ public class LongStyleManagerXHTML extends tx2x.LongStyleManager {
 				return new Style_TagInfo("", null, null, null, null, null, "");
 			} else {
 				String sString = iText.getText();
-				return new Style_TagInfo("", null, "<p>&nbsp;&nbsp;&nbsp;&nbsp;", sString, "</p>", null, "");
+				if (longStyle.matches("^【コード】.*")) {
+					return new Style_TagInfo("", null, "\t\t\t<p>&nbsp;&nbsp;&nbsp;&nbsp;", sString, "</p>\n", null,
+							"");
+				} else {
+					return new Style_TagInfo("", null, "\t\t\t\t\t<p>&nbsp;&nbsp;&nbsp;&nbsp;", sString, "</p>\n", null,
+							"");
+				}
 			}
 		}
 
@@ -232,17 +281,18 @@ public class LongStyleManagerXHTML extends tx2x.LongStyleManager {
 				return new Style_TagInfo("", null, null, null, null, null, "");
 			} else {
 				String sString = iText.getText();
-				return new Style_TagInfo("", null, "<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;", sString,
-						"</p>", null, "");
+				return new Style_TagInfo("", null, "\t\t\t<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;", sString,
+						"</p>\n", null, "");
 			}
 		}
 
 		if (longStyle.equals("【1.】")) {
-			return new Style_TagInfo("", null, null, "", null, null, "");
+			return new Style_TagInfo("\t\t<div class=\"steps\">\n", null, null, "", null, null, "\t\t</div>\n");
 		}
 
 		if (longStyle.equals("【1.】【1.】")) {
-			return new Style_TagInfo("<div class=\"step_block\">", null, null, "", null, null, "</div>");
+			return new Style_TagInfo("\t\t\t<div class=\"step_block\">\n", null, null, "", null, null,
+					"\t\t\t</div>\n");
 		}
 
 		if (longStyle.equals("【1.】【1.】【1.】")) {
@@ -251,7 +301,7 @@ public class LongStyleManagerXHTML extends tx2x.LongStyleManager {
 			if (matcher.find()) {
 				String sString = iText.getText().replaceFirst("[0-9]+[．\\.]\t", "");
 				return new Style_TagInfo("", null,
-						"\n\t\t<div class=\"step\"><span class=\"no\">" + matcher.group(1) + "．</span>", sString,
+						"\t\t\t\t<div class=\"step\"><span class=\"no\">" + matcher.group(1) + "．</span>", sString,
 						"</div>\n", null, "");
 			}
 		}
@@ -262,23 +312,24 @@ public class LongStyleManagerXHTML extends tx2x.LongStyleManager {
 
 		if (longStyle.equals("【1.】【1.】【本文】【本文】【本文】")) {
 			String sString = iText.getText();
-			return new Style_TagInfo("", null, "<p>", sString, "</p>", null, "");
+			return new Style_TagInfo("", null, "\t\t\t\t<p>", sString, "</p>\n", null, "");
 		}
 
 		if (longStyle.equals("【箇条書き（用語）】")) {
-			return new Style_TagInfo("<div class=\"glossary\">", null, null, null, null, null, "</div>");
+			return new Style_TagInfo("\t\t<div class=\"glossary\">\n", null, null, null, null, null, "\t\t</div>\n");
 		}
 
 		if (longStyle.equals("【箇条書き（用語）】【箇条書き（用語）】")) {
-			return new Style_TagInfo("<div class=\"item\">", null, null, null, null, null, "</div>");
+			return new Style_TagInfo("\t\t\t<div class=\"item\">\n", null, null, null, null, null, "\t\t\t</div>\n");
 		}
 
 		if (longStyle.equals("【箇条書き（用語）】【箇条書き（用語）】【箇条書き（用語）】")) {
 			if (iText instanceof ControlText) {
-				return new Style_TagInfo("<div class=\"glossary\">", null, null, null, null, null, "</div>");
+				return new Style_TagInfo("\t\t\t\t<div class=\"glossary\">\n", null, null, null, null, null,
+						"\t\t\t\t</div>\n");
 			} else {
 				String sString = iText.getText().replaceFirst("^::", "");
-				return new Style_TagInfo("", null, "<div class=\"title\">", sString, "</div>", null, "");
+				return new Style_TagInfo("", null, "\t\t\t\t<div class=\"title\">", sString, "</div>\n", null, "");
 			}
 		}
 
@@ -288,19 +339,21 @@ public class LongStyleManagerXHTML extends tx2x.LongStyleManager {
 
 		if (longStyle.equals("【箇条書き（用語）】【箇条書き（用語）】【本文】【本文】【本文】")) {
 			String sString = iText.getText();
-			return new Style_TagInfo("", null, "<p>", sString, "</p>", null, "");
+			return new Style_TagInfo("", null, "\t\t\t\t<p>", sString, "</p>\n", null, "");
 		}
 
 		if (longStyle.equals("【箇条書き（用語）】【箇条書き（用語）】【箇条書き（用語）】【箇条書き（用語）】")) {
-			return new Style_TagInfo("<div class=\"item\">", null, null, null, null, null, "</div>");
+			return new Style_TagInfo("\t\t\t\t\t<div class=\"item\">\n", null, null, null, null, null,
+					"\t\t\t\t\t</div>\n");
 		}
 
 		if (longStyle.equals("【箇条書き（用語）】【箇条書き（用語）】【箇条書き（用語）】【箇条書き（用語）】【箇条書き（用語）】")) {
 			if (iText instanceof ControlText) {
-				return new Style_TagInfo("<div class=\"glossary\">", null, null, null, null, null, "</div>");
+				return new Style_TagInfo("\t\t\t\t\t\t\t<div class=\"glossary\">\n", null, null, null, null, null,
+						"\t\t\t\t\t\t\t</div>\n");
 			} else {
 				String sString = iText.getText().replaceFirst("^::", "");
-				return new Style_TagInfo("", null, "<div class=\"title\">", sString, "</div>", null, "");
+				return new Style_TagInfo("", null, "\t\t\t\t\t\t<div class=\"title\">", sString, "</div>\n", null, "");
 			}
 		}
 
@@ -311,7 +364,7 @@ public class LongStyleManagerXHTML extends tx2x.LongStyleManager {
 
 		if (longStyle.equals("【箇条書き（用語）】【箇条書き（用語）】【箇条書き（用語）】【箇条書き（用語）】【本文】【本文】【本文】")) {
 			String sString = iText.getText();
-			return new Style_TagInfo("", null, "<p>", sString, "</p>", null, "");
+			return new Style_TagInfo("", null, "\t\t\t\t\t\t<p>", sString, "</p>\n", null, "");
 		}
 
 		if (longStyle.equals("【――】") || longStyle.equals("【――】【――】")) {
@@ -320,470 +373,33 @@ public class LongStyleManagerXHTML extends tx2x.LongStyleManager {
 
 		if (longStyle.equals("【――】【――】【――】")) {
 			String sString = iText.getText().replaceFirst("^-+", "－－");
-			return new Style_TagInfo(null, null, "<div class=\"hack_author\">", sString, "</div>\n", null, null);
+			return new Style_TagInfo(null, null, "\t\t<div class=\"hack_author\">", sString, "</div>\n", null, null);
+		}
+		if (longStyle.equals("【画面】") || longStyle.equals("【画面】【画面】")) {
+			return new Style_TagInfo("", null, null, null, null, null, "");
 		}
 
-		if (longStyle.equals("【：】【：】【：】")) {
-			String sString = iText.getText().replaceFirst("：", "");
-			return new Style_TagInfo(null, null, "\n		<h4>", sString, "</h4>\n", null, null);
+		if (longStyle.equals("【画面】【画面】【画面】")) {
+			String sString = iText.getText();
+			sString = sString.replaceFirst("img src", "img class=\"Indent0\" src");
+			return new Style_TagInfo("", null, "\t\t", sString, "\n", null, "");
 		}
 
-		if (longStyle.equals("【項下】【項下】【項下】") /* 2013.12.19 */
-				|| longStyle.equals("【■】【■】【■】")) {
-			String sString = iText.getText().replaceFirst("■", "");
-			return new Style_TagInfo(null, null, "\n		<h5>", sString, "</h5>\n", null, null);
-		}
-
-		if (longStyle.equals("【項下下】【項下下】【項下下】")) {
-			String sString = iText.getText().replaceFirst("【項下下】", "");
-			return new Style_TagInfo(null, null, "\n		<h5>", sString, "</h5>\n", null, null);
-		}
-
-		if (longStyle.equals("【○】") || longStyle.equals("【○】【○】")) {
-			return null;
-		}
-
-		if (longStyle.equals("【○】【○】【○】")) {
-			String md5 = "id" + Utils.caluculateMD5(iText.getText());
-			iText.setText(iText.getText().substring(1));
-			m_cNavPointManager.add(iText.getText(), 3, md5);
-			return new Style_TagInfo(null, null, "<h3 xmlns=\"http://www.w3.org/1999/xhtml\" id=\"" + md5 + "\">",
-					iText.getText(), "</h3>", null, null);
-		}
-
-		if (longStyle.equals("【本文】")) {
-			if (getPrevLongStyle().equals("【画面】【画面】【画面】")) { /* 2013.12.19 */
-				return new Style_TagInfo("\n", null, null, null, null, null, "");
-			} else {
-				return new Style_TagInfo("", null, null, "", null, null,
-						""); /* 2013.12.19 */
-			}
-		}
-
-		if (longStyle.equals("【本文】【本文】")) {
+		if (longStyle.equals("【本文】") || longStyle.equals("【本文】【本文】")) {
 			return new Style_TagInfo("", null, null, "", null, null, "");
 		}
 
 		if (longStyle.equals("【本文】【本文】【本文】")) {
-			if (iText instanceof ControlText) {
-				return new Style_TagInfo("", null, null, "", null, null, "");
-			} else {
-				String sString = iText.getText();
-				if (sString.equals("")) {
-					sString = "<br />";
-				} else if (sString.indexOf("【右揃え】") > -1) {
-					sString = sString.replaceFirst("【右揃え】", "");
-					return new Style_TagInfo("", null, "\t\t<p class=\"TextRight\">", sString, "</p>\n", null,
-							""); /* 2013.12.19 */
-				}
-				return new Style_TagInfo("", null, "\t\t<p>", sString, "</p>\n", null,
-						""); /* 2013.12.19 */
-			}
-		}
-
-		if (longStyle.equals("【手順】【手順】【箇条書き●】")) {
-			return new Style_TagInfo("\t\t<ul class=\"Indent2\">\n", null, null, null, null, null, "\t\t</ul>\n");
-		}
-
-		if (longStyle.equals("【表】【行】【セル】【箇条書き●】")) {
-			return new Style_TagInfo("\t\t<ul>\n", null, null, null, null, null, "\t\t</ul>\n");
-		}
-
-		if (longStyle.equals("【箇条書き●】【箇条書き●】【箇条書き●】【箇条書き●】")) {
-			return new Style_TagInfo("\t\t\t\t\t<li>", null, null, "", null, null, "</li>\n");
-		}
-
-		if (longStyle.equals("【箇条書き●】【箇条書き●】【箇条書き●】【箇条書き●】【箇条書き●】")) {
-			String sString = iText.getText().replaceFirst("●\t", "");
-			return new Style_TagInfo(null, null, "", sString, "", null, null);
-
-		}
-
-		if (longStyle.equals("【箇条書き●】【箇条書き●】【本文】")) {
-			return new Style_TagInfo("<br />\n", null, null, iText.getText(), null, null, "");
-		}
-
-		if (longStyle.equals("【箇条書き●】【箇条書き●】【本文】【本文】")) {
-			String sLineCloseInfo = "";
-			String sNextSiblingTextStyle = getNextSiblingTextStyle(iText);
-			if (sNextSiblingTextStyle != null && sNextSiblingTextStyle.equals("【本文】"))
-				sLineCloseInfo = "<br />";
-			return new Style_TagInfo(null, null, "\t\t\t\t", iText.getText(), sLineCloseInfo, null, null);
-		}
-
-		if (longStyle.equals("【※】") || longStyle.equals("【※0】")) {
-			return new Style_TagInfo("", null, null, null, null, null, "");
-		}
-
-		if (longStyle.equals("【※】【※】") || longStyle.equals("【※0】【※0】")) {
-			return new Style_TagInfo("", null, null, null, null, null, "");
-		}
-
-		if (longStyle.equals("【※】【※】【※】") || longStyle.equals("【※0】【※0】【※0】")) {
-			String sString = iText.getText().replaceFirst("\t", " ");
-			return new Style_TagInfo(null, null, "\t\t<p class=\"Postscript\">", sString, "</p>\n", null, null);
-		}
-
-		if (longStyle.equals("【手順】【手順】【※】") || longStyle.equals("【手順】【手順】【※0】")) {
-			return new Style_TagInfo("", null, null, null, null, null, "");
-		}
-
-		if (longStyle.equals("【手順】【手順】【※】【※】") || longStyle.equals("【手順】【手順】【※0】【※0】")) {
-			return new Style_TagInfo("", null, null, null, null, null, "");
-		}
-
-		if (longStyle.equals("【手順】【手順】【※】【※】【※】") || longStyle.equals("【手順】【手順】【※0】【※0】【※0】")) {
-			String sString = iText.getText().replaceFirst("\t", " ");
-			return new Style_TagInfo(null, null, "\t\t<p class=\"Postscript Indent3\">", sString, "</p>\n", null, null);
-		}
-
-		if (longStyle.equals("【手順】【手順】【項下】")) { /* 2013.12.19 */
-			return new Style_TagInfo("", null, null, null, null, null, "");
-		}
-
-		if (longStyle.equals("【手順】【手順】【項下】【項下】")) { /* 2013.12.19 */
-			return new Style_TagInfo("", null, null, null, null, null, "");
-		}
-
-		if (longStyle.equals("【手順】【手順】【項下】【項下】【項下】")) { /* 2013.12.19 */
-			String sString = iText.getText().replaceFirst("■", "");
-			return new Style_TagInfo(null, null, "\n\t\t<h5 class=\"Indent15\">", sString, "</h5>\n", null, null);
-		}
-
-		if (longStyle.equals("【手順】【手順】【本文】")) { /* 2013.12.19 */
-			return new Style_TagInfo("", null, null, null, null, null, "");
-		}
-
-		if (longStyle.equals("【手順】【手順】【本文】【本文】")) { /* 2013.12.19 */
-			return new Style_TagInfo("", null, null, null, null, null, "");
-		}
-
-		if (longStyle.equals("【手順】【手順】【本文】【本文】【本文】")) { /* 2013.12.19 */
-			return new Style_TagInfo("", null, "\t\t<p class=\"Result\">", iText.getText(), "</p>\n", null, "");
-		}
-
-		if (longStyle.equals("【手順】【手順】【例：】")) {
-			return new Style_TagInfo(null, null, null, iText.getText(), null, null, null);
-		}
-
-		if (longStyle.equals("【手順】【手順】【例：】【例：】")) {
-			return new Style_TagInfo("", null, null, iText.getText(), null, null, "");
-		}
-
-		/* 2013.12.19 */
-		if (longStyle.equals("【手順】【手順】【例：】【例：】【例：】")) {
-			return new Style_TagInfo(null, null, "\t\t<p class=\"Result\">", iText.getText(), "</p>\n", null, null);
-		}
-
-		if (longStyle.equals("【手順】【手順】【code】")) {
-			return new Style_TagInfo("<pre>", null, null, iText.getText(), null, null, "</pre>");
-		}
-
-		if (longStyle.equals("【手順】【手順】【code】【本文】") || longStyle.equals("【手順】【手順】【code】【本文】【本文】")) {
-			return new Style_TagInfo(null, null, "", iText.getText(), "", null, null);
-		}
-
-		if (longStyle.equals("【画面】")) { /* 2013.12.19 */
-			return new Style_TagInfo("", null, null, "", null, null, "");
-		}
-
-		if (longStyle.equals("【補足】【画面】")) { /* 2013.12.19 */
-			return new Style_TagInfo("\t\t\t\t", null, null, null, null, null, "");
-		}
-
-		if (longStyle.equals("【補足】【画面】【画面】")) { /* 2013.12.19 */
-			return new Style_TagInfo("", null, null, null, null, null, "");
-		}
-
-		if (longStyle.equals("【補足】【箇条書き●】【箇条書き●】【画面】")) { /* 2013.12.19 */
-			return new Style_TagInfo("\t\t\t\t\t", null, null, null, null, null, "");
-		}
-
-		if (longStyle.equals("【補足】【箇条書き●】【箇条書き●】【画面】【画面】")) { /* 2013.12.19 */
-			return new Style_TagInfo("", null, null, null, null, null, "");
-		}
-
-		if (longStyle.equals("【画面】【画面】")) { /* 2013.12.19 */
-			return new Style_TagInfo("", null, null, null, null, null, "");
-		}
-
-		if (longStyle.matches("【手順】【手順】(【補足】)?【画面】")) { /* 2013.12.19 */
-			return new Style_TagInfo("", null, null, "", null, null, "");
-		}
-
-		if (longStyle.matches("【手順】【手順】(【補足】)?【画面】【画面】")) { /* 2013.12.19 */
-			return new Style_TagInfo("", null, null, null, null, null, "");
-		}
-
-		if (longStyle.matches("(【手順】【手順】)?【画面】【画面】【画面】")) {
 			String sString = iText.getText();
-			if (longStyle.matches("【画面】【画面】【画面】")) {
-				// System.out.println(sString);
-				sString = sString.replaceFirst("img src", "img class=\"Indent0\" src");
-				// System.out.println(sString);
-			}
-			return new Style_TagInfo("", null, "\t\t", sString, "\n", null, "");
-		}
-
-		if (longStyle.matches("【補足】【画面】【画面】【画面】")) { /* 2013.12.19 */
-			String sString = iText.getText();
-			return new Style_TagInfo("", null, "", sString, "\n", null, "");
-		}
-
-		if (longStyle
-				.matches("【補足】【箇条書き●】【箇条書き●】【画面】【画面】【画面】")) { /* 2013.12.19 */
-			String sString = iText.getText();
-			return new Style_TagInfo("", null, "", sString, "\n", null, "");
-		}
-
-		if (longStyle.matches("【手順】【手順】【補足】【画面】【画面】【画面】")) { /* 2013.12.19 */
-			String sString = iText.getText();
-			return new Style_TagInfo("", null, "\t\t\t\t", sString, "\n", null, "");
-		}
-
-		/* 2013.12.19 */
-		if (longStyle.equals("【手順】【手順】【重要】")) {
-			return new Style_TagInfo(
-					"\t\t<div class=\"Importance Indent2\">\n\t\t\t<div class=\"ImportanceTitle\">重 要</div>\n", null,
-					null, "", null, null, "\t\t</div>\n");
-		}
-
-		if (longStyle.equals("【手順】【手順】【注意】")) {
-			return new Style_TagInfo(
-					"\t\t<div class=\"Caution Indent2\">\n\t\t\t<div class=\"CautionTitle\">注 意</div>\n", null, null,
-					"", null, null, "\t\t</div>\n");
-		}
-
-		/* 2013.12.19 */
-		if (longStyle.equals("【手順】【手順】【補足】")) {
-			return new Style_TagInfo(
-					"\t\t<div class=\"supplement Indent15\">\n\t\t\t<div class=\"supplementtitle\">補 足</div>\n", null,
-					null, "", null, null, "\t\t</div>\n");
-		}
-
-		/* 2013.12.19 */
-		if (longStyle.equals("【コマンド】") || longStyle.equals("【手順】【手順】【コマンド】")) {
-			return new Style_TagInfo("\t\t<div class=\"Command\">\n", null, null, "", null, null, "\t\t</div>\n");
-		}
-
-		/* 2013.12.19 */
-		if (longStyle.equals("【注意】【コマンド】")) {
-			return new Style_TagInfo("\t\t\t\t<div class=\"Command\">\n", null, null, "", null, null,
-					"\t\t\t\t</div>\n");
-		}
-
-		/* 2013.12.19 */
-		if (longStyle.equals("【コマンド】【本文】") || longStyle.equals("【手順】【手順】【コマンド】【本文】")
-				|| longStyle.equals("【注意】【コマンド】【本文】")) {
-			return new Style_TagInfo("", null, null, "", null, null, "");
-		}
-
-		/* 2013.12.19 */
-		if (longStyle.equals("【コマンド】【本文】【本文】") || longStyle.equals("【手順】【手順】【コマンド】【本文】【本文】")) {
-			String sString = iText.getText();
-			sString = sString.replace("（", "<span>（");
-			sString = sString.replace("）", "）</span>");
 			if (sString.equals("")) {
 				sString = "<br />";
 			}
-			return new Style_TagInfo(null, null, "\t\t\t<p>", sString, "</p>\n", null, null);
-		}
-		/* 2013.12.19 */
-		if (longStyle.equals("【注意】【コマンド】【本文】【本文】")) {
-			String sString = iText.getText();
-			sString = sString.replace("（", "<span>（");
-			sString = sString.replace("）", "）</span>");
-			return new Style_TagInfo(null, null, "\t\t\t\t\t<p>", sString, "</p>\n", null, null);
-		}
-
-		/* 2013.12.19 */
-		if (longStyle.equals("【注意】【箇条書き●】【箇条書き●】【コマンド】")) {
-			return new Style_TagInfo("\n\t\t\t\t<div class=\"Command\">\n", null, null, "", null, null,
-					"\t\t\t\t</div>\n");
-		}
-
-		/* 2013.12.19 */
-		if (longStyle.equals("【注意】【箇条書き●】【箇条書き●】【コマンド】【本文】")) {
-			return new Style_TagInfo("", null, null, "", null, null, "");
-		}
-
-		/* 2013.12.19 */
-		if (longStyle.equals("【注意】【箇条書き●】【箇条書き●】【コマンド】【本文】【本文】")) {
-			String sString = iText.getText();
-			sString = sString.replace("（", "<span>（");
-			sString = sString.replace("）", "）</span>");
-			return new Style_TagInfo(null, null, "\t\t\t\t\t<p class=\"Indent1\">", sString, "</p>\n", null, null);
-		}
-
-		if (longStyle.equals("【重要】")) { /* 2013.12.19 */
-			return new Style_TagInfo(
-					"\n\t\t<div class=\"Importance\">\n\t\t\t<div class=\"ImportanceTitle\">重 要</div>\n", null, null,
-					"", null, null, "\t\t</div>\n\n");
-		}
-
-		if (longStyle.equals("【注意】")) { /* 2013.12.19 */
-			return new Style_TagInfo("\t\t<div class=\"Caution\">\n\t\t\t<div class=\"CautionTitle\">注 意</div>\n", null,
-					null, "", null, null, "\t\t</div>\n");
-		}
-
-		if (longStyle.equals("【囲み】")) { /* 2013.12.19 */
-			if (getPrevLongStyle().equals("【節】【節】【節】"))
-				return new Style_TagInfo("\n\t\t<div class=\"Note\">\n", null, null, "", null, null, "\t\t</div>\n");
-			else
-				return new Style_TagInfo("\t\t<br />\n\t\t<div class=\"Note\">\n", null, null, "", null, null,
-						"\t\t</div>\n\n");
-		}
-
-		if (longStyle.equals("【重要】【重要】") || longStyle.equals("【注意】【注意】") || longStyle.equals("【補足】【補足】")) {
-			return new Style_TagInfo("", null, "", "", "", null, "");
-		}
-
-		if (longStyle.equals("【重要】【本文】") /* 2013.12.19 */
-				|| longStyle.equals("【注意】【本文】") || longStyle.equals("【補足】【本文】") || longStyle.equals("【手順】【手順】【重要】【本文】")
-				|| longStyle.equals("【手順】【手順】【注意】【本文】")
-				|| longStyle.equals("【手順】【手順】【補足】【本文】") /* 2013.12.19 */) {
-			return new Style_TagInfo("", null, null, null, null, null, "");
-		}
-
-		if (longStyle.equals("【囲み】【本文】")) {
-			return null;
-			// return new Style_TagInfo("\t\t\t<ul>\n", null, null, null, null,
-			// null, "\t\t\t</ul>\n");
-		}
-
-		if (longStyle.equals("【手順】【手順】【補足】【本文】【本文】")) {
-			return null;
-		}
-
-		if (longStyle.equals("【重要】【本文】【本文】【本文】") || longStyle.equals("【注意】【本文】【本文】【本文】")
-				|| longStyle.equals("【補足】【本文】【本文】【本文】") || longStyle.equals("【手順】【手順】【重要】【本文】【本文】【本文】")
-				|| longStyle.equals("【手順】【手順】【注意】【本文】【本文】【本文】")
-				|| longStyle.equals("【手順】【手順】【補足】【本文】【本文】【本文】") /* 2013.12.19 */) {
-			String sLineOpenInfo = "\t\t\t\t<p>";
-			String sLineCloseInfo = "</p>\n";
-			String sNextSiblingTextStyle = getNextSiblingTextStyle(iText);
-			if (sNextSiblingTextStyle != null) {
-				if (sNextSiblingTextStyle.equals("【箇条書き●】")) {
-					sLineOpenInfo = "";
-					sLineCloseInfo = "\n";
-				}
-			}
-			return new Style_TagInfo(null, null, sLineOpenInfo, iText.getText(), sLineCloseInfo, null, null);
-		}
-
-		if (longStyle.equals("【囲み】【本文】【本文】")) {
-			String sLineOpenInfo = "\t\t\t<p>";
-			String sLineCloseInfo = "</p>\n";
-			String sNextSiblingTextStyle = getNextSiblingTextStyle(iText);
-			if (sNextSiblingTextStyle != null) {
-				if (sNextSiblingTextStyle.equals("【箇条書き●】")) {
-					sLineOpenInfo = "";
-					sLineCloseInfo = "\n";
-				}
-			}
-			return new Style_TagInfo(null, null, sLineOpenInfo, iText.getText(), sLineCloseInfo, null, null);
-		}
-
-		if (longStyle.equals("【重要】【本文】【本文】") || longStyle.equals("【注意】【本文】【本文】") || longStyle.equals("【補足】【本文】【本文】")) {
-			return null;
-		}
-
-		if (longStyle.equals("【重要】【本文】【本文】【本文】") || longStyle.equals("【注意】【本文】【本文】【本文】")
-				|| longStyle.equals("【補足】【本文】【本文】【本文】")) {
-			return new Style_TagInfo(null, null, "\t\t\t\t<p>", iText.getText(), "</p>\n", null, "");
-		}
-
-		if (longStyle.equals("【重要】【箇条書き●】") /* 2013.12.19 */
-				|| longStyle.equals("【注意】【箇条書き●】") /* 2013.12.19 */
-				|| longStyle.equals("【補足】【箇条書き●】") /* 2013.12.19 */
-				|| longStyle.equals("【手順】【手順】【重要】【箇条書き●】") || longStyle.equals("【手順】【手順】【注意】【箇条書き●】")
-				|| longStyle.equals("【手順】【手順】【補足】【箇条書き●】")) {
-			return new Style_TagInfo("\t\t\t<ul>\n", null, null, null, null, null, "\t\t\t</ul>\n");
-		}
-
-		if (longStyle.equals("【重要】【箇条書き●】【箇条書き●】") /* 2013.12.19 */
-				|| longStyle.equals("【注意】【箇条書き●】【箇条書き●】") /* 2013.12.19 */
-				|| longStyle.equals("【補足】【箇条書き●】【箇条書き●】") /* 2013.12.19 */) {
-			return new Style_TagInfo("\t\t\t\t<li>", null, null, null, null, null, "\t\t\t\t</li>\n");
-		}
-
-		if (longStyle.equals("【手順】【手順】【重要】【箇条書き●】【箇条書き●】") || longStyle.equals("【手順】【手順】【注意】【箇条書き●】【箇条書き●】")
-				|| longStyle.equals("【手順】【手順】【補足】【箇条書き●】【箇条書き●】")) {
-			return new Style_TagInfo("\t\t\t\t<li>", null, null, null, null, null, "\t\t\t\t</li>\n");
-		}
-
-		if (longStyle.equals("【重要】【箇条書き●】【箇条書き●】【箇条書き●】")
-				|| longStyle
-						.equals("【注意】【箇条書き●】【箇条書き●】【箇条書き●】") /* 2013.12.19 */
-				|| longStyle.equals("【補足】【箇条書き●】【箇条書き●】【箇条書き●】")
-				|| longStyle.equals("【手順】【手順】【重要】【箇条書き●】【箇条書き●】【箇条書き●】")
-				|| longStyle.equals("【手順】【手順】【注意】【箇条書き●】【箇条書き●】【箇条書き●】")
-				|| longStyle.equals("【手順】【手順】【補足】【箇条書き●】【箇条書き●】【箇条書き●】")) {
-			// 【(重要|注意|補足)】【箇条書き●】【箇条書き●】【箇条書き●】では、1番が使用される
-			if (iText instanceof ControlText) {
-				return new Style_TagInfo("\n\t\t\t\t<ul class=\"Indent15\">\n", "", "", null, "", "",
-						"\t\t\t\t</ul>\n");
-			} else {
-				String sString = iText.getChildText().replaceFirst("●\t", "");
-				return new Style_TagInfo("", "", "", sString, "<br/>\n", "", "");
-			}
-		}
-
-		if (longStyle.equals("【重要】【本文】【箇条書き●】") || longStyle.equals("【注意】【本文】【箇条書き●】")
-				|| longStyle.equals("【補足】【本文】【箇条書き●】")) {
-			return new Style_TagInfo("\t\t\t\t\t<ul>\n", null, null, null, null, null, "\t\t\t\t\t</ul>\n\t\t\t\t");
-		}
-
-		if (longStyle.equals("【重要】【本文】【箇条書き●】【箇条書き●】") || longStyle.equals("【注意】【本文】【箇条書き●】【箇条書き●】")
-				|| longStyle.equals("【補足】【本文】【箇条書き●】【箇条書き●】")) {
-			return new Style_TagInfo("\t\t\t\t\t\t<li>", null, null, null, null, null, "</li>\n");
-		}
-
-		if (longStyle.equals("【重要】【本文】【箇条書き●】【箇条書き●】【箇条書き●】") || longStyle.equals("【注意】【本文】【箇条書き●】【箇条書き●】【箇条書き●】")
-				|| longStyle.equals("【補足】【本文】【箇条書き●】【箇条書き●】【箇条書き●】")) {
-			String sString = iText.getText().replaceFirst("●\t", "");
-			return new Style_TagInfo(null, null, "", sString, "", null, null);
-		}
-
-		if (longStyle.equals("【重要】【箇条書き●】【箇条書き●】【本文】") || longStyle.equals("【注意】【箇条書き●】【箇条書き●】【本文】")
-				|| longStyle.equals("【補足】【箇条書き●】【箇条書き●】【本文】")) {
-			if (getPrevLongStyle().equals("【重要】【箇条書き●】【箇条書き●】【箇条書き●】【箇条書き●】【箇条書き●】")
-					|| getPrevLongStyle().equals("【注意】【箇条書き●】【箇条書き●】【箇条書き●】【箇条書き●】【箇条書き●】")
-					|| getPrevLongStyle().equals("【補足】【箇条書き●】【箇条書き●】【箇条書き●】【箇条書き●】【箇条書き●】")) {
-				return new Style_TagInfo("", null, null, iText.getText(), null, null, "");
-			} else {
-				return new Style_TagInfo("<br />\n", null, null, iText.getText(), null, null, "");
-			}
-		}
-
-		if (longStyle.equals("【重要】【箇条書き●】【箇条書き●】【本文】【本文】") || longStyle.equals("【注意】【箇条書き●】【箇条書き●】【本文】【本文】")
-				|| longStyle.equals("【補足】【箇条書き●】【箇条書き●】【本文】【本文】")) {
-			String sLineCloseInfo = "";
-			String sNextSiblingTextStyle = getNextSiblingTextStyle(iText);
-			if (sNextSiblingTextStyle != null && sNextSiblingTextStyle.equals("【本文】"))
-				sLineCloseInfo = "<br />";
-			return new Style_TagInfo(null, null, "\t\t\t\t\t", iText.getText(), sLineCloseInfo, null, null);
-		}
-
-		if (longStyle.equals("【重要】【箇条書き●】【箇条書き●】【箇条書き●】【箇条書き●】")
-				|| longStyle.equals(
-						"【注意】【箇条書き●】【箇条書き●】【箇条書き●】【箇条書き●】") /*
-															 * 2013.12 .19
-															 */
-				|| longStyle.equals("【補足】【箇条書き●】【箇条書き●】【箇条書き●】【箇条書き●】")) {
-			return new Style_TagInfo("\t\t\t\t\t<li>", null, null, null, null, null, "</li>\n");
-		}
-
-		if (longStyle.equals("【重要】【箇条書き●】【箇条書き●】【箇条書き●】【箇条書き●】【箇条書き●】")
-				|| longStyle.equals("【注意】【箇条書き●】【箇条書き●】【箇条書き●】【箇条書き●】【箇条書き●】")
-				|| longStyle.equals("【補足】【箇条書き●】【箇条書き●】【箇条書き●】【箇条書き●】【箇条書き●】")) {
-			String sString = iText.getText().replaceFirst("●\t", "");
-			return new Style_TagInfo("\t\t\t\t\t<ul>\n", "", "", sString, "", "", "\t\t\t\t\t</ul>\n");
+			return new Style_TagInfo("", null, "\t\t<p>", sString, "</p>\n", null, "");
 		}
 
 		if (longStyle.equals("【表】")/* 2013.12.19 */
 				|| longStyle.equals("【手順】【手順】【表】")) {
-			return new Style_TagInfo("\n", null, null, "", null, null, "");
+			return new Style_TagInfo("", null, null, "", null, null, "");
 		}
 
 		if (longStyle.equals("【表】【行】") /* 2013.12.19 */
@@ -791,22 +407,15 @@ public class LongStyleManagerXHTML extends tx2x.LongStyleManager {
 			return new Style_TagInfo("", null, null, "", null, null, "");
 		}
 
-		if (longStyle.matches("(【手順】【手順】)?【表】【行】【セル：ヘッダー】")) {/* 2013.12.19 */
-			return new Style_TagInfo("", null, "", "", "", null, "");
+		if (longStyle.matches("【表】【行】【セル(：ヘッダー)?】")) {/* 2013.12.19 */
+			return new Style_TagInfo("", null, null, "", null, null, "");
 		}
 
-		if (longStyle
-				.matches("(【手順】【手順】)?【表】【行】【セル：ヘッダー】【本文】")) {/* 2013.12.19 */
-			return null;
+		if (longStyle.matches("【表】【行】【セル(：ヘッダー)?】【本文】(【本文】)?")) {
+			return new Style_TagInfo("", null, null, "", null, null, "");
 		}
 
-		if (longStyle.matches(
-				"(【手順】【手順】)?【表】【行】【セル：ヘッダー】【本文】【本文】")) {/* 2013.12.19 */
-			return null;
-		}
-
-		if (longStyle.matches(
-				"(【手順】【手順】)?【表】【行】【セル：ヘッダー】【本文】【本文】【本文】")) {/* 2013.12.19 */
+		if (longStyle.matches("【表】【行】【セル(：ヘッダー)?】【本文】【本文】【本文】")) {
 			String sString = iText.getText().replaceFirst("【ヘッダー】", "");
 			String sLineCloseInfo = "";
 			String sNextSiblingTextStyle = getNextSiblingTextStyle(iText);
@@ -815,206 +424,8 @@ public class LongStyleManagerXHTML extends tx2x.LongStyleManager {
 			return new Style_TagInfo("", null, "", sString, sLineCloseInfo, null, "");
 		}
 
-		if (longStyle.equals("【表】【行】【セル】") /* 2013.12.19 */
-				|| longStyle.equals("【手順】【手順】【表】【行】【セル】")) {
-			ControlText cChildText = (ControlText) ((ControlText) iText).getChildList().get(0);
-			if (((ControlText) iText).getChildList().size() == 1 && cChildText.getChildList().size() == 1) {
-				return null;
-			} else {
-				return new Style_TagInfo(null, null, null, null, null, null, "\t\t\t\t");
-			}
-		}
-
-		if (longStyle.equals("【表】【行】【セル】【項下】") || longStyle.equals("【表】【行】【セル】【■】")) {
+		if (longStyle.equals("【表】【行】【セル】")) {
 			return new Style_TagInfo("", null, null, "", null, null, "");
-		}
-
-		if (longStyle.equals("【表】【行】【セル】【項下】【項下】") || longStyle.equals("【表】【行】【セル】【■】【■】")) {
-			String sString = iText.getText().replace('\t', ' ');
-			return new Style_TagInfo(null, null, "", sString, "", null, null);
-		}
-
-		if (longStyle.equals("【表】【行】【セル】【項下】【項下】【項下】") || longStyle.equals("【表】【行】【セル】【■】【■】【■】")) {
-			String sString = iText.getText().replaceFirst("■", "");
-			return new Style_TagInfo(null, null, "<h5>", sString, "</h5>", null, null);
-		}
-
-		if (longStyle.equals("【表】【行】【セル】【本文】")/* 2013.12.19 */
-				|| longStyle.equals("【手順】【手順】【表】【行】【セル】【本文】")) {
-			return null;
-		}
-
-		if (longStyle.equals("【表】【行】【セル】【本文】【本文】")/* 2013.12.19 */
-				|| longStyle.equals("【手順】【手順】【表】【行】【セル】【本文】【本文】")) {
-			return null;
-		}
-
-		if (longStyle.equals("【表】【行】【セル】【本文】【本文】【本文】")/* 2013.12.19 */
-				|| longStyle.equals("【手順】【手順】【表】【行】【セル】【本文】【本文】【本文】")) {
-			// 前の行から同じスタイルが続く場合は<br />を追加する
-			String sLineOpenInfo = "";
-			String sLineCloseInfo = "";
-			ControlText cParentParentParent = cTreeWalker.peekParent(3);
-
-			if (cParentParentParent.getChildList().size() > 1 || cParentParent.getChildList().size() > 1) {
-				sLineOpenInfo = "\n\t\t\t\t\t<p>";
-				sLineCloseInfo = "</p>";
-				if (cParentParent.getIndex(cParent) == cParentParent.getChildList().size() - 1) {
-					// 複数行の場合、最後の1行だけインデントを調整する
-					sLineCloseInfo = sLineCloseInfo + "\n";
-				}
-			} else {
-				// 兄弟がいない
-				sLineOpenInfo = "";
-				sLineCloseInfo = "";
-			}
-
-			// 【中央揃え】は削除する（すでにスタイル変更済み）
-			String sString = iText.getText();
-			if (sString.indexOf("【中央揃え】") != -1) {
-				sString = sString.replaceFirst("【中央揃え】", "");
-			}
-			return new Style_TagInfo("", null, sLineOpenInfo, sString, sLineCloseInfo, null, "");
-		}
-
-		if (longStyle.equals("【手順】【手順】【表】【行】【セル】【箇条書き●】")) {
-			return new Style_TagInfo("\t\t\t\t\t<ul>\n", null, null, null, null, null, "\t\t\t\t\t</ul>\n");
-		}
-
-		if (longStyle.equals("【手順】【手順】【表】【行】【セル】【箇条書き●】【箇条書き●】")) {
-			// String sString = iText.getText().replaceFirst("●\t", "");
-			return new Style_TagInfo("\t\t\t\t\t\t<li>", null, null, null, null, null, "</li>\n");
-		}
-
-		if (longStyle.equals("【手順】【手順】【表】【行】【セル】【箇条書き●】【箇条書き●】【箇条書き●】")) {
-			String sString = iText.getText().replaceFirst("●\t", "");
-			return new Style_TagInfo(null, null, "", sString, "", null, null);
-		}
-
-		if (longStyle.equals("【表】【行】【セル】【画面】")) {
-			return new Style_TagInfo("", null, null, null, null, null, "");
-		}
-
-		if (longStyle.equals("【表】【行】【セル】【画面】【画面】")) {
-			return new Style_TagInfo("", null, null, null, null, null, "");
-		}
-
-		if (longStyle.equals("【表】【行】【セル】【画面】【画面】【画面】")) {
-			return new Style_TagInfo(null, null, "", iText.getText(), "", null, null);
-		}
-
-		if (longStyle.equals("【リンク】")) {
-			return new Style_TagInfo("\t\t<ul class=\"SectionList\">\n", null, null, "", null, null, "\t\t</ul>\n");
-		}
-
-		if (longStyle.equals("【リンク】【本文】") || longStyle.equals("【リンク】【箇条書き・】")) {
-			return new Style_TagInfo("", null, null, "", null, null, "");
-		}
-
-		if (longStyle.equals("【リンク】【本文】【本文】")) {
-			if (iText instanceof ControlText) {
-				ControlText cText = (ControlText) iText;
-				if (cText.getChildList().size() == 1) {
-					return new Style_TagInfo("\t\t\t<li>", null, null, "", null, null, "</li>\n");
-				} else {
-					return new Style_TagInfo("\t\t\t<li>", null, null, "", null, null, "\t\t\t</li>\n");
-				}
-			}
-		}
-
-		if (longStyle.equals("【リンク】【本文】【本文】【本文】")) {
-			if (iText instanceof ControlText) {
-				return new Style_TagInfo("\n\t\t\t\t<ul>\n", null, null, "", null, null, "\t\t\t\t</ul>\n");
-			} else {
-				if (cParent.getChildList().size() == 1) {
-					return new Style_TagInfo(null, null, "", iText.getText(), "", null, null);
-				} else {
-					return new Style_TagInfo(null, null, "\n\t\t\t\t", iText.getText(), "", null, null);
-				}
-			}
-		}
-
-		if (longStyle.equals("【リンク】【本文】【本文】【本文】【本文】")) {
-			if (iText instanceof ControlText) {
-				return new Style_TagInfo("", null, null, "", null, null, "");
-			} else {
-				String sLineOpenInfo = "";
-				String sString = iText.getText();
-				String sLineCloseInfo = "";
-
-				if (cParentParent.getChildList().size() > 1) {
-					sLineOpenInfo = "";
-					sLineCloseInfo = "";
-					if (cParentParent.getIndex(cParent) == cParentParent.getChildList().size() - 1) {
-						// 複数行の場合、最後の1行だけインデントを調整する
-						sLineOpenInfo = sLineOpenInfo + "\t\t\t\t";
-						sLineCloseInfo = sLineCloseInfo + "\n";
-					}
-				} else {
-					// 兄弟がいない
-					sLineOpenInfo = "";
-					sLineCloseInfo = "";
-				}
-
-				return new Style_TagInfo(null, null, sLineOpenInfo, sString, sLineCloseInfo, null, null);
-			}
-		}
-
-		if (longStyle.equals("【リンク】【本文】【本文】【本文】【本文】【本文】")) {
-			if (iText instanceof ControlText) {
-				return new Style_TagInfo("\n\t\t\t\t<ul>\n", null, null, "", null, null, "\t\t\t\t</ul>\n");
-			} else {
-				if (cParent.getChildList().size() == 1) {
-					return new Style_TagInfo(null, null, "\t\t\t\t\t<li>", iText.getText(), "</li>\n", null, null);
-				} else {
-					return new Style_TagInfo(null, null, "\n\t\t\t\t", iText.getText(), "", null, null);
-				}
-			}
-		}
-
-		if (longStyle.equals("【リンク】【箇条書き・】【箇条書き・】")) {
-			ControlText cText = (ControlText) iText;
-			if (cText.getChildList().size() == 1 && (cText.getChildList().get(0) instanceof ControlText == false)) {
-				return new Style_TagInfo("\t\t\t<li>", null, null, "", null, null, "</li>\n");
-			} else {
-				return new Style_TagInfo("\t\t\t<li>\n", null, null, "", null, null, "\t\t\t</li>\n");
-			}
-		}
-
-		if (longStyle.equals("【リンク】【箇条書き・】【箇条書き・】【箇条書き・】")) { /* 2013.12.19 */
-			if (iText instanceof ControlText) {
-				return new Style_TagInfo("\t\t\t\t<ul>\n", null, null, "", null, null, "\t\t\t\t</ul>\n");
-			} else {
-				String sLineOpenInfo = "";
-				String sString = iText.getText().replaceFirst("・\t", "");
-				String sLineCloseInfo = "";
-
-				if (cParentParent.getChildList().size() > 1) {
-					sLineOpenInfo = "";
-					sLineCloseInfo = "";
-					if (cParentParent.getIndex(cParent) == cParentParent.getChildList().size() - 1) {
-						// 複数行の場合、最後の1行だけインデントを調整する
-						sLineOpenInfo = sLineOpenInfo + "\t\t\t\t";
-						sLineCloseInfo = sLineCloseInfo + "\n";
-					}
-				} else {
-					// 兄弟がいない
-					sLineOpenInfo = "";
-					sLineCloseInfo = "";
-				}
-
-				return new Style_TagInfo(null, null, sLineOpenInfo, sString, sLineCloseInfo, null, null);
-			}
-		}
-
-		if (longStyle
-				.equals("【リンク】【箇条書き・】【箇条書き・】【箇条書き・】【箇条書き・】")) { /* 2013.12.19 */
-			return new Style_TagInfo("\t\t\t\t\t<li>\n", null, null, "", null, null, "\t\t\t\t\t</li>\n");
-		}
-
-		if (longStyle.equals("【リンク】【箇条書き・】【箇条書き・】【箇条書き・】【箇条書き・】【箇条書き・】")) {
-			String sString = iText.getText().replaceFirst("・\t", "");
-			return new Style_TagInfo(null, null, "\t\t\t\t\t\t", sString, "\n", null, null);
 		}
 
 		// コメントスタイルの処理
