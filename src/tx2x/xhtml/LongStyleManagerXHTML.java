@@ -193,16 +193,16 @@ public class LongStyleManagerXHTML extends tx2x.LongStyleManager {
 			return new Style_TagInfo("", "<p>", sString, "</p>");
 		}
 
-		if (longStyle.matches("(【ヒント】|【1.】【1.】)?【箇条書き・】")) {
+		if (longStyle.matches("(【ヒント】|【1.】【1.】|【1】【1】【表】【行】【セル】(【本文】【本文】|【指】【指】)?)?【箇条書き[・●]】")) {
 			return new Style_TagInfo("\t", "<ul>\n", null, "</ul>");
 		}
 
-		if (longStyle.matches("(【ヒント】|【1.】【1.】)?【箇条書き・】【箇条書き・】")) {
+		if (longStyle.matches("(【ヒント】|【1.】【1.】|【1】【1】【表】【行】【セル】(【本文】【本文】|【指】【指】)?)?【箇条書き[・●]】【箇条書き[・●]】")) {
 			return new Style_TagInfo("\t", "<li>\n", null, "</li>");
 		}
 
-		if (longStyle.matches("(【ヒント】|【1.】【1.】)?【箇条書き・】【箇条書き・】【箇条書き・】")) {
-			String sString = iText.getText().replaceFirst("・\t", "");
+		if (longStyle.matches("(【ヒント】|【1.】【1.】|【1】【1】【表】【行】【セル】(【本文】【本文】|【指】【指】)?)?【箇条書き[・●]】【箇条書き[・●]】【箇条書き[・●]】$")) {
+			String sString = iText.getText().replaceFirst("^[・●]\t", "");
 			return new Style_TagInfo("", "<p>", sString, "</p>");
 		}
 
@@ -260,19 +260,19 @@ public class LongStyleManagerXHTML extends tx2x.LongStyleManager {
 			}
 		}
 
-		if (longStyle.equals("【1.】")) {
+		if (longStyle.matches("【1\\.?】")) {
 			return new Style_TagInfo("\t", "<div class=\"steps\">\n", "", "</div>");
 		}
 
-		if (longStyle.equals("【1.】【1.】")) {
+		if (longStyle.matches("【1\\.?】【1\\.?】")) {
 			return new Style_TagInfo("\t", "<div class=\"step_block\">\n", "", "</div>");
 		}
 
-		if (longStyle.equals("【1.】【1.】【1.】")) {
-			Pattern pattern = Pattern.compile("^([0-9]+)[．\\.]\t");
+		if (longStyle.matches("【1\\.?】【1\\.?】【1\\.?】")) {
+			Pattern pattern = Pattern.compile("^([0-9]+)[．\\.]?\t");
 			Matcher matcher = pattern.matcher(iText.getText());
 			if (matcher.find()) {
-				String sString = iText.getText().replaceFirst("[0-9]+[．\\.]\t", "");
+				String sString = iText.getText().replaceFirst("[0-9]+[．\\.]?\t", "");
 				return new Style_TagInfo("\t",
 						"<div class=\"step\"><span class=\"no\">" + matcher.group(1) + "．</span>", sString, "</div>");
 			}
@@ -366,25 +366,23 @@ public class LongStyleManagerXHTML extends tx2x.LongStyleManager {
 			return new Style_TagInfo("", "<p>", sString, "</p>");
 		}
 
-		if (longStyle.equals("【表】")/* 2013.12.19 */
-				|| longStyle.equals("【手順】【手順】【表】")) {
+		if (longStyle.matches("(【手順】【手順】|【1】【1】)?【表】")) {
 			return Style_TagInfo.NULL_STYLE_TAGINFO;
 		}
 
-		if (longStyle.equals("【表】【行】") /* 2013.12.19 */
-				|| longStyle.equals("【手順】【手順】【表】【行】")) {
+		if (longStyle.matches("(【手順】【手順】|【1】【1】)?【表】【行】")) {
 			return Style_TagInfo.NULL_STYLE_TAGINFO;
 		}
 
-		if (longStyle.matches("【表】【行】【セル(：ヘッダー)?】")) {/* 2013.12.19 */
+		if (longStyle.matches("(【手順】【手順】|【1】【1】)?【表】【行】【セル(：ヘッダー)?】")) {
 			return Style_TagInfo.NULL_STYLE_TAGINFO;
 		}
 
-		if (longStyle.matches("【表】【行】【セル(：ヘッダー)?】【本文】(【本文】)?")) {
+		if (longStyle.matches("(【手順】【手順】|【1】【1】)?【表】【行】【セル(：ヘッダー)?】【本文】(【本文】)?")) {
 			return Style_TagInfo.NULL_STYLE_TAGINFO;
 		}
 
-		if (longStyle.matches("【表】【行】【セル(：ヘッダー)?】【本文】【本文】【本文】")) {
+		if (longStyle.matches("(【手順】【手順】|【1】【1】)?【表】【行】【セル(：ヘッダー)?】【本文】【本文】【本文】")) {
 			String sString = iText.getText().replaceFirst("【ヘッダー】", "");
 			String sCloseInfo = "";
 			String sNextSiblingTextStyle = getNextSiblingTextStyle(iText);
@@ -398,6 +396,32 @@ public class LongStyleManagerXHTML extends tx2x.LongStyleManager {
 
 		if (longStyle.equals("【表】【行】【セル】")) {
 			return Style_TagInfo.NULL_STYLE_TAGINFO;
+		}
+
+		if (longStyle.matches("【1】【1】【表】【行】【セル】(【本文】【本文】|【指】【指】)?【①】")) {
+			return new Style_TagInfo("\t", "<div class=\"steps\">\n", "", "</div>");
+		}
+
+		if (longStyle.matches("【1】【1】【表】【行】【セル】(【本文】【本文】|【指】【指】)?【①】【①】")) {
+			return new Style_TagInfo("\t", "<div class=\"step_block\">\n", "", "</div>");
+		}
+
+		if (longStyle.matches("【1】【1】【表】【行】【セル】(【本文】【本文】|【指】【指】)?【①】【①】【①】")) {
+			String sString = iText.getText().replaceFirst("([①-⑳])\t", "<span class=\"no_circle\">$1</span>");
+			return new Style_TagInfo("", "<div class=\"step\">", sString, "</div>");
+		}
+
+		if (longStyle.matches("【1】【1】【表】【行】【セル】【指】")) {
+			return Style_TagInfo.NULL_STYLE_TAGINFO;
+		}
+
+		if (longStyle.matches("【1】【1】【表】【行】【セル】【指】【指】")) {
+			return new Style_TagInfo("", "<div class=\"other_step\">", null, "</div>");
+		}
+
+		if (longStyle.matches("【1】【1】【表】【行】【セル】【指】【指】【指】")) {
+			String sString = iText.getText().replaceFirst("【指】", "&#x261E;");
+			return new Style_TagInfo("", "<div class=\"title\">", sString, "</div>");
 		}
 
 		// コメントスタイルの処理

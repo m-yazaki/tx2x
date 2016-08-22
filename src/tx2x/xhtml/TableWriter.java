@@ -27,6 +27,8 @@ public class TableWriter {
 		String ret = "";
 		if (currentLongStyle.equals("【表】【行】【セル：ヘッダー】【本文】【本文】【本文】")) {
 			ret = "\n\t\t<table class=\"information\">";
+		} else if (currentLongStyle.equals("【1】【1】【表】【行】【セル】【本文】【本文】【本文】")) {
+			ret = "\n\t\t<table class=\"branch\">";
 		} else {
 			System.out.println("【警告】表のclassが正しいことを確認してください。");
 			System.out.println(currentLongStyle);

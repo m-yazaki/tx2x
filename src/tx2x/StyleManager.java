@@ -78,6 +78,7 @@ public class StyleManager {
 		m_cStyle_BulletLike_List.add(new Style_BulletLike("【HACK】", "^【HACK #[0-9]+】.*", ".*"));
 		m_cStyle_BulletLike_List.add(new Style_BulletLike("【画面】", "^<img .*>$", ".*")); // 【画面】
 		m_cStyle_BulletLike_List.add(new Style_BulletLike("【――】", "^----\t.*", "^(?!----\t).*")); // 【――】
+		m_cStyle_BulletLike_List.add(new Style_BulletLike("【指】", "^【指】\t.*", "^(?!【指】\t).*")); // 【指】
 
 		// お知らせの類似品
 		m_cStyle_NoteLike_List.add(new Style_NoteLike("【メモ】", "^▼メモ.*", "▲.*")); // memo
