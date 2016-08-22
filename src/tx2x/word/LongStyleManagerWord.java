@@ -353,22 +353,9 @@ public class LongStyleManagerWord extends LongStyleManager {
 			Dispatch.call(oSelection, "EndKey", 5 /* wdLine */); // 行末へ移動
 			Dispatch.call(oSelection, "TypeParagraph"); // 改行
 			return;
-		} else if (longStyle.equals("【箇条書き・】【箇条書き・】【箇条書き・】")) {
+		} else if (longStyle.matches("(【1.】【1.】|【ヒント】)?【箇条書き・】【箇条書き・】【箇条書き・】")) {
 			Dispatch.put(oSelection, "Style", sWordStyle);
-			Dispatch.put(oSelection, "Text", iText.getText().replaceFirst("^・", "●"));
-			Dispatch.call(oSelection, "EndKey", 5 /* wdLine */); // 行末へ移動
-			Dispatch.call(oSelection, "TypeParagraph"); // 改行
-			return;
-		} else if (longStyle.equals("【1.】【1.】【箇条書き・】【箇条書き・】【箇条書き・】")) {
-			Dispatch.put(oSelection, "Style", sWordStyle);
-			Dispatch.put(oSelection, "Text", iText.getText().replaceFirst("^・", "●"));
-			Dispatch.call(oSelection, "EndKey", 5 /* wdLine */); // 行末へ移動
-			Dispatch.call(oSelection, "TypeParagraph"); // 改行
-			return;
-		} else if (longStyle.equals("【ヒント】【箇条書き・】【箇条書き・】【箇条書き・】")) {
-			Dispatch.put(oSelection, "Style", sWordStyle);
-			Dispatch.put(oSelection, "Text", iText.getText().replaceFirst("^・", "●"));
-			Dispatch.call(oSelection, "EndKey", 5 /* wdLine */); // 行末へ移動
+			typeText(oSelection, iText.getText().replaceFirst("^・", "●"));
 			Dispatch.call(oSelection, "TypeParagraph"); // 改行
 			return;
 		} else if (longStyle.equals("【――】【――】【――】")) {
@@ -384,26 +371,15 @@ public class LongStyleManagerWord extends LongStyleManager {
 		}
 
 		// 標準的な処理
-		String[] t = iText.getText().split("((?<=</?b>)|(?=</?b>))", -1);
-		for (int i = 0; i < t.length; i++) {
-			System.out.println("t[" + i + "] : " + t[i]);
-			if (t[i].equals("<b>")) {
-				Tx2xDispatch.call(oSelection, "Font.Bold", true);
-			} else if (t[i].equals("</b>")) {
-				Tx2xDispatch.call(oSelection, "Font.Bold", false);
-			} else {
-				Dispatch.put(oSelection, "Text", t[i]);
-			}
-		}
-
 		try {
 			Dispatch.put(oSelection, "Style", sWordStyle);
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("Style: " + sWordStyle);
 		}
+		typeText(oSelection, iText.getText());
 
-		Dispatch.call(oSelection, "EndKey", 5 /* wdLine */); // 行末へ移動
+		// Dispatch.call(oSelection, "EndKey", 5 /* wdLine */); // 行末へ移動
 
 		if (getPrevLongStyle().equals("【HACK】【HACK】")) {
 			// Dispatch.call(oSelection, "MoveDown"); // 下へ移動
@@ -411,6 +387,41 @@ public class LongStyleManagerWord extends LongStyleManager {
 			// Dispatch.call(oSelection, "MoveDown"); // 下へ移動
 		} else {
 			Dispatch.call(oSelection, "TypeParagraph"); // 改行
+		}
+	}
+
+	private void typeText(Dispatch oSelection, String sText) {
+		String[] b = sText.split("((?<=</?b>)|(?=</?b>))", -1);
+		for (int i = 0; i < b.length; i++) {
+			if (b[i].equals("<b>")) {
+				Tx2xDispatch.put(oSelection, "Font.Bold", true);
+			} else if (b[i].equals("</b>")) {
+				Tx2xDispatch.put(oSelection, "Font.Bold", false);
+			} else {
+				String[] a = b[i].split("((?<=[<>])|(?=[<>]))", -1);
+				for (int j = 0; j < a.length; j++) {
+					if (a[j].equals("<")) {
+						Pattern p = Pattern.compile("a href=\"(.+)\"");
+						Matcher matcher = p.matcher(a[j + 1]);
+						String sHref = "";
+						if (matcher.find()) {
+							sHref = matcher.group(1);
+							Variant oRange = Tx2xDispatch.call(oSelection, "Range");
+							Tx2xDispatch.call(oSelection, "Document.Hyperlinks.Add", oRange, sHref, "", "", a[j + 3]);
+							j += 3;
+						} else if (a[j + 1].equals("/a")) {
+							// 出力無し
+							j++;
+						}
+					} else if (a[j].equals(">")) {
+						// 出力無し
+					} else {
+						Dispatch.call(oSelection, "TypeText", a[j]);
+						// Dispatch.put(oSelection, "Text", t[i]);
+						Dispatch.call(oSelection, "EndKey", 5 /* wdLine */); // 行末へ移動
+					}
+				}
+			}
 		}
 	}
 
