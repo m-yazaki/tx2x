@@ -177,3 +177,14 @@ div.hack_author {
 img {
     max-width: 100%;
 }
+
+li {
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+
+li p {
+    line-height: 1em;
+    margin-top: 8px;
+    margin-bottom: 8px;
+}

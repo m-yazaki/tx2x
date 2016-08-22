@@ -203,7 +203,17 @@ public class LongStyleManagerXHTML extends tx2x.LongStyleManager {
 
 		if (longStyle.matches("(【ヒント】|【1.】【1.】)?【箇条書き・】【箇条書き・】【箇条書き・】")) {
 			String sString = iText.getText().replaceFirst("・\t", "");
-			return new Style_TagInfo("", "", sString, "");
+			return new Style_TagInfo("", "<p>", sString, "</p>");
+		}
+
+		if (longStyle.matches("(【ヒント】|【1.】【1.】)?【箇条書き・】【箇条書き・】【本文】")
+				|| longStyle.matches("(【ヒント】|【1.】【1.】)?【箇条書き・】【箇条書き・】【本文】【本文】")) {
+			return Style_TagInfo.NULL_STYLE_TAGINFO;
+		}
+
+		if (longStyle.matches("(【ヒント】|【1.】【1.】)?【箇条書き・】【箇条書き・】【本文】【本文】【本文】")) {
+			String sString = iText.getText();
+			return new Style_TagInfo("", "<p>", sString, "</p>");
 		}
 
 		if (longStyle.matches("(【ヒント】|【注意】|【1.】【1.】|【箇条書き・】【箇条書き・】)?【コード】")) {
