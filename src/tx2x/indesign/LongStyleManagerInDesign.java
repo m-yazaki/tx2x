@@ -210,6 +210,10 @@ public class LongStyleManagerInDesign extends tx2x.LongStyleManager {
 			return "<ParaStyle:バレット>";
 		}
 
+		if (longStyle.equals("【箇条書き・】【箇条書き・】【本文】【本文】【本文】")) {
+			return "<ParaStyle:バレット-本文>";
+		}
+
 		if (longStyle.equals("【箇条書き・】【箇条書き・】【コード】【コード】")) {
 			if (iText.getText().startsWith("▼")) {
 				iText.setText(null);

@@ -100,6 +100,10 @@ public class LongStyleManagerWord extends LongStyleManager {
 			return "箇条書き";
 		}
 
+		if (m_sCurrentLongStyle.equals("【箇条書き・】【箇条書き・】【本文】【本文】【本文】")) {
+			return "箇条書き-本文";
+		}
+
 		if (m_sCurrentLongStyle.equals("【箇条書き・】【箇条書き・】【コード】【コード】")) {
 			return "コード";
 		}
