@@ -28,15 +28,13 @@ public class ControlTextWriter {
 			writeNoteParts(oSelection, 0, 136.9 * MM);
 			return;
 		} else if (longStyle.equals("【HACK】")) {
-			Dispatch oDocument = Dispatch.call(oSelection, "Document").toDispatch();
-			Dispatch oTables = Dispatch.call(oDocument, "Tables").toDispatch();
+			// 表を作る
 			Variant oRange = Dispatch.call(oSelection, "Range");
-			Dispatch oTable = Dispatch.call(oTables, "Add", oRange, 1, 2).toDispatch();
+			Dispatch oTable = Tx2xDispatch.call(oSelection, "Document.Tables.Add", oRange, 1, 2).toDispatch();
 
 			// HACKグレーアイコン
-			Dispatch oInlineShapes = Dispatch.get(oSelection, "InlineShapes").toDispatch();
-			Dispatch oInlineShape = Dispatch
-					.call(oInlineShapes, "AddPicture",
+			Dispatch oInlineShape = Tx2xDispatch
+					.call(oSelection, "InlineShapes.AddPicture",
 							Tx2xOptions.getInstance().getString("tx2x_folder_name") + "\\hack.png", "False", "True")
 					.toDispatch();
 			Dispatch oShape = Dispatch.call(oInlineShape, "ConvertToShape").toDispatch();
@@ -66,11 +64,6 @@ public class ControlTextWriter {
 			Dispatch.call(oCell, "Select");
 			Dispatch.call(oSelection, "MoveLeft"); // 左へ移動（カーソルを立てる）
 			iText.setText(matcher.group(2));
-
-			// Dispatch.put(oSelection, "Text", matcher.group(2));
-			// Dispatch.put(oSelection, "Style", "HACK-見出し");
-			// Dispatch.call(oSelection, "MoveRight"); // 右へ移動
-			// Dispatch.call(oSelection, "TypeParagraph"); // 改行
 			return;
 		} else if (longStyle.equals("【コード】")) {
 			writeCodeParts(oSelection, 15 * MM, 134.8 * MM, RGB(236, 240, 241));
@@ -94,29 +87,25 @@ public class ControlTextWriter {
 
 	private void writeCodeParts(Dispatch oSelection, double dLeftIndent, double dWidth, int iBackgroundPatternColor) {
 		// 表を作る
-		Dispatch oDocument = Dispatch.call(oSelection, "Document").toDispatch();
-		Dispatch oTables = Dispatch.call(oDocument, "Tables").toDispatch();
 		Variant oRange = Dispatch.call(oSelection, "Range");
-		Dispatch oTable = Dispatch.call(oTables, "Add", oRange, 1, 1).toDispatch();
+		Dispatch oTable = Tx2xDispatch.call(oSelection, "Document.Tables.Add", oRange, 1, 1).toDispatch();
 
 		// 幅を調節
 		Dispatch oCell = Dispatch.call(oTable, "Cell", 1, 1).getDispatch();
 		setCellWidth(oCell, dWidth);
 
 		// 左端からのインデント
-		Dispatch oRows = Dispatch.get(oTable, "Rows").toDispatch();
-		Dispatch.put(oRows, "LeftIndent", dLeftIndent);
+		Tx2xDispatch.put(oTable, "Rows.LeftIndent", dLeftIndent);
 
 		// 背景
-		Dispatch oShading = Dispatch.get(oTable, "Shading").toDispatch();
-		Dispatch.put(oShading, "BackgroundPatternColor", iBackgroundPatternColor);
+		Tx2xDispatch.put(oTable, "Shading.BackgroundPatternColor", iBackgroundPatternColor);
 
 		// 罫線
 		for (int i = -4; i <= -1; i++) {
-			/* -1:wdBorderTop */
-			/* -2:wdBorderLeft */
-			/* -3:wdBorderBottom */
-			/* -4:wdBorderRight */
+			/* i=-1:wdBorderTop */
+			/* i=-2:wdBorderLeft */
+			/* i=-3:wdBorderBottom */
+			/* i=-4:wdBorderRight */
 			Dispatch oBorder = Dispatch.call(oTable, "Borders", i).toDispatch();
 			Dispatch.put(oBorder, "LineStyle", 4 /* wdLineStyleDashLargeGap */);
 		}
@@ -158,14 +147,12 @@ public class ControlTextWriter {
 	}
 
 	private void writeHintParts(Dispatch oSelection, double dLeftIndent) {
-		Dispatch oDocument = Dispatch.call(oSelection, "Document").toDispatch();
-		Dispatch oTables = Dispatch.call(oDocument, "Tables").toDispatch();
+		// 表を作る
 		Variant oRange = Dispatch.call(oSelection, "Range");
-		Dispatch oTable = Dispatch.call(oTables, "Add", oRange, 1, 2).toDispatch();
+		Dispatch oTable = Tx2xDispatch.call(oSelection, "Document.Tables.Add", oRange, 1, 2).toDispatch();
 
 		// 左端からのインデント
-		Dispatch oRows = Dispatch.get(oTable, "Rows").toDispatch();
-		Dispatch.put(oRows, "LeftIndent", dLeftIndent);
+		Tx2xDispatch.put(oTable, "Rows.LeftIndent", dLeftIndent);
 
 		// アイコン
 		Dispatch oCell = Dispatch.call(oTable, "Cell", 1, 1).getDispatch();
@@ -173,8 +160,7 @@ public class ControlTextWriter {
 
 		Dispatch.call(oCell, "Select");
 		Dispatch.put(oSelection, "Style", "本文");
-		Dispatch oInlineShapes = Dispatch.get(oSelection, "InlineShapes").toDispatch();
-		Dispatch.call(oInlineShapes, "AddPicture",
+		Tx2xDispatch.call(oSelection, "InlineShapes.AddPicture",
 				Tx2xOptions.getInstance().getString("tx2x_folder_name") + "\\hint.png", "False", "True");
 
 		// 本文
@@ -186,14 +172,12 @@ public class ControlTextWriter {
 	}
 
 	private void writeNoteParts(Dispatch oSelection, double dLeftIndent, double dBodyWidth) {
-		Dispatch oDocument = Dispatch.call(oSelection, "Document").toDispatch();
-		Dispatch oTables = Dispatch.call(oDocument, "Tables").toDispatch();
+		// 表を作る
 		Variant oRange = Dispatch.call(oSelection, "Range");
-		Dispatch oTable = Dispatch.call(oTables, "Add", oRange, 1, 2).toDispatch();
+		Dispatch oTable = Tx2xDispatch.call(oSelection, "Document.Tables.Add", oRange, 1, 2).toDispatch();
 
 		// 左端からのインデント
-		Dispatch oRows = Dispatch.get(oTable, "Rows").toDispatch();
-		Dispatch.put(oRows, "LeftIndent", dLeftIndent);
+		Tx2xDispatch.put(oTable, "Rows.LeftIndent", dLeftIndent);
 
 		// アイコン
 		Dispatch oCell = Dispatch.call(oTable, "Cell", 1, 1).getDispatch();
@@ -201,8 +185,7 @@ public class ControlTextWriter {
 
 		Dispatch.call(oCell, "Select");
 		Dispatch.put(oSelection, "Style", "本文");
-		Dispatch oInlineShapes = Dispatch.get(oSelection, "InlineShapes").toDispatch();
-		Dispatch.call(oInlineShapes, "AddPicture",
+		Tx2xDispatch.call(oSelection, "InlineShapes.AddPicture",
 				Tx2xOptions.getInstance().getString("tx2x_folder_name") + "\\note.png", "False", "True");
 
 		// 本文
