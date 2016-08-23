@@ -102,6 +102,17 @@ public class TableWriter {
 					header += "<ColStart:<tColAttrWidth:" + (238.16141732283399 / m_nWidth) + ">>";
 				}
 			}
+		} else if (longStyle.equals("【1】【1】【表】")) {
+			switch (m_nWidth) {
+			case 2:
+				header += "<ColStart:<tColAttrWidth:119.08070866141699>>";
+				header += "<ColStart:<tColAttrWidth:333.75393700769325>>";
+				break;
+			default:
+				for (int i = 0; i < m_nWidth; i++) {
+					header += "<ColStart:<tColAttrWidth:" + (238.16141732283399 / m_nWidth) + ">>";
+				}
+			}
 		} else {
 			System.out.println("セル幅が未定義の表があります。" + Tx2x.getMessageCRLF() + "　longStyle:" + longStyle
 					+ Tx2x.getMessageCRLF() + "　m_nWidth:" + m_nWidth);
@@ -110,9 +121,18 @@ public class TableWriter {
 	}
 
 	public String getCellHeader(LongStyleManagerInDesign lsManager) throws ArrayIndexOutOfBoundsException {
+		String longStyle = lsManager.getLongStyle();
 		m_nX++;
-		String header = "<CellStyle:\\[None\\]><StylePriority:0><CellStart:";
-
+		String header;
+		if (longStyle.equals("【1】【1】【表】【行】【セル】")) {
+			if (m_nX == 1) {
+				header = "<CellStyle:表ヘッダー><StylePriority:0><CellStart:";
+			} else {
+				header = "<CellStyle:表本文><StylePriority:0><CellStart:";
+			}
+		} else {
+			header = "<CellStyle:\\[None\\]><StylePriority:0><CellStart:";
+		}
 		if (m_nWidth < m_nX) {
 			System.out.println("内部エラー：横幅を超えた指定になっています。");
 			System.out.println("m_nHeight:" + m_nHeight + ", m_nWidth:" + m_nWidth);

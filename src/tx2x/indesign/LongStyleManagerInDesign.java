@@ -10,14 +10,18 @@ import static tx2x.Constants.MM;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.Hashtable;
+import java.util.LinkedList;
+import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import tx2x.IntermediateTextTreeWalker;
 import tx2x.Tx2x;
 import tx2x.Tx2xOptions;
 import tx2x.Utils;
 import tx2x.core.ControlText;
 import tx2x.core.IntermediateText;
+import tx2x.core.TableManager;
 
 public class LongStyleManagerInDesign extends tx2x.LongStyleManager {
 	private static final String KOKOMADE_INDENT_CHAR = String.valueOf((char) 7); // ここまでインデント文字
@@ -57,7 +61,8 @@ public class LongStyleManagerInDesign extends tx2x.LongStyleManager {
 		m_bMac = bMac;
 	}
 
-	public String getInDesignStyle(IntermediateText iText, int nLsIndex) throws IOException {
+	public String getInDesignStyle(IntermediateText iText, int nLsIndex, IntermediateTextTreeWalker cTreeWalker)
+			throws IOException {
 		setPrevLongStyle();
 		String longStyle = getLongStyle();
 
@@ -203,11 +208,15 @@ public class LongStyleManagerInDesign extends tx2x.LongStyleManager {
 			return "<ParaStyle:画面>";
 		}
 
-		if (longStyle.equals("【箇条書き・】【箇条書き・】【箇条書き・】")) {
+		if (longStyle.matches("(【1\\.?】【1\\.?】【表】【行】【セル】)?【箇条書き[●・]】【箇条書き[●・]】【箇条書き[●・]】")) {
 			String text = iText.getText();
-			text = text.replaceFirst("・", "•");
+			text = text.replaceFirst("^[●・]", "•");
 			iText.setText(text);
-			return "<ParaStyle:バレット>";
+			if (isFirstCell(cTreeWalker)) {
+				return "<ParaStyle:表ヘッダー-バレット>";
+			} else {
+				return "<ParaStyle:バレット>";
+			}
 		}
 
 		if (longStyle.equals("【箇条書き・】【箇条書き・】【本文】【本文】【本文】")) {
@@ -233,8 +242,16 @@ public class LongStyleManagerInDesign extends tx2x.LongStyleManager {
 			return "<ParaStyle:表ヘッダー>";
 		}
 
-		if (longStyle.equals("【表】【行】【セル】【本文】【本文】【本文】")) {
+		if (longStyle.matches("【表】【行】【セル】【本文】【本文】【本文】")) {
 			return "<ParaStyle:表本文>";
+		}
+
+		if (longStyle.matches("【1\\.?】【1\\.?】【表】【行】【セル】【本文】【本文】【本文】")) {
+			if (isFirstCell(cTreeWalker)) {
+				return "<ParaStyle:表ヘッダー>";
+			} else {
+				return "<ParaStyle:表本文>";
+			}
 		}
 
 		if (longStyle.equals("【メモ】【メモ】")) {
@@ -410,7 +427,7 @@ public class LongStyleManagerInDesign extends tx2x.LongStyleManager {
 			return "<ParaStyle:リスト補足バレット>";
 		}
 
-		if (longStyle.compareTo("【1.】【1.】【1.】") == 0) {
+		if (longStyle.matches("【1\\.?】【1\\.?】【1\\.?】")) {
 			return "<ParaStyle:手順>";
 		}
 
@@ -421,6 +438,27 @@ public class LongStyleManagerInDesign extends tx2x.LongStyleManager {
 		if (longStyle.compareTo("【1.】【1.】【箇条書き・】【箇条書き・】【箇条書き・】") == 0) {
 			iText.setText(iText.getText().replaceFirst("・", "•"));
 			return "<ParaStyle:手順バレット>";
+		}
+
+		if (longStyle.matches("【1\\.?】【1\\.?】【表】")) {
+			return "<ParaStyle:手順補足>";
+		}
+
+		if (longStyle.matches("【1\\.?】【1\\.?】【表】【行】【セル】【①】【①】【①】")) {
+			return "<ParaStyle:表手順丸数字>";
+		}
+
+		if (longStyle.matches("【1\\.?】【1\\.?】【表】【行】【セル】【指】【指】【指】")) {
+			iText.setText(iText.getText().replaceFirst("^【指】\t", "☞"));
+			return "<ParaStyle:その他の手順-タイトル>";
+		}
+
+		if (longStyle.matches("【1\\.?】【1\\.?】【表】【行】【セル】【指】【指】【①】【①】【①】")) {
+			return "<ParaStyle:その他の手順-手順>";
+		}
+
+		if (longStyle.matches("【1\\.?】【1\\.?】【表】【行】【セル】【指】【指】【箇条書き●】【箇条書き●】【箇条書き●】")) {
+			return "<ParaStyle:その他の手順-補足>";
 		}
 
 		if (longStyle.equals("【Step 1】【Step 1】")) {
@@ -502,6 +540,49 @@ public class LongStyleManagerInDesign extends tx2x.LongStyleManager {
 		// 以降、ダミースタイルの処理
 		return dummyStyle(longStyle);// + longStyle;
 		// throw new IOException("Unknown Style:" + longStyle);
+	}
+
+	private boolean isFirstCell(IntermediateTextTreeWalker cTreeWalker) {
+		IntermediateText cCurrentNode = cTreeWalker.getCurrentNode();
+
+		// cParentNodesには、cCurrentNodeから、cCurrentNodeが属するセルまでのルート（親ノードたち）を入れる
+		Stack<IntermediateText> cParentNodes = new Stack<IntermediateText>();
+		ControlText cParentNode = null;
+		while (true) {
+			cParentNode = cTreeWalker.parentNode();
+			cParentNodes.push(cParentNode);
+			if (cParentNode.getStyle().getStyleName().equals("【行】")) {
+				break; // 行まで遡ったらbreak;
+			}
+		}
+		// ここに、先頭セルだけで行う処理を記述する
+		ControlText cText = (ControlText) (cParentNodes.lastElement());
+		boolean bRet;
+		if (cText.getChildList().get(0) == cParentNodes.get(cParentNodes.size() - 2)) {
+			bRet = true;
+		} else {
+			bRet = false;
+		}
+
+		// ここまででm_cTreeWalkerがセルを指しているので、m_cTreeWalkerを戻す
+		IntermediateText cRoute;
+		do {
+			if (cParentNodes.isEmpty()) {
+				// この中にいるぞ!
+				while (cTreeWalker.getCurrentNode() != cCurrentNode) {
+					cTreeWalker.nextSibling();
+				}
+				break; // 発見
+			}
+			cRoute = cParentNodes.pop();
+			while (cTreeWalker.getCurrentNode() != cRoute) {
+				cTreeWalker.nextSibling();
+			}
+			// 辿ってきた道を発見
+			cTreeWalker.firstChild();
+		} while (true);
+
+		return bRet;
 	}
 
 	private String normalizeTag(String src) {

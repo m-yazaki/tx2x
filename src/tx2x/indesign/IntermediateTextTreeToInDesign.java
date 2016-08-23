@@ -212,7 +212,7 @@ public class IntermediateTextTreeToInDesign {
 
 						// coStartを出力
 						// lsManager.getInDesignStyle(cText)は、表を挿入する行のスタイルを返してくれる
-						fwInDesign.write(lsManager.getInDesignStyle(cText, m_nLsIndex + 1)
+						fwInDesign.write(lsManager.getInDesignStyle(cText, m_nLsIndex + 1, cTreeWalker)
 								+ tWriter.getHeader(lsManager, m_nLsIndex), false);
 					} else if (currentStyle.getStyleName().compareTo("【行】") == 0) {
 						TableWriter tWriter = m_TableWriterList.getLast();
@@ -259,13 +259,13 @@ public class IntermediateTextTreeToInDesign {
 
 						// （共通）テキストを出力
 						lsManager.addStyle(currentStyle); // スタイルをpush
-						outputText(fwInDesign, lsManager, iText);
+						outputText(fwInDesign, lsManager, iText, cTreeWalker);
 						lsManager.removeLastStyle(); // スタイルをpop
 					}
 				} else {
 					// スタイルがないのでテキストを出力するのみ
 					if (iText.getText() != null) {
-						outputText(fwInDesign, lsManager, iText);
+						outputText(fwInDesign, lsManager, iText, cTreeWalker);
 					}
 				}
 			}
@@ -274,7 +274,7 @@ public class IntermediateTextTreeToInDesign {
 	}
 
 	private void outputText(InDesignTT_FileWriter fwInDesign, LongStyleManagerInDesign lsManager,
-			IntermediateText iText) {
+			IntermediateText iText, IntermediateTextTreeWalker cTreeWalker) {
 		if (iText instanceof ControlText) {
 			// System.out.println("outputText:" + iText.getText());
 			return; // ControlTextはカエレ！
@@ -291,7 +291,7 @@ public class IntermediateTextTreeToInDesign {
 		}
 		// sLongStyleを正しいスタイルに変換
 		try {
-			String style = lsManager.getInDesignStyle(iText, m_nLsIndex + 1);
+			String style = lsManager.getInDesignStyle(iText, m_nLsIndex + 1, cTreeWalker);
 			if (style.equals("") == false) {
 				if (iText.getText() != null) {
 					fwInDesign.write(style + iText.getText(), true);
