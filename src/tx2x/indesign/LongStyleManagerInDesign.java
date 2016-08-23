@@ -10,7 +10,6 @@ import static tx2x.Constants.MM;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.Hashtable;
-import java.util.LinkedList;
 import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -21,7 +20,6 @@ import tx2x.Tx2xOptions;
 import tx2x.Utils;
 import tx2x.core.ControlText;
 import tx2x.core.IntermediateText;
-import tx2x.core.TableManager;
 
 public class LongStyleManagerInDesign extends tx2x.LongStyleManager {
 	private static final String KOKOMADE_INDENT_CHAR = String.valueOf((char) 7); // ここまでインデント文字
