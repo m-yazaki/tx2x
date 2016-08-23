@@ -1,4 +1,4 @@
-* {
+https://www.b-trust.jp/redmine/issues/c* {
     font-family:Helvetica,Arial, Roboto, “Droid Sans”, “游ゴシック”, YuGothic,“ヒラギノ角ゴ ProN W3″,“Hiragino Kaku Gothic ProN”, “メイリオ”,Meiryo, sans-serif;
 }
 
@@ -41,6 +41,25 @@ table.information td {
     padding:6px 12px 6px 12px;
     color:#4f6b72;
 }
+
+table.branch {
+    margin:8px 0 0 32px;
+    padding:0;
+    border:0;
+    border-spacing:0;
+    border-collapse:collapse;
+}
+
+table.branch td {
+    border:2px solid #c1dad7;
+    background:#fff;
+    padding:6px 12px 6px 12px;
+}
+
+table.branch tbody tr td:nth-child(1) {
+    background-color:#dadada;
+}
+
 
 div.hint {
     padding:12px;
@@ -156,6 +175,22 @@ div.step_block ul {
     margin-left: 38px;
 }
 
+div.step_block table p {
+    margin-left: 0px;
+    padding-left: 0px;
+}
+
+div.step_block table ul {
+    margin-left: 8px;
+    padding-left: 8px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+div.step_block table ul li {
+    margin-left: 8px;
+}
+
 div.glossary {
     border-left: 1px solid black;
     padding-left: 12px;
@@ -179,8 +214,8 @@ img {
 }
 
 li {
-    margin-top: 16px;
-    margin-bottom: 16px;
+    margin-top: 8px;
+    margin-bottom: 8px;
 }
 
 li p {
@@ -188,3 +223,30 @@ li p {
     margin-top: 8px;
     margin-bottom: 8px;
 }
+
+td {
+    line-height: 1.5em;
+}
+
+div.other_step {
+    margin-top: 8px;
+    padding-left: 1em;
+}
+
+table div.other_step ul {
+    margin-left: 36px;
+}
+
+div.other_step div.steps {
+    margin-left: 32px;
+}
+
+div.other_step div.step {
+    font-weight: normal;
+}
+
+div.other_step div.title {
+    font-weight: bold;
+}
+
+
