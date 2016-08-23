@@ -105,6 +105,7 @@ public class IntermediateTextTreeToWord {
 						TableWriter tWriter = new TableWriter(currentTable);
 						m_TableWriterList.add(tWriter);
 						tWriter.write(oSelection);
+						tWriter.setIndent(lsManager, m_nLsIndex);
 					} else if (currentStyle.getStyleName().compareTo("【行】") == 0) {
 						TableWriter tWriter = m_TableWriterList.getLast();
 						tWriter.selectNextRow();
@@ -147,13 +148,13 @@ public class IntermediateTextTreeToWord {
 
 						// （共通）テキストを出力
 						lsManager.addStyle(currentStyle); // スタイルをpush
-						outputText(oSelection, lsManager, iText);
+						outputText(oSelection, lsManager, iText, cTreeWalker);
 						lsManager.removeLastStyle(); // スタイルをpop
 					}
 				} else {
 					// スタイルがないのでテキストを出力するのみ
 					if (iText.getText() != null) {
-						outputText(oSelection, lsManager, iText);
+						outputText(oSelection, lsManager, iText, cTreeWalker);
 					}
 				}
 			}
@@ -161,7 +162,8 @@ public class IntermediateTextTreeToWord {
 		cTreeWalker.parentNode();
 	}
 
-	private void outputText(Dispatch oSelection, LongStyleManagerWord lsManager, IntermediateText iText) {
+	private void outputText(Dispatch oSelection, LongStyleManagerWord lsManager, IntermediateText iText,
+			IntermediateTextTreeWalker cTreeWalker) {
 		if (iText instanceof ControlText) {
 			// System.out.println("outputText:" + iText.getText());
 			return; // ControlTextはカエレ！
@@ -169,6 +171,8 @@ public class IntermediateTextTreeToWord {
 		// System.out.println("outputText");
 		String realtimeStyle = lsManager.getLongStyle();
 		String bufferingStyle = lsManager.getLongStyleFromArrayList(m_nLsIndex);
+
+		// getLongStyleFromArrayList()のデバッグ用コード
 		if (realtimeStyle.compareTo(bufferingStyle) == 0) {
 			// ok!
 			// System.out.println("longStyle OK");
@@ -176,10 +180,11 @@ public class IntermediateTextTreeToWord {
 			// NG!
 			System.out.println("longStyle NG:" + realtimeStyle + "/" + bufferingStyle);
 		}
+
 		// iTextとsLongStyleから必要な処理を行う
 		try {
 			String style = lsManager.getTargetStyle(iText, m_nLsIndex + 1);
-			lsManager.writeTargetIntermediateText(oSelection, style, iText, m_nLsIndex + 1);
+			lsManager.writeTargetIntermediateText(oSelection, style, iText, m_nLsIndex + 1, cTreeWalker);
 		} catch (IOException e) {
 			// TODO 自動生成された catch ブロック
 			e.printStackTrace();

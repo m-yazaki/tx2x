@@ -364,21 +364,6 @@ public class TableManager {
 		return m_cTableText;
 	}
 
-	// public boolean isCellHeader(ControlText cText) {
-	// if (cText.getStyle().getStyleName().equals("【セル：ヘッダー】")) {
-	// return true;
-	// }
-	// String text = cText.getChildList().get(0).getText();
-	// if (text.matches(".*【黒[0-9]+%】.*")) {
-	// return true;
-	// } else if (text.matches(".*【ヘッダー】.*")) {
-	// return true;
-	// } else if (text.matches(".*【背景グレー】.*")) {
-	// return true;
-	// }
-	// return false;
-	// }
-
 	public String getCaption() {
 		return m_sCaption;
 	}

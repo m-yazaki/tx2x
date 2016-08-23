@@ -1,10 +1,13 @@
 package tx2x.word;
 
+import com.jacob.com.Dispatch;
+import com.jacob.com.Variant;
+
 import tx2x.core.CellInfo;
 import tx2x.core.TableManager;
 
-import com.jacob.com.Dispatch;
-import com.jacob.com.Variant;
+//定数クラス
+import static tx2x.Constants.MM;
 
 /*
  * TableManagerが管理している表を、ターゲットに正しく出力することを責務とする
@@ -26,8 +29,7 @@ public class TableWriter {
 
 	public void selectNextCell() throws ArrayIndexOutOfBoundsException {
 		m_nX++;
-		Dispatch oCell = Dispatch.call(m_oTable, "Cell", m_nY, m_nX)
-				.getDispatch();
+		Dispatch oCell = Dispatch.call(m_oTable, "Cell", m_nY, m_nX).getDispatch();
 		Dispatch.call(oCell, "Select");
 		CellInfo[][] nCellSize = m_tManager.getCellSize();
 		if (nCellSize[m_nY - 1][m_nX - 1] != null) {
@@ -40,9 +42,7 @@ public class TableWriter {
 			/* 斜線の処理 */
 			if (nCellSize[m_nY - 1][m_nX - 1].isDiagonalLine()) {
 				if (nCellSize[m_nY - 1][m_nX - 1].isLeftTopLine()) {
-					Dispatch oBorders = Dispatch
-							.call(oCell, "Borders", -7 /* wdBorderDiagonalDown */)
-							.toDispatch();
+					Dispatch oBorders = Dispatch.call(oCell, "Borders", -7 /* wdBorderDiagonalDown */).toDispatch();
 					Dispatch.put(oBorders, "LineStyle", 1 /* wdLineStyleSingle */);
 					Dispatch.put(oBorders, "LineWidth", 4 /* wdLineWidth050pt */);
 					Dispatch.put(oBorders, "Color", -16777216 /* wdColorAutomatic */);
@@ -63,30 +63,41 @@ public class TableWriter {
 	}
 
 	public void write(Dispatch oSelection) {
-		Dispatch oDocument = Dispatch.call(oSelection, "Document").toDispatch();
-		Dispatch oTables = Dispatch.call(oDocument, "Tables").toDispatch();
 		Variant oRange = Dispatch.call(oSelection, "Range");
-		m_oTable = Dispatch.call(oTables, "Add", oRange,
-				m_tManager.getHeight(), m_tManager.getWidth()).toDispatch();
+		m_oTable = Tx2xDispatch
+				.call(oSelection, "Document.Tables.Add", oRange, m_tManager.getHeight(), m_tManager.getWidth())
+				.toDispatch();
 
 		// 標準的な外枠
 		Dispatch.call(m_oTable, "Select");
-		Dispatch oBorder = Dispatch
-				.call(oSelection, "Borders", -1 /* wdBorderTop */).toDispatch();
-		Dispatch.put(oBorder, "LineStyle", 1 /* Options.DefaultBorderLineStyle */);
-		Dispatch.put(oBorder, "LineWidth", 4 /* Options.DefaultBorderLineWidth */);
-		Dispatch.put(oBorder, "Color", -16777216 /* Options.DefaultBorderColor */);
-		oBorder = Dispatch.call(oSelection, "Borders", -3 /* wdBorderBottom */)
-				.toDispatch();
-		Dispatch.put(oBorder, "LineStyle", 1 /* Options.DefaultBorderLineStyle */);
-		Dispatch.put(oBorder, "LineWidth", 4 /* Options.DefaultBorderLineWidth */);
-		Dispatch.put(oBorder, "Color", -16777216 /* Options.DefaultBorderColor */);
-		oBorder = Dispatch.call(oSelection, "Borders", -6 /* wdBorderVertical */)
-				.toDispatch();
-		Dispatch.put(oBorder, "LineStyle", 1 /* Options.DefaultBorderLineStyle */);
-		Dispatch.put(oBorder, "LineWidth", 4 /* Options.DefaultBorderLineWidth */);
-		Dispatch.put(oBorder, "Color", -16777216 /* Options.DefaultBorderColor */);
+		int aBorders[] = { -1 /* wdBorderTop */, -5 /* wdBorderHorizontal */, -3 /* wdBorderBottom */,
+				-6 /* wdBorderVertical */ };
+		for (int i = 0; i < aBorders.length; i++) {
+			Dispatch oBorder = Dispatch.call(oSelection, "Borders", aBorders[i]).toDispatch();
+			Dispatch.put(oBorder, "LineStyle",
+					1 /* Options.DefaultBorderLineStyle */);
+			Dispatch.put(oBorder, "LineWidth",
+					4 /* Options.DefaultBorderLineWidth */);
+			Dispatch.put(oBorder, "Color",
+					-16777216 /* Options.DefaultBorderColor */);
+		}
+	}
 
+	public void setIndent(LongStyleManagerWord lsManager, int nLsIndex) {
+		// スタイルによってインデントが異なる
+		String longStyle = lsManager.getLongStyle();
+		if (longStyle.matches("【1\\.?】【1\\.?】【表】")) {
+			// 1列目の幅を調節
+			Dispatch oCol = Dispatch.call(m_oTable, "Columns", 1).getDispatch();
+			Dispatch.put(oCol, "Width", 63.3 * MM);
+
+			// 表全体のインデントを調節
+			Tx2xDispatch.put(m_oTable, "Rows.LeftIndent", 12.5 * MM);
+		} else {
+			System.out.println("【警告】表のインデントが正しいことを確認してください。");
+			System.out.println(longStyle);
+			System.out.println(m_tManager.getCTableText().getDebugText());
+		}
 	}
 
 }
