@@ -220,7 +220,7 @@ public class LongStyleManagerInDesign extends tx2x.LongStyleManager {
 		}
 
 		if (longStyle.equals("【箇条書き・】【箇条書き・】【本文】【本文】【本文】")) {
-			return "<ParaStyle:バレット-本文>";
+			return "<ParaStyle:バレット補足>";
 		}
 
 		if (longStyle.equals("【箇条書き・】【箇条書き・】【コード】【コード】")) {
@@ -548,7 +548,7 @@ public class LongStyleManagerInDesign extends tx2x.LongStyleManager {
 		// cParentNodesには、cCurrentNodeから、cCurrentNodeが属するセルまでのルート（親ノードたち）を入れる
 		Stack<IntermediateText> cParentNodes = new Stack<IntermediateText>();
 		ControlText cParentNode = null;
-		while (true) {
+		while (cParentNode == null || cParentNode.getStyle().getStyleName().equals("【Root】") == false) {
 			cParentNode = cTreeWalker.parentNode();
 			cParentNodes.push(cParentNode);
 			if (cParentNode.getStyle().getStyleName().equals("【行】")) {

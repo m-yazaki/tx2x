@@ -5,6 +5,7 @@ import static tx2x.Constants.MM;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.jacob.com.ComFailException;
 import com.jacob.com.Dispatch;
 import com.jacob.com.Variant;
 
@@ -33,14 +34,19 @@ public class ControlTextWriter {
 			Dispatch oTable = Tx2xDispatch.call(oSelection, "Document.Tables.Add", oRange, 1, 2).toDispatch();
 
 			// HACKグレーアイコン
-			Dispatch oInlineShape = Tx2xDispatch
-					.call(oSelection, "InlineShapes.AddPicture",
-							Tx2xOptions.getInstance().getString("tx2x_folder_name") + "\\hack.png", "False", "True")
-					.toDispatch();
-			Dispatch oShape = Dispatch.call(oInlineShape, "ConvertToShape").toDispatch();
-			Dispatch.call(oShape, "ZOrder", 5 /* msoSendBehindText */);
-			Dispatch.call(oShape, "IncrementTop", -2 * MM); // 2mm上へ移動
-			Dispatch.call(oShape, "IncrementLeft", -2 * MM); // 2mm左へ移動
+			String sHackFilename = Tx2xOptions.getInstance().getString("tx2x_folder_name") + "\\hack.png";
+			try {
+				Dispatch oInlineShape = Tx2xDispatch
+						.call(oSelection, "InlineShapes.AddPicture", sHackFilename, "False", "True").toDispatch();
+
+				Dispatch oShape = Dispatch.call(oInlineShape, "ConvertToShape").toDispatch();
+				Dispatch.call(oShape, "ZOrder", 5 /* msoSendBehindText */);
+				Dispatch.call(oShape, "IncrementTop", -2 * MM); // 2mm上へ移動
+				Dispatch.call(oShape, "IncrementLeft", -2 * MM); // 2mm左へ移動
+			} catch (ComFailException e) {
+				System.out.println("---------- error ----------\n" + e.getLocalizedMessage() + "ファイル名：" + sHackFilename
+						+ "\n---------------------------");
+			}
 
 			Dispatch oCell = Dispatch.call(oTable, "Cell", 1, 1).getDispatch();
 			setCellWidth(oCell, 15 * MM);
@@ -154,14 +160,19 @@ public class ControlTextWriter {
 		// 左端からのインデント
 		Tx2xDispatch.put(oTable, "Rows.LeftIndent", dLeftIndent);
 
-		// アイコン
+		// ヒントアイコン
 		Dispatch oCell = Dispatch.call(oTable, "Cell", 1, 1).getDispatch();
 		setCellWidth(oCell, 15 * MM);
 
 		Dispatch.call(oCell, "Select");
 		Dispatch.put(oSelection, "Style", "本文");
-		Tx2xDispatch.call(oSelection, "InlineShapes.AddPicture",
-				Tx2xOptions.getInstance().getString("tx2x_folder_name") + "\\hint.png", "False", "True");
+		String sHintFilename = Tx2xOptions.getInstance().getString("tx2x_folder_name") + "\\hint.png";
+		try {
+			Tx2xDispatch.call(oSelection, "InlineShapes.AddPicture", sHintFilename, "False", "True");
+		} catch (ComFailException e) {
+			System.out.println("---------- error ----------\n" + e.getLocalizedMessage() + "ファイル名：" + sHintFilename
+					+ "\n---------------------------");
+		}
 
 		// 本文
 		oCell = Dispatch.call(oTable, "Cell", 1, 2).getDispatch();
@@ -185,8 +196,13 @@ public class ControlTextWriter {
 
 		Dispatch.call(oCell, "Select");
 		Dispatch.put(oSelection, "Style", "本文");
-		Tx2xDispatch.call(oSelection, "InlineShapes.AddPicture",
-				Tx2xOptions.getInstance().getString("tx2x_folder_name") + "\\note.png", "False", "True");
+		String sNoteFilename = Tx2xOptions.getInstance().getString("tx2x_folder_name") + "\\note.png";
+		try {
+			Tx2xDispatch.call(oSelection, "InlineShapes.AddPicture", sNoteFilename, "False", "True");
+		} catch (ComFailException e) {
+			System.out.println("---------- error ----------\n" + e.getLocalizedMessage() + "ファイル名：" + sNoteFilename
+					+ "\n---------------------------");
+		}
 
 		// 本文
 		oCell = Dispatch.call(oTable, "Cell", 1, 2).getDispatch();
