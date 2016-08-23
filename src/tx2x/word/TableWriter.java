@@ -89,10 +89,13 @@ public class TableWriter {
 		if (longStyle.matches("【1\\.?】【1\\.?】【表】")) {
 			// 1列目の幅を調節
 			Dispatch oCol = Dispatch.call(m_oTable, "Columns", 1).getDispatch();
-			Dispatch.put(oCol, "Width", 63.3 * MM);
+			Tx2xDispatch.put(oCol, "Width", 63.3 * MM);
+			Tx2xDispatch.put(oCol, "Shading.BackgroundPatternColor", -603923969);
 
 			// 表全体のインデントを調節
 			Tx2xDispatch.put(m_oTable, "Rows.LeftIndent", 12.5 * MM);
+
+			// 1列目の背景を変更する
 		} else {
 			System.out.println("【警告】表のインデントが正しいことを確認してください。");
 			System.out.println(longStyle);
