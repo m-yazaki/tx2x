@@ -37,7 +37,6 @@ public class Tx2xDispatch {
 					cNameTimesSet.entrySet());
 			Collections.sort(timesEntries, new Comparator<Map.Entry<String, Integer>>() {
 
-				@Override
 				public int compare(Entry<String, Integer> entry1, Entry<String, Integer> entry2) {
 					return ((Integer) entry2.getValue()).compareTo((Integer) entry1.getValue());
 				}
@@ -52,7 +51,6 @@ public class Tx2xDispatch {
 					cNameMinutesSet.entrySet());
 			Collections.sort(minutesEntries, new Comparator<Map.Entry<String, Long>>() {
 
-				@Override
 				public int compare(Entry<String, Long> entry1, Entry<String, Long> entry2) {
 					return ((Long) entry2.getValue()).compareTo((Long) entry1.getValue());
 				}

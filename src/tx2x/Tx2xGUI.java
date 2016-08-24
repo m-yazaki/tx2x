@@ -74,7 +74,6 @@ public class Tx2xGUI implements ActionListener {
 		button_cancel.addActionListener(this);
 	}
 
-	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO 自動生成されたメソッド・スタブ
 		if (e.getSource() == button_ok) {
@@ -202,9 +201,7 @@ public class Tx2xGUI implements ActionListener {
 				if (files.size() > 0) {
 					text_file.setText(files.get(0).toString());
 				}
-			} catch (UnsupportedFlavorException |
-
-					IOException e) {
+			} catch (UnsupportedFlavorException | IOException e) {
 				e.printStackTrace();
 			}
 			return true;

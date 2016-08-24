@@ -1,31 +1,3 @@
-*.class
-DEMO.indd
-.gradle/
-bin/DEMO.txt
-bin/DEMO.win.indesign.txt
-bin/Tx2x.indd
-bin/Tx2x.jar
-bin/Tx2xTemplate.indesign.indd
-bin/Tx2x.jar.zip
-~*.indd
-file_in.docx
-file_out.docx
-# Package Files #
-*.war
-*.ear
-.project
-build/tmp/jar/MANIFEST.MF
-.classpath
 doc/
-sample-text/word-demo/Test.docx
-sample-text/word-demo/Test.win.indesign.txt
-sample-text/word-demo/~$2xWordTemplate.dotx
-sample-text/word-demo/~$Test.docx
-sample-text/word-demo - GOOD/
-sample-text/word-demo/Test.html
-sample-text/word-demo/Test2.docx
-sample-text/word-demo/Test2.txt
-*.idlk
-sample-text/word-demo/Tag.txt
-sample-text/word-demo/Test2.html
-tx2x.indd
+.gradle/
+*.docx

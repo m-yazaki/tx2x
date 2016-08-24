@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Main-Class: tx2x.Tx2x
+Implementation-Version: 1.2
+
