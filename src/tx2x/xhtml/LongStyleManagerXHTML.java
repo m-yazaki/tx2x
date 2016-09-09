@@ -105,7 +105,7 @@ public class LongStyleManagerXHTML extends tx2x.LongStyleManager {
 			return new Style_TagInfo("", "\n<h1>", sString, "</h1>\n");
 		}
 
-		if (longStyle.equals("(【章サブ】){1,2}")) {
+		if (longStyle.matches("(【章サブ】){1,2}")) {
 			return Style_TagInfo.NULL_STYLE_TAGINFO;
 		}
 

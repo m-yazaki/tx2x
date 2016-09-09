@@ -49,7 +49,7 @@ public abstract class Converter {
 	/*
 	 * ファイルまたはディレクトリを受け取り、ファイルかディレクトリかを判別して、適切な処理を行う
 	 */
-	void parse_filesystem(File cTargetFile) throws IOException {
+	public void parse_filesystem(File cTargetFile) throws IOException {
 		// tx2x.ignoreの処理
 		IgnoreFile cIgnoreFile = IgnoreFile.getInstance();
 		if (cIgnoreFile.isIgnore(cTargetFile))

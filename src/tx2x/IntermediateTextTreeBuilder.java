@@ -41,6 +41,7 @@ public class IntermediateTextTreeBuilder {
 
 	public ControlText parse_file(File cInputTx2xFile, LongStyleManager lsManager)
 			throws IOException, IntermediateTextTreeBuildException {
+		System.out.println(cInputTx2xFile.getPath());
 		/*
 		 * 作業用ArrayListを準備
 		 */

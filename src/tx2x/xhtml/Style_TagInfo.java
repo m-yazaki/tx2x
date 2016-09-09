@@ -5,13 +5,9 @@ public class Style_TagInfo {
 	 * 各変数の意味合いは以下の通り。
 	 *
 	 * <pre>
-	 * <ol>：m_sBigBlockOpenInfo
-	 * <li>：m_sSmallBlockOpenInfo
-	 * <p>：m_sLineOpenInfo
+	 * <p>：m_sOpenInfo
 	 * 文章：m_sLine
-	 * </p>：m_sLineCloseInfo
-	 * </li>：m_sSmallBlockCloseinfo
-	 * </ol>：m_sBigBlockCloseInfo
+	 * </p>：m_sCloseInfo
 	 * </pre>
 	 */
 	private String m_sOpenInfo;
