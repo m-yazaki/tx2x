@@ -67,4 +67,20 @@ public class ControlText extends IntermediateText {
 	public String getDebugText() {
 		return "-----\n" + getDebugText(0) + "-----";
 	}
+
+	/*
+	 * ControlTextに含まれるIntermediateTextの数を返す
+	 */
+	public int getITextCount() {
+		int count = 0;
+		for (int i = 0; i < m_cChildList.size(); i++) {
+			IntermediateText iText = m_cChildList.get(i);
+			if (iText instanceof ControlText) {
+				count = count + ((ControlText) m_cChildList.get(i)).getITextCount();
+			} else {
+				count++;
+			}
+		}
+		return count;
+	}
 }

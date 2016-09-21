@@ -265,4 +265,14 @@ public class IntermediateTextTreeWalker {
 		// 親がない（m_cRootと同じオブジェクトを指しているはず）
 		return null;
 	}
+
+	// 次の兄弟の段落スタイルを取得する
+	public String getNextSiblingStyleName() {
+		IntermediateText cNextSibling = peekNextSibling();
+		if (cNextSibling != null) {
+			return cNextSibling.getStyle().getStyleName();
+		} else {
+			return null;
+		}
+	}
 }

@@ -14,8 +14,7 @@ public class XHTML_FileWriter {
 	boolean m_bCRLFBuffer; // write()に渡されたbCRLFを保持する。次のwrite()呼びだし時に改行コード（CRLFなど）を書き込む
 
 	public XHTML_FileWriter(File cXHTML) throws IOException {
-		m_fwOutput = new OutputStreamWriter(new FileOutputStream(cXHTML),
-				"UTF-8");
+		m_fwOutput = new OutputStreamWriter(new FileOutputStream(cXHTML), "UTF-8");
 		m_bCRLFBuffer = false;
 	}
 
@@ -37,8 +36,7 @@ public class XHTML_FileWriter {
 	 *            Mac用のテキストにする場合はtrue
 	 * @throws IOException
 	 */
-	public void write(String string, boolean bCRLF, boolean bMac)
-			throws IOException {
+	public void write(String string, boolean bCRLF, boolean bMac) throws IOException {
 		if (string == null)
 			return;
 
@@ -79,5 +77,9 @@ public class XHTML_FileWriter {
 		}
 
 		m_bCRLFBuffer = bCRLF;
+	}
+
+	public void clearCRLFBuffer() {
+		m_bCRLFBuffer = false;
 	}
 }

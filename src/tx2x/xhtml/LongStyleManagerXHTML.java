@@ -385,7 +385,7 @@ public class LongStyleManagerXHTML extends tx2x.LongStyleManager {
 		if (longStyle.matches("(【手順】【手順】|【1】【1】)?【表】【行】【セル(：ヘッダー)?】【本文】【本文】【本文】")) {
 			String sString = iText.getText().replaceFirst("【ヘッダー】", "");
 			String sCloseInfo = "";
-			String sNextSiblingTextStyle = getNextSiblingTextStyle(iText);
+			String sNextSiblingTextStyle = cTreeWalker.peekNextSibling().getStyle().getStyleName();
 			if (sNextSiblingTextStyle != null && sNextSiblingTextStyle.equals("【本文】")) {
 				sCloseInfo = "<br />\n\t\t\t\t";
 			} else {
@@ -435,7 +435,7 @@ public class LongStyleManagerXHTML extends tx2x.LongStyleManager {
 		dummyStyle(longStyle, iText);// + longStyle;
 	}
 
-	protected String getNextSiblingTextStyle(IntermediateText iText) {
+	protected String getNextSiblingTextStyle_DUP(IntermediateText iText) {
 		String sNextTextStyle = null;
 		Iterator<IntermediateText> it = m_cParentText.get(0).getChildList().iterator(); // get(0)は仮
 		while (it.hasNext()) {

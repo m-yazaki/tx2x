@@ -260,8 +260,8 @@ public class IntermediateTextTreeToXHTML {
 		m_nLsIndex++;
 	}
 
-	private void writeOpenInfoWithIndent(XHTML_FileWriter fwXHTML, LongStyleManagerXHTML lsManager, Style_TagInfo style)
-			throws IOException {
+	protected void writeOpenInfoWithIndent(XHTML_FileWriter fwXHTML, LongStyleManagerXHTML lsManager,
+			Style_TagInfo style) throws IOException {
 		String[] saOpenInfoSplit = style.getOpenInfo().split("\n");
 		int i;
 		for (i = 0; i < saOpenInfoSplit.length - 1; i++) {
@@ -296,7 +296,7 @@ public class IntermediateTextTreeToXHTML {
 	}
 
 	// ブロック（Block）のCloseInfoを書く
-	private void writeBlockCloseInfoWithIndent(XHTML_FileWriter fwXHTML, LongStyleManagerXHTML lsManager,
+	protected void writeBlockCloseInfoWithIndent(XHTML_FileWriter fwXHTML, LongStyleManagerXHTML lsManager,
 			Style_TagInfo style) throws IOException {
 		if (style.getCloseInfo().length() > 0) {
 			String[] saCloseInfoSplit = style.getCloseInfo().split("\n", -1);
