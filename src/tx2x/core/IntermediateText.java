@@ -1,5 +1,7 @@
 package tx2x.core;
 
+import tx2x.StringAndLineNo;
+
 /*
  * スタイル情報とテキストを保持するクラス
  *
@@ -9,11 +11,13 @@ public class IntermediateText {
 	Style m_cAStyle; // 一致したスタイルを保持
 	String m_sLine; // テキスト本文
 	Object m_cOption; // オプション
+	private int m_nLineNumber;
 
-	public IntermediateText(Style style, String line) {
+	public IntermediateText(Style style, StringAndLineNo cStringAndLineNo) {
 		super();
 		setStyle(style);
-		setText(line);
+		setText(cStringAndLineNo.getLine());
+		setLineNumber(cStringAndLineNo.getLineNo());
 	}
 
 	public Style getStyle() {
@@ -46,5 +50,13 @@ public class IntermediateText {
 
 	public Object getOption() {
 		return m_cOption;
+	}
+
+	private void setLineNumber(int nLineNumber) {
+		m_nLineNumber = nLineNumber;
+	}
+
+	public int getLineNumber() {
+		return m_nLineNumber;
 	}
 }

@@ -2,12 +2,14 @@ package tx2x.core;
 
 import java.util.ArrayList;
 
+import tx2x.StringAndLineNo;
+
 public class ControlText extends IntermediateText {
 
 	ArrayList<IntermediateText> m_cChildList = null;
 
 	public ControlText(Style ruleBlock) {
-		super(ruleBlock, ""); // ControlTextはline無し
+		super(ruleBlock, new StringAndLineNo("", -1)); // ControlTextはline無し
 		m_cChildList = new ArrayList<IntermediateText>();
 	}
 

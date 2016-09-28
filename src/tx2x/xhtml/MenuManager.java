@@ -129,7 +129,7 @@ public class MenuManager {
 					if (it.hasNext()) {
 						String sNextTitle = it.next();
 						sNextFilename = m_cList.get(sNextTitle);
-						while (sNextFilename == null) {
+						while (sNextFilename == null && it.hasNext()) {
 							sTitle = it.next();
 							sNextFilename = m_cList.get(sTitle);
 						}

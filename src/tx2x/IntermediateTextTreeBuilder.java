@@ -45,7 +45,7 @@ public class IntermediateTextTreeBuilder {
 		/*
 		 * 作業用ArrayListを準備
 		 */
-		ArrayList<String> allText = new ArrayList<String>();
+		ArrayList<StringAndLineNo> allText = new ArrayList<StringAndLineNo>();
 
 		/*
 		 * Tx2x形式のテキストファイルをバッファ（ArrayList<String> allText）に読み込む
@@ -62,8 +62,10 @@ public class IntermediateTextTreeBuilder {
 		m_nTargetLevel = 0;
 		String line;
 		// addLineToAllText(allText, line);
+		int count = 0;
 		while ((line = bf.readLine()) != null) {
-			addLineToAllText(allText, line);
+			count++;
+			addLineToAllText(allText, line, count);
 		}
 
 		bf.close();
@@ -71,7 +73,7 @@ public class IntermediateTextTreeBuilder {
 		return parseTextArrayList(allText, lsManager);
 	}
 
-	private void addLineToAllText(ArrayList<String> allText, String line) {
+	private void addLineToAllText(ArrayList<StringAndLineNo> allText, String line, int lineno) {
 		if (m_cTarget != null) {
 			// <var>変数処理
 			line = changeVariables(line);
@@ -79,7 +81,7 @@ public class IntermediateTextTreeBuilder {
 			line = checkTarget(line);
 		}
 		if (line != null) {
-			allText.add(line);
+			allText.add(new StringAndLineNo(line, lineno));
 		}
 	}
 
@@ -146,7 +148,7 @@ public class IntermediateTextTreeBuilder {
 	 * @return ツリーの根（ルートオブジェクト）
 	 * @throws IntermediateTextTreeBuildException
 	 */
-	public ControlText parseTextArrayList(ArrayList<String> allText, LongStyleManager lsManager)
+	public ControlText parseTextArrayList(ArrayList<StringAndLineNo> allText, LongStyleManager lsManager)
 			throws IntermediateTextTreeBuildException {
 		ControlText resultRootText = new ControlText(StyleManager.getRootStyle());
 		compileBlock(allText, resultRootText); // 第一次コンパイル（共通処理）
@@ -160,13 +162,14 @@ public class IntermediateTextTreeBuilder {
 	 *
 	 * allTextすべてを変換する責任を持つ （表を除く）
 	 */
-	private void compileBlock(ArrayList<String> allText, ControlText cGrandParentText)
+	private void compileBlock(ArrayList<StringAndLineNo> allText, ControlText cGrandParentText)
 			throws IntermediateTextTreeBuildException {
 		for (int i = 0; i < allText.size();) {
 			/*
 			 * 1行目を読み取って、styleParentTextの決定
 			 */
-			String currentLine = allText.get(i);
+			StringAndLineNo currentStringAndLineNo = allText.get(i);
+			String currentLine = currentStringAndLineNo.getLine();
 			Style styleParentText = m_cStyleManager.getMatchStyle_Start(currentLine);
 
 			/*
@@ -212,7 +215,7 @@ public class IntermediateTextTreeBuilder {
 	 *
 	 * @throws IntermediateTextTreeBuildException
 	 */
-	private int compileChildBlockFromStartPos(ArrayList<String> smallPartText, int startPos, Style cLastStyle,
+	private int compileChildBlockFromStartPos(ArrayList<StringAndLineNo> smallPartText, int startPos, Style cLastStyle,
 			ControlText cGrandParentText) throws IntermediateTextTreeBuildException {
 
 		/* ControlTextのスタイルを取り出しておく */
@@ -226,7 +229,8 @@ public class IntermediateTextTreeBuilder {
 		 */
 		/***** 開始行以降を確認 *****/
 		for (int currentPos = startPos; currentPos < smallPartText.size();) {
-			String currentLine = smallPartText.get(currentPos);
+			StringAndLineNo currentStringAndLineNo = smallPartText.get(currentPos);
+			String currentLine = currentStringAndLineNo.getLine();
 
 			/* 入れ子のブロックを確認する */
 			Style styleCurrentLine = m_cStyleManager.getMatchStyle_Start(currentLine);
@@ -269,7 +273,8 @@ public class IntermediateTextTreeBuilder {
 						cGrandParentText.getChildList().add(controlSmallBlockText);
 
 						// SmallBlockに現在行を登録
-						IntermediateText textCurrentLine = new IntermediateText(styleCurrentLine, currentLine); // 1行分
+						IntermediateText textCurrentLine = new IntermediateText(styleCurrentLine,
+								currentStringAndLineNo); // 1行分
 						controlSmallBlockText.getChildList().add(textCurrentLine);
 
 						cTextToAddChild = controlSmallBlockText;
@@ -286,7 +291,7 @@ public class IntermediateTextTreeBuilder {
 					// 対応：次の行（currentPos+1）からは、新しいブロックの始まり。
 
 					// 終端まですべてnotePartTextに入れる
-					ArrayList<String> notePartText = new ArrayList<String>();
+					ArrayList<StringAndLineNo> notePartText = new ArrayList<StringAndLineNo>();
 					currentPos = copyNotePartBlockTo(smallPartText, currentPos, styleGrandParentText, notePartText);
 					compileBlock(notePartText, cTextToAddChild);
 					cTextToAddChild = cGrandParentText;
@@ -342,7 +347,8 @@ public class IntermediateTextTreeBuilder {
 							 * (現象0)controlText：表 currentLine：表（表の始まり）
 							 */
 							// TableInfo...「▼表(2)」を格納
-							IntermediateText sTableInfo = new IntermediateText(styleCurrentLine, currentLine);
+							IntermediateText sTableInfo = new IntermediateText(styleCurrentLine,
+									currentStringAndLineNo);
 							cGrandParentText.getChildList().add(sTableInfo);
 							currentPos++;
 							continue; // currentPosは「==========」を指している
@@ -370,11 +376,11 @@ public class IntermediateTextTreeBuilder {
 								// nextControlText);
 
 								// cellPartText
-								ArrayList<String> cellPartText = new ArrayList<String>();
-								cellPartText.add("-----");
+								ArrayList<StringAndLineNo> cellPartText = new ArrayList<StringAndLineNo>();
+								cellPartText.add(new StringAndLineNo("-----", -1));
 								// currentPosは==========や-----を指しているので、次の行から変換開始
 								currentPos = compileCellPartBlock(currentPos, smallPartText, cellPartText, styleCell);
-								cellPartText.add("▲"); // compileBlockが終了を検知できるように。
+								cellPartText.add(new StringAndLineNo("▲", -1)); // compileBlockが終了を検知できるように。
 								compileBlock(cellPartText, cTextToAddChild);
 								// セルが終わったときは、
 								continue; // currentPosは「-----」か「=========」か「▲」の次の行を指している
@@ -392,7 +398,7 @@ public class IntermediateTextTreeBuilder {
 							 *
 							 * 対応：セル内部をコンパイル
 							 */
-							ArrayList<String> cellPartText = new ArrayList<String>();
+							ArrayList<StringAndLineNo> cellPartText = new ArrayList<StringAndLineNo>();
 							currentPos = compileCellPartBlock(currentPos, smallPartText, cellPartText,
 									styleCurrentLine);
 							compileBlock(cellPartText, cTextToAddChild);
@@ -426,11 +432,11 @@ public class IntermediateTextTreeBuilder {
 							// セル2
 							// ▲
 
-							ArrayList<String> rowPartText = new ArrayList<String>();
-							rowPartText.add(currentLine);
+							ArrayList<StringAndLineNo> rowPartText = new ArrayList<StringAndLineNo>();
+							rowPartText.add(new StringAndLineNo(currentLine, currentPos));
 							// currentPosは==========や-----の次を指しているので、そこから変換開始
 							currentPos = compileCellPartBlock(currentPos, smallPartText, rowPartText, styleCurrentLine);
-							rowPartText.add("▲"); // compileBlockが終了を検知できるように。
+							rowPartText.add(new StringAndLineNo("▲", -1)); // compileBlockが終了を検知できるように。
 
 							compileBlock(rowPartText, cGrandParentText);
 							continue;
@@ -449,11 +455,11 @@ public class IntermediateTextTreeBuilder {
 							// cellControlText);
 
 							// cellPartText
-							ArrayList<String> cellPartText = new ArrayList<String>();
-							cellPartText.add("-----");
+							ArrayList<StringAndLineNo> cellPartText = new ArrayList<StringAndLineNo>();
+							cellPartText.add(new StringAndLineNo("-----", -1));
 							// currentPosは==========や-----を指しているので、次の行から変換開始
 							currentPos = compileCellPartBlock(currentPos, smallPartText, cellPartText, styleCell);
-							cellPartText.add("▲"); // compileBlockが終了を検知できるように。
+							cellPartText.add(new StringAndLineNo("▲", -1)); // compileBlockが終了を検知できるように。
 							compileBlock(cellPartText, cTextToAddChild);
 							continue;
 						} else if ((styleGrandParentText.getStyleName().compareTo("【セル】") == 0
@@ -515,11 +521,13 @@ public class IntermediateTextTreeBuilder {
 				if (currentLine.length() > 0 && currentLine.charAt(0) == TAB_CHAR) {
 					// タブ文字で始まる行はすべてtabPartTextに入れる
 					// ※先頭のタブ文字を除いてtabPartTextに入れる
-					ArrayList<String> tabPartText = new ArrayList<String>();
+					ArrayList<StringAndLineNo> tabPartText = new ArrayList<StringAndLineNo>();
 					for (; currentPos < smallPartText.size(); currentPos++) {
-						currentLine = smallPartText.get(currentPos);
+						currentStringAndLineNo = smallPartText.get(currentPos);
+						currentLine = currentStringAndLineNo.getLine();
 						if (currentLine.length() > 0 && currentLine.charAt(0) == TAB_CHAR)
-							tabPartText.add(currentLine.substring(1));
+							tabPartText.add(
+									new StringAndLineNo(currentLine.substring(1), currentStringAndLineNo.getLineNo()));
 						else
 							break;
 					}
@@ -543,7 +551,7 @@ public class IntermediateTextTreeBuilder {
 						// 表のタイプ
 						if (cLastStyle.getStyleName().compareTo("【表】") == 0) {
 							// 最後の1行（▲など）を登録する
-							IntermediateText lastLineText = new IntermediateText(cLastStyle, currentLine);
+							IntermediateText lastLineText = new IntermediateText(cLastStyle, currentStringAndLineNo);
 							cTextToAddChild.getChildList().add(lastLineText);
 							return currentPos + 1; // currentPosは「▲」を指しているので次の行を案内
 						} else if (cLastStyle.getStyleName().equals("【セル】")) {
@@ -563,7 +571,7 @@ public class IntermediateTextTreeBuilder {
 				ControlText controlSmallBlockText = new ControlText(styleCurrentLine);
 				cGrandParentText.getChildList().add(controlSmallBlockText);
 
-				IntermediateText textBody = new IntermediateText(StyleManager.getBodyStyle(), currentLine);
+				IntermediateText textBody = new IntermediateText(StyleManager.getBodyStyle(), currentStringAndLineNo);
 				controlSmallBlockText.getChildList().add(textBody);
 				currentPos++; // 次の行へ・・・
 			}
@@ -580,12 +588,13 @@ public class IntermediateTextTreeBuilder {
 		return smallPartText.size();
 	}
 
-	private int compileCellPartBlock(int currentPos, ArrayList<String> smallPartText, ArrayList<String> notePartText,
-			Style lastStyle) throws IntermediateTextTreeBuildException {
+	private int compileCellPartBlock(int currentPos, ArrayList<StringAndLineNo> smallPartText,
+			ArrayList<StringAndLineNo> notePartText, Style lastStyle) throws IntermediateTextTreeBuildException {
 		String currentLine = "";
 		currentPos++;
 		while (currentPos < smallPartText.size()) {
-			currentLine = smallPartText.get(currentPos);
+			StringAndLineNo currentStringAndLineNo = smallPartText.get(currentPos);
+			currentLine = currentStringAndLineNo.getLine();
 			/* 終了かチェック */
 			if (lastStyle != null && lastStyle.isMatch_Last(currentLine)) {
 				break;
@@ -593,11 +602,11 @@ public class IntermediateTextTreeBuilder {
 			/* 入れ子のブロックがないか確認 */
 			Style styleCurrentLine_local = m_cStyleManager.getMatchStyle_Start(currentLine);
 			if (styleCurrentLine_local.bNoteLikeStyle()) {
-				notePartText.add(currentLine);
+				notePartText.add(currentStringAndLineNo);
 				currentPos = copyNotePartBlockTo(smallPartText, currentPos, lastStyle, notePartText);
 				notePartText.add(smallPartText.get(currentPos));
 			} else {
-				notePartText.add(currentLine);
+				notePartText.add(currentStringAndLineNo);
 			}
 			currentPos++;
 		}
@@ -616,25 +625,26 @@ public class IntermediateTextTreeBuilder {
 	 * @return
 	 * @throws IntermediateTextTreeBuildException
 	 */
-	private int copyNotePartBlockTo(ArrayList<String> smallPartText, int startPos, Style lastStyle,
-			ArrayList<String> copyTo) throws IntermediateTextTreeBuildException {
+	private int copyNotePartBlockTo(ArrayList<StringAndLineNo> smallPartText, int startPos, Style lastStyle,
+			ArrayList<StringAndLineNo> copyTo) throws IntermediateTextTreeBuildException {
 		String currentLine = "";
 		int currentPos = startPos;
 		try {
 			while (currentPos < smallPartText.size()) {
 				currentPos++;
-				currentLine = smallPartText.get(currentPos);
+				StringAndLineNo currentStringAndLineNo = smallPartText.get(currentPos);
+				currentLine = currentStringAndLineNo.getLine();
 				/* 入れ子のブロックがないか確認 */
 				Style styleCurrentLine_local = m_cStyleManager.getMatchStyle_Start(currentLine);
 				if (lastStyle.isMatch_Last(currentLine)) {
 					break;
 				}
 				if (styleCurrentLine_local.bNoteLikeStyle()) {
-					copyTo.add(currentLine);
+					copyTo.add(currentStringAndLineNo);
 					currentPos = copyNotePartBlockTo(smallPartText, currentPos, lastStyle, copyTo);
 					copyTo.add(smallPartText.get(currentPos));
 				} else {
-					copyTo.add(currentLine);
+					copyTo.add(currentStringAndLineNo);
 				}
 			}
 		} catch (IndexOutOfBoundsException e) {

@@ -1,6 +1,5 @@
 package tx2x.core;
 
-import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -51,24 +50,5 @@ public abstract class Style {
 
 	public boolean bTableLikeStyle() {
 		return false;
-	}
-
-	/*
-	 * 1行目の処理
-	 */
-	public int compileLine(ControlText controlText,
-			ArrayList<String> smallPartText, int startPos) {
-		/* controlTextのスタイルを確保 */
-		Style styleControlText = controlText.getStyle();
-
-		/* controlTextの子供を確保 */
-		ArrayList<IntermediateText> childArrayControlText = controlText
-				.getChildList();
-
-		/* 1行目のIntermediateTextを作成して、次の行に進む */
-		IntermediateText textFirstLine = new IntermediateText(styleControlText,
-				smallPartText.get(startPos)); // 1行分
-		childArrayControlText.add(textFirstLine);
-		return startPos + 1;
 	}
 }

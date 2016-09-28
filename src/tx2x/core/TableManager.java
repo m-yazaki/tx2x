@@ -324,7 +324,7 @@ public class TableManager {
 						for (int x = 0; x < cCells.size(); x++) {
 							if (x != 0)
 								System.out.println("　-----:(" + (x + 1) + "," + y + ")");
-							System.out.println("　" + cCells.get(x).getText());
+							System.out.println("　" + cCells.get(x).getChildText());
 						}
 					}
 					width_check = cCells.size();

@@ -275,4 +275,25 @@ public class IntermediateTextTreeWalker {
 			return null;
 		}
 	}
+
+	public IntermediateText peekPreviousSibling() {
+		if (LOCAL_DEBUG_MODE)
+			System.out.println("peekPreviousSibling:前の兄弟を確認する（移動しない）");
+		if (m_cParents.size() > 0) {
+			IntermediateText iRetText = null;
+			ControlText cParentParent = peekParent(2);
+			ControlText cParent = peekParent();
+			int nCurrentNode = cParentParent.getChildList().lastIndexOf(cParent);
+			if (nCurrentNode > 0) {
+				// 直の兄弟がいた場合
+				iRetText = ((ControlText) (cParentParent.getChildList().get(nCurrentNode - 1))).getChildList().get(0);
+			} else {
+				// もう1つ親を遡る必要がある場合
+				iRetText = null; // 兄弟がいない
+			}
+			return iRetText;
+		}
+		// 親がない（m_cRootと同じオブジェクトを指しているはず）
+		return null;
+	}
 }
