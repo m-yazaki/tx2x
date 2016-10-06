@@ -192,8 +192,7 @@ public class IntermediateTextTreeBuilderXHTML extends IntermediateTextTreeBuilde
 				ControlText cChildText = (ControlText) itChild.next();
 				if (cChildText.getStyle().getStyleName().equals("【箇条書き●】")) {
 					ArrayList<IntermediateText> cBulletList = cChildText.getChildList();
-					if (cBulletList.size() == 1) {
-						// 箇条書きが1個しかない
+					if (cBulletList.size() == 1) { // 箇条書きが1個しかない場合
 						Style bodyStyle = StyleManager.getBodyStyle();
 						cChildText.setStyle(bodyStyle);
 						ControlText cOneBulletText = (ControlText) cBulletList.get(0);
@@ -226,15 +225,11 @@ public class IntermediateTextTreeBuilderXHTML extends IntermediateTextTreeBuilde
 								break;
 							} else {
 								// 2つ目が【本文】以外なら2つ目以降を1レベル上げる
-								ArrayList<IntermediateText> childList = ((ControlText) cText.getChildList().get(0))
-										.getChildList();
-
-								// 移動対象のcText
-								int count = childList.size() - 1;
-								for (int i = 0; i < count; i++) {
-									ControlText moveControlText = (ControlText) childList.get(1);
-									cText.getChildList().add(i + 1, moveControlText);
-									childList.remove(moveControlText);
+								while (itBulletChild.hasNext()) {
+									IntermediateText iOneBulletText2 = itBulletChild.next();
+									ControlText moveControlText = (ControlText) iOneBulletText2;
+									cText.getChildList().add(moveControlText);
+									itBulletChild.remove();
 								}
 								break;
 							}
