@@ -296,4 +296,12 @@ public class IntermediateTextTreeWalker {
 		// 親がない（m_cRootと同じオブジェクトを指しているはず）
 		return null;
 	}
+
+	public String getLongStyle() {
+		String ret = m_cCurrentNode.getStyle().getStyleName();
+		for (int i = 1; i < m_cParents.size(); i++) {
+			ret = peekParent(i).getStyle().getStyleName() + ret;
+		}
+		return ret;
+	}
 }

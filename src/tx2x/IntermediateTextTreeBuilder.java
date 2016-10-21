@@ -189,9 +189,11 @@ public class IntermediateTextTreeBuilder {
 				// e.printStackTrace();
 				String error = "@compileText ===== 以下の文章から始まるブロックでエラー発生 =====" + Tx2x.getMessageCRLF();
 				for (int j = 0; j < 3 && j < allText.size(); j++) {
-					error += "|" + allText.get(j) + Tx2x.getMessageCRLF();
+					error += "|" + allText.get(j).getLineNo() + "行目：" + allText.get(j).getLine()
+							+ Tx2x.getMessageCRLF();
 				}
-				error += "エラー発生行(" + (i + 1) + "行目): " + allText.get(i) + Tx2x.getMessageCRLF();
+				error += "エラー発生行(" + allText.get(i).getLineNo() + "行目): " + allText.get(i).getLine()
+						+ Tx2x.getMessageCRLF();
 				Tx2x.appendWarn("エラー発生行(" + (i + 1) + "行目)");
 
 				throw new IntermediateTextTreeBuildException(

@@ -133,6 +133,7 @@ public class RegChecker {
 			bf.close();
 		} catch (FileNotFoundException e1) {
 			Tx2x.appendWarn("ファイルが見つかりません（問題ありません）@IgnoreFile：" + cTx2xCheckWord.getAbsolutePath());
+			Tx2x.appendWarn(e1.getLocalizedMessage());
 			return;
 		} catch (IOException e) {
 			// TODO 自動生成された catch ブロック
@@ -185,7 +186,7 @@ public class RegChecker {
 		int errorCount = 0;
 		String temp_line = original_line;
 		temp_line = temp_line.replaceAll("<ui( recommend=\".+?\")?>.+?</ui>", ""); // UIはチェック対象外とする
-		temp_line = temp_line.replaceAll("<img src=\"[^\"]+\" />", ""); // imgタグはチェック対象外とする
+		temp_line = temp_line.replaceAll("<img src=\"[^\"]+\" (alt=\"[^\"]+\" )?/>", ""); // imgタグはチェック対象外とする
 		// OKループ
 		Iterator<CheckWordInfo> itOK = m_sCheckWordFilelistOK.iterator();
 		while (itOK.hasNext()) {
