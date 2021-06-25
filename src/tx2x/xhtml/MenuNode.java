@@ -1,7 +1,6 @@
 package tx2x.xhtml;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 
 public class MenuNode {
 

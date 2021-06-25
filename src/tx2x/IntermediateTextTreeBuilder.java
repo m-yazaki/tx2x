@@ -46,7 +46,11 @@ public class IntermediateTextTreeBuilder {
 		 * 作業用ArrayListを準備
 		 */
 		ArrayList<StringAndLineNo> allText = new ArrayList<StringAndLineNo>();
+		parsePartialFile(cInputTx2xFile, allText);
+		return parseTextArrayList(allText, lsManager);
+	}
 
+	private void parsePartialFile(File cInputTx2xFile, ArrayList<StringAndLineNo> allText) throws IOException {
 		/*
 		 * Tx2x形式のテキストファイルをバッファ（ArrayList<String> allText）に読み込む
 		 */
@@ -62,18 +66,17 @@ public class IntermediateTextTreeBuilder {
 		m_nTargetLevel = 0;
 		String line;
 		// addLineToAllText(allText, line);
-		int count = 0;
+		int lineno = 0;
 		while ((line = bf.readLine()) != null) {
-			count++;
-			addLineToAllText(allText, line, count);
+			lineno++;
+			addLineToAllText(cInputTx2xFile, allText, line, lineno);
 		}
 
 		bf.close();
-
-		return parseTextArrayList(allText, lsManager);
 	}
 
-	private void addLineToAllText(ArrayList<StringAndLineNo> allText, String line, int lineno) {
+	private void addLineToAllText(File cInputTx2xFile, ArrayList<StringAndLineNo> allText, String line, int lineno)
+			throws IOException {
 		if (m_cTarget != null) {
 			// <var>変数処理
 			line = changeVariables(line);
@@ -141,10 +144,8 @@ public class IntermediateTextTreeBuilder {
 	/**
 	 * テキストを解釈してIntermediateTextツリーを生成します。
 	 *
-	 * @param allText
-	 *            テキスト
-	 * @param lsManager
-	 *            LongStyleManager
+	 * @param allText   テキスト
+	 * @param lsManager LongStyleManager
 	 * @return ツリーの根（ルートオブジェクト）
 	 * @throws IntermediateTextTreeBuildException
 	 */
@@ -203,7 +204,7 @@ public class IntermediateTextTreeBuilder {
 	}
 
 	/***
-	 * smallPartTextのstartPosから始まるブロックから、controlTextの子供にあたる部分を変換する
+	 * smallPartTextのstartPosから始まるテキストブロックから、controlTextの子供にあたる部分をIntermediateTextTreeに変換する
 	 * 子供にあたる部分の変換が終わったら、次の読み取り行番号を返す。
 	 *
 	 * 1行目から始まるブロックが終わるまでを変換する責任を持つ
@@ -215,12 +216,18 @@ public class IntermediateTextTreeBuilder {
 	 * <li>cGrandParentText：追加先
 	 * </ul>
 	 *
+	 * 結果： (cText)【ページタイトル】: (cText)【ページタイトル】: (iText)【ページタイトル】:# Example API 1
+	 * 
 	 * @throws IntermediateTextTreeBuildException
 	 */
 	private int compileChildBlockFromStartPos(ArrayList<StringAndLineNo> smallPartText, int startPos, Style cLastStyle,
 			ControlText cGrandParentText) throws IntermediateTextTreeBuildException {
 
-		/* ControlTextのスタイルを取り出しておく */
+		/**
+		 * ControlText cGrandParentTextのスタイルを取り出しておく
+		 * 
+		 * このスタイルが、後々のスタイルの基本となる
+		 */
 		Style styleGrandParentText = cGrandParentText.getStyle();
 
 		/* ブロックを統括するControlTextに、IntermediateTextを登録する先を準備 */
@@ -291,6 +298,7 @@ public class IntermediateTextTreeBuilder {
 				} else if (styleGrandParentText.bNoteLikeStyle()) {
 					// 現象：ノートタイプをコンパイル中にスタイル行が来た（ノートタイプの1行目である）
 					// 対応：次の行（currentPos+1）からは、新しいブロックの始まり。
+					cGrandParentText.setText(currentLine);
 
 					// 終端まですべてnotePartTextに入れる
 					ArrayList<StringAndLineNo> notePartText = new ArrayList<StringAndLineNo>();
@@ -368,14 +376,6 @@ public class IntermediateTextTreeBuilder {
 
 								/* nextControlText（セル）の生成 */
 								Style styleCell = m_cStyleManager.getStyle("【セル】");
-								//
-								// ControlText nextControlText = new
-								// ControlText(
-								// styleCell, styleCell.getStyleName());
-								//
-								// /* controlTextの子供に登録 */
-								// controlText_BigBlock.getChildList().add(
-								// nextControlText);
 
 								// cellPartText
 								ArrayList<StringAndLineNo> cellPartText = new ArrayList<StringAndLineNo>();
@@ -418,13 +418,6 @@ public class IntermediateTextTreeBuilder {
 							/*
 							 * nextControlText（行）の生成＆追加
 							 */
-							// ControlText nextControlText = new ControlText(
-							// styleCurrentLine,
-							// styleCurrentLine.getStyleName());
-							//
-							// /* controlTextの子供に登録 */
-							// controlText_BigBlock.getChildList().add(
-							// nextControlText);
 
 							// 本文
 							// ▼表
@@ -451,17 +444,12 @@ public class IntermediateTextTreeBuilder {
 							 * （セル）の生成
 							 */
 							Style styleCell = new Style_TableCell();
-							// ControlText cellControlText = new ControlText(
-							// styleCell, styleCell.getStyleName());
-							// controlText_BigBlock.getChildList().add(
-							// cellControlText);
 
 							// cellPartText
 							ArrayList<StringAndLineNo> cellPartText = new ArrayList<StringAndLineNo>();
 							cellPartText.add(new StringAndLineNo("-----", -1));
 							// currentPosは==========や-----を指しているので、次の行から変換開始
 							currentPos = compileCellPartBlock(currentPos, smallPartText, cellPartText, styleCell);
-							cellPartText.add(new StringAndLineNo("▲", -1)); // compileBlockが終了を検知できるように。
 							compileBlock(cellPartText, cTextToAddChild);
 							continue;
 						} else if ((styleGrandParentText.getStyleName().compareTo("【セル】") == 0
@@ -534,7 +522,13 @@ public class IntermediateTextTreeBuilder {
 							break;
 					}
 					int lastIndex = cTextToAddChild.getChildList().size();
-					IntermediateText cTemp = cTextToAddChild.getChildList().get(lastIndex - 1);
+					IntermediateText cTemp;
+					if (lastIndex == 0) {
+						cTemp = new ControlText(StyleManager.getBodyStyle());
+						cTextToAddChild.getChildList().add(cTemp);
+					} else {
+						cTemp = cTextToAddChild.getChildList().get(lastIndex - 1);
+					}
 					if (cTemp instanceof ControlText) {
 						cTextToAddChild = (ControlText) cTemp;
 					}
@@ -605,8 +599,12 @@ public class IntermediateTextTreeBuilder {
 			Style styleCurrentLine_local = m_cStyleManager.getMatchStyle_Start(currentLine);
 			if (styleCurrentLine_local.bNoteLikeStyle()) {
 				notePartText.add(currentStringAndLineNo);
-				currentPos = copyNotePartBlockTo(smallPartText, currentPos, lastStyle, notePartText);
+				currentPos = copyNotePartBlockTo(smallPartText, currentPos, styleCurrentLine_local, notePartText);
 				notePartText.add(smallPartText.get(currentPos));
+			} else if (styleCurrentLine_local.bTableLikeStyle()) {
+				// System.out.println("DEBUG:
+				// compileCellPartBlock()内でbTableLikeStyle()は別処理が良いのではありませんか。");
+				notePartText.add(currentStringAndLineNo);
 			} else {
 				notePartText.add(currentStringAndLineNo);
 			}
@@ -616,14 +614,12 @@ public class IntermediateTextTreeBuilder {
 	}
 
 	/***
-	 * ノートタイプのテキストをコンパイルして、notePartTextに
+	 * ノートタイプのテキストを抽出する
 	 *
-	 * @param currentPos
-	 * @param smallPartText
-	 * @param lastStyle
-	 * @param controlText_BigBlock
-	 * @param copyTo
-	 *            値が更新されます
+	 * @param smallPartText 変換対象のテキスト候補
+	 * @param startPos      変換対象のテキスト候補の先頭を指す
+	 * @param lastStyle     変換対象のテキストの終端を判別するルール
+	 * @param copyTo        変換対象のテキスト（確定版）。 ▼ ▲の場合、この開始タグと終了タグは含まない
 	 * @return
 	 * @throws IntermediateTextTreeBuildException
 	 */
@@ -643,8 +639,11 @@ public class IntermediateTextTreeBuilder {
 				}
 				if (styleCurrentLine_local.bNoteLikeStyle()) {
 					copyTo.add(currentStringAndLineNo);
-					currentPos = copyNotePartBlockTo(smallPartText, currentPos, lastStyle, copyTo);
+					currentPos = copyNotePartBlockTo(smallPartText, currentPos, styleCurrentLine_local, copyTo);
 					copyTo.add(smallPartText.get(currentPos));
+				} else if (styleCurrentLine_local.bTableLikeStyle()) {
+					System.out.println("DEBUG: copyNotePartBlockTo()内でbTableLikeStyle()は別処理が良いのではありませんか。");
+					copyTo.add(currentStringAndLineNo);
 				} else {
 					copyTo.add(currentStringAndLineNo);
 				}
@@ -666,10 +665,8 @@ public class IntermediateTextTreeBuilder {
 	/**
 	 * 最終スキャンを実行する
 	 *
-	 * @param resultText
-	 *            ここまでの変換結果
-	 * @param lsManager
-	 *            LongStyleManager
+	 * @param resultText ここまでの変換結果
+	 * @param lsManager  LongStyleManager
 	 */
 	protected void lastScan(ControlText resultText, LongStyleManager lsManager) {
 		Iterator<IntermediateText> it = resultText.getChildList().iterator();
@@ -700,24 +697,25 @@ public class IntermediateTextTreeBuilder {
 							System.out.println("【セル】");
 						if (cText.getChildList().size() == 0) {
 							System.out.println(resultText.getDebugText());
-						}
-						ControlText cText2 = (ControlText) cText.getChildList().get(0);
-						if (cText2.getChildList().get(0).getChildText().matches(".*【ヘッダー】.*")) {
-							// 【セル】→【セル：ヘッダー】に置換
-							Style newStyle = m_cStyleManager.getStyle("【セル：ヘッダー】");
-							lsManager.removeLastStyle();
-							lsManager.addStyle(newStyle);
-							cText.setStyle(newStyle); // cTextもStyleを変更する
-							cText.setText("【セル：ヘッダー】");
-							// System.out.println("【セル】→【セル：ヘッダー】に置換");
-						} else if (cText2.getChildList().get(0).getChildText().matches(".*【行ヘッダー】.*")) {
-							// 【セル】→【セル：行ヘッダー】に置換
-							Style newStyle = m_cStyleManager.getStyle("【セル：行ヘッダー】");
-							lsManager.removeLastStyle();
-							lsManager.addStyle(newStyle);
-							cText.setStyle(newStyle); // cTextもStyleを変更する
-							cText.setText("【セル：行ヘッダー】");
-							// System.out.println("【セル】→【セル：ヘッダー】に置換");
+						} else {
+							ControlText cText2 = (ControlText) cText.getChildList().get(0);
+							if (cText2.getChildList().get(0).getChildText().matches(".*【ヘッダー】.*")) {
+								// 【セル】→【セル：ヘッダー】に置換
+								Style newStyle = m_cStyleManager.getStyle("【セル：ヘッダー】");
+								lsManager.removeLastStyle();
+								lsManager.addStyle(newStyle);
+								cText.setStyle(newStyle); // cTextもStyleを変更する
+								cText.setText("【セル：ヘッダー】");
+								// System.out.println("【セル】→【セル：ヘッダー】に置換");
+							} else if (cText2.getChildList().get(0).getChildText().matches(".*【行ヘッダー】.*")) {
+								// 【セル】→【セル：行ヘッダー】に置換
+								Style newStyle = m_cStyleManager.getStyle("【セル：行ヘッダー】");
+								lsManager.removeLastStyle();
+								lsManager.addStyle(newStyle);
+								cText.setStyle(newStyle); // cTextもStyleを変更する
+								cText.setText("【セル：行ヘッダー】");
+								// System.out.println("【セル】→【セル：ヘッダー】に置換");
+							}
 						}
 					}
 				}
@@ -762,8 +760,7 @@ public class IntermediateTextTreeBuilder {
 	 * 変換対象を指定する<br/>
 	 * 1つのTx2xテキストで、複数のドキュメントを出力するための機能（かき分け）
 	 *
-	 * @param sTarget
-	 *            変換対象を表す文字列
+	 * @param sTarget 変換対象を表す文字列
 	 * @note Converterなど別クラスから呼び出される
 	 */
 	public void setTarget(String sTarget) {
@@ -777,10 +774,8 @@ public class IntermediateTextTreeBuilder {
 	 * 変数の値を指定する<br/>
 	 * 1つのTx2xテキストで、複数のドキュメントを出力するための機能（変数）
 	 *
-	 * @param key
-	 *            変数名
-	 * @param value
-	 *            値
+	 * @param key   変数名
+	 * @param value 値
 	 * @note Converterなど別クラスから呼び出される
 	 */
 	public void putVariable(String key, String value) {

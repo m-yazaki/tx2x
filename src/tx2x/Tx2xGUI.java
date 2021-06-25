@@ -119,6 +119,7 @@ public class Tx2xGUI implements ActionListener {
 				JOptionPane.showMessageDialog(frame, "変換モードが不正です。");
 				return;
 			}
+			System.out.println("- " + mode + " START -");
 			File cFile = new File(Tx2xOptions.getInstance().getString("tx2x_folder_file_name"));
 			if (cFile.exists()) {
 				IgnoreFile cIgnoreFile = IgnoreFile.getInstance();
@@ -136,7 +137,7 @@ public class Tx2xGUI implements ActionListener {
 			}
 
 			// メッセージ出力
-			String message = "-整形終了-" + Tx2x.getMessageCRLF();
+			String message = "- " + mode + " FINISH -" + Tx2x.getMessageCRLF();
 			String warn = Tx2x.getWarn();
 			if (warn.length() > 0) {
 				message += warn;
@@ -173,12 +174,17 @@ public class Tx2xGUI implements ActionListener {
 				return false;
 			}
 
-			if (!support.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
-				// ドロップされたのがファイルでない場合は受け取らない
-				return false;
+			// 文字列を受け取る
+			if (support.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+				return true;
 			}
 
-			return true;
+			// Fileを受け取る
+			if (support.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
+				return true;
+			}
+
+			return false;
 		}
 
 		/**
@@ -193,16 +199,34 @@ public class Tx2xGUI implements ActionListener {
 
 			// ドロップ処理
 			Transferable t = support.getTransferable();
-			try {
-				@SuppressWarnings("unchecked")
-				List<File> files = (List<File>) t.getTransferData(DataFlavor.javaFileListFlavor);
-
-				// テキストエリアにファイル名のリストを表示する
-				if (files.size() > 0) {
-					text_file.setText(files.get(0).toString());
+			// 先にstringFlavorをとる。
+			if (t.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+				File file;
+				try {
+					String filename = (String) t.getTransferData(DataFlavor.stringFlavor);
+					file = new File(filename.replaceAll("\n.*", "").trim());
+					if (file.exists()) {
+						text_file.setText(file.getAbsolutePath());
+					}
+				} catch (UnsupportedFlavorException | IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-			} catch (UnsupportedFlavorException | IOException e) {
-				e.printStackTrace();
+			} else if (t.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
+				// stringFlavor非サポートで、javaFileListFlavorをサポートしている状況があるかわからないけど…。
+				try {
+					@SuppressWarnings("unchecked")
+					List<File> files = (List<File>) t.getTransferData(DataFlavor.javaFileListFlavor);
+
+					// テキストエリアにファイル名のリストを表示する
+					if (files.size() > 0) {
+						text_file.setText(files.get(0).toString());
+					}
+				} catch (UnsupportedFlavorException | IOException e) {
+					e.printStackTrace();
+				}
+			} else {
+				System.out.println("There is a new DataFlavor.");
 			}
 			return true;
 		}
