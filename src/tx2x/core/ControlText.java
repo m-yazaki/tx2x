@@ -18,13 +18,17 @@ public class ControlText extends IntermediateText {
 	}
 
 	public String getText() {
-		System.out.println("WARNING: getChildText();を呼び出すべきではありませんか。。");
-		System.out.println(getChildText());
-		String sText = "（ControlText）";
-		// for (int i = 0; i < m_cChildList.size(); i++) {
-		// sText = sText + m_cChildList.get(i).getText();
-		// }
-		return sText;
+		if (m_sLine.equals("")) {
+			System.out.println("WARNING: getChildText();を呼び出すべきではありませんか。。");
+			System.out.println(getChildText());
+			String sText = "（ControlText）";
+			// for (int i = 0; i < m_cChildList.size(); i++) {
+			// sText = sText + m_cChildList.get(i).getText();
+			// }
+			return sText;
+		} else {
+			return m_sLine;
+		}
 	}
 
 	public String getChildText() {

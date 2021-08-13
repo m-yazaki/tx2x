@@ -283,15 +283,28 @@ public class IntermediateTextTreeWalker {
 			IntermediateText iRetText = null;
 			ControlText cParentParent = peekParent(2);
 			ControlText cParent = peekParent();
-			int nCurrentNode = cParentParent.getChildList().lastIndexOf(cParent);
-			if (nCurrentNode > 0) {
-				// 直の兄弟がいた場合
-				iRetText = ((ControlText) (cParentParent.getChildList().get(nCurrentNode - 1))).getChildList().get(0);
+			if (cParentParent == null) {
+				int nCurrentNode = cParent.getChildList().lastIndexOf(m_cCurrentNode);
+				if (nCurrentNode > 0) {
+					// 直の兄弟がいた場合
+					iRetText = ((ControlText) (cParent.getChildList().get(nCurrentNode - 1))).getChildList().get(0);
+				} else {
+					// もう1つ親を遡る必要がある場合
+					iRetText = null; // 兄弟がいない
+				}
+				return iRetText;
 			} else {
-				// もう1つ親を遡る必要がある場合
-				iRetText = null; // 兄弟がいない
+				int nCurrentNode = cParentParent.getChildList().lastIndexOf(cParent);
+				if (nCurrentNode > 0) {
+					// 直の兄弟がいた場合
+					iRetText = ((ControlText) (cParentParent.getChildList().get(nCurrentNode - 1))).getChildList()
+							.get(0);
+				} else {
+					// もう1つ親を遡る必要がある場合
+					iRetText = null; // 兄弟がいない
+				}
+				return iRetText;
 			}
-			return iRetText;
 		}
 		// 親がない（m_cRootと同じオブジェクトを指しているはず）
 		return null;
